@@ -1,0 +1,25 @@
+change_event_bag_recorder:
+  ros__parameters:
+    # 程序会按服务器本地日期自动创建 YYYY_MM_DD 子目录，并在零点自动切片。
+    output_base_directory: "/home/dnt/ws_ros2_rtg/ros_bag/change_events"
+    bag_name_prefix: "rtg_change_event"
+
+    plc_topic: "/rtg/plc_topic_35"
+    exec_status_topic: "/rtg/task_exec_status"
+
+    # 任一路业务字段变化都会刷新计时；已收到的 Topic 均无新变化达到 5 秒后封包。
+    quiet_period_seconds: 5.0
+
+    # 连续变化超过 1 小时就无缝切成下一段，避免单文件无限增长。
+    max_segment_seconds: 3600.0
+
+    # 时间戳不参与变化判断；浮点字段按下列精度量化后比较。
+    # 设为 0.0 表示浮点值必须逐位相同。
+    plc_float_epsilon: 0.001
+    exec_float_epsilon: 0.001
+
+    # file + zstd 压缩整个 SQLite bag 文件，适合这两类小消息长期归档。
+    compression_mode: "file"
+    compression_format: "zstd"
+    compression_queue_size: 1
+    compression_threads: 0

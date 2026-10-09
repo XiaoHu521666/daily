@@ -1,0 +1,130 @@
+dnt@rw-4090:~/ws_ros2_rtg$ cd /home/dnt/ws_ros2_rtg
+
+  source /opt/ros/humble/setup.bash
+
+  colcon build --packages-select rtg_auto_bag_compress --symlink-install
+
+  source /home/dnt/ws_ros2_rtg/install/setup.bash
+
+  ros2 launch rtg_auto_bag_compress change_event_bag_recorder.launch.py
+Starting >>> rtg_auto_bag_compress
+Finished <<< rtg_auto_bag_compress [6.82s]                     
+
+Summary: 1 package finished [6.99s]
+[INFO] [launch]: All log files can be found below /home/dnt/.ros/log/2026-08-14-13-50-35-138489-rw-4090-297139
+[INFO] [launch]: Default logging verbosity is set to INFO
+[INFO] [change_event_bag_recorder_node-1]: process started with pid [297144]
+[change_event_bag_recorder_node-1] [INFO] [1786686635.176170296] [change_event_bag_recorder]: 变化事件录包节点已启动
+[change_event_bag_recorder_node-1] [INFO] [1786686635.176212951] [change_event_bag_recorder]: PLC: /rtg/plc_topic_35
+[change_event_bag_recorder_node-1] [INFO] [1786686635.176216472] [change_event_bag_recorder]: 任务状态: /rtg/task_exec_status
+[change_event_bag_recorder_node-1] [INFO] [1786686635.176218763] [change_event_bag_recorder]: 已接收 Topic 的业务字段均稳定 5.0 秒后封包，单段最长 3600.0 秒
+[change_event_bag_recorder_node-1] [INFO] [1786686635.176227063] [change_event_bag_recorder]: 压缩: mode=file, format=zstd；输出目录=/home/dnt/ws_ros2_rtg/ros_bag/change_events
+[change_event_bag_recorder_node-1] [INFO] [1786686647.090799686] [rosbag2_storage]: Opened database '/home/dnt/ws_ros2_rtg/ros_bag/change_events/rtg_change_event_2026_08_14_13_50_47_085/rtg_change_event_2026_08_14_13_50_47_085_0.db3' for READ_WRITE.
+[change_event_bag_recorder_node-1] [INFO] [1786686647.092508429] [change_event_bag_recorder]: 检测到 ExecStatusMsg 业务字段变化，开始事件段: /home/dnt/ws_ros2_rtg/ros_bag/change_events/rtg_change_event_2026_08_14_13_50_47_085
+[change_event_bag_recorder_node-1] [INFO] [1786686647.092581383] [change_event_bag_recorder]: 已写入 ExecStatusMsg 变化前一条完整消息
+[change_event_bag_recorder_node-1] [INFO] [1786686672.677077534] [rosbag2_cpp]: Writing remaining messages from cache to the bag. It may take a while
+[change_event_bag_recorder_node-1] [INFO] [1786686672.677221189] [rosbag2_compression]: Compressing file: /home/dnt/ws_ros2_rtg/ros_bag/change_events/rtg_change_event_2026_08_14_13_50_47_085/rtg_change_event_2026_08_14_13_50_47_085_0.db3
+[change_event_bag_recorder_node-1] [INFO] [1786686672.678875422] [change_event_bag_recorder]: 事件段已保存并完成压缩，原因=已接收 Topic 的业务字段均已稳定，时长=25.6 秒，目录=/home/dnt/ws_ros2_rtg/ros_bag/change_events/rtg_change_event_2026_08_14_13_50_47_085
+[change_event_bag_recorder_node-1] [INFO] [1786686688.744068856] [rosbag2_storage]: Opened database '/home/dnt/ws_ros2_rtg/ros_bag/change_events/rtg_change_event_2026_08_14_13_51_28_741/rtg_change_event_2026_08_14_13_51_28_741_0.db3' for READ_WRITE.
+[change_event_bag_recorder_node-1] [INFO] [1786686688.744807293] [change_event_bag_recorder]: 检测到 PlcMsg 业务字段变化，开始事件段: /home/dnt/ws_ros2_rtg/ros_bag/change_events/rtg_change_event_2026_08_14_13_51_28_741
+[change_event_bag_recorder_node-1] [INFO] [1786686688.744847267] [change_event_bag_recorder]: 已写入 PlcMsg 变化前一条完整消息
+[change_event_bag_recorder_node-1] [INFO] [1786686764.779079188] [rosbag2_cpp]: Writing remaining messages from cache to the bag. It may take a while
+[change_event_bag_recorder_node-1] [INFO] [1786686764.779356572] [rosbag2_compression]: Compressing file: /home/dnt/ws_ros2_rtg/ros_bag/change_events/rtg_change_event_2026_08_14_13_51_28_741/rtg_change_event_2026_08_14_13_51_28_741_0.db3
+[change_event_bag_recorder_node-1] [INFO] [1786686764.786045535] [change_event_bag_recorder]: 事件段已保存并完成压缩，原因=已接收 Topic 的业务字段均已稳定，时长=76.0 秒，目录=/home/dnt/ws_ros2_rtg/ros_bag/change_events/rtg_change_event_2026_08_14_13_51_28_741
+^C[WARNING] [launch]: user interrupted with ctrl-c (SIGINT)
+[change_event_bag_recorder_node-1] [INFO] [1786686777.490179210] [rclcpp]: signal_handler(signum=2)
+[INFO] [change_event_bag_recorder_node-1]: process has finished cleanly [pid 297144]
+
+dnt@rw-4090:~/ws_ros2_rtg$ ros2 bag play     "/mnt/win_share/Data_Storage/研发/HIT/新版堆扫/653_2026_08_06_lyqdata_01晴小车移动40尺"
+[INFO] [1786686644.511362454] [rosbag2_storage]: Opened database '/mnt/win_share/Data_Storage/研发/HIT/新版堆扫/653_2026_08_06_lyqdata_01晴小车移动40尺/653_2026_08_06_lyqdata_01_0.db3' for READ_ONLY.
+[INFO] [1786686644.511400749] [rosbag2_player]: Set rate to 1
+[INFO] [1786686644.515879151] [rosbag2_player]: Adding keyboard callbacks.
+[INFO] [1786686644.515897126] [rosbag2_player]: Press SPACE for Pause/Resume
+[INFO] [1786686644.515901283] [rosbag2_player]: Press CURSOR_RIGHT for Play Next Message
+[INFO] [1786686644.515904586] [rosbag2_player]: Press CURSOR_UP for Increase Rate 10%
+[INFO] [1786686644.515907566] [rosbag2_player]: Press CURSOR_DOWN for Decrease Rate 10%
+[INFO] [1786686644.516091945] [rosbag2_storage]: Opened database '/mnt/win_share/Data_Storage/研发/HIT/新版堆扫/653_2026_08_06_lyqdata_01晴小车移动40尺/653_2026_08_06_lyqdata_01_0.db3' for READ_ONLY.
+dnt@rw-4090:~/ws_ros2_rtg$ ros2 bag play     "/mnt/win_share/Data_Storage/研发/HIT/防吊起/655_2026_06_23_ATL1"     -p     --topics     /rtg/plc_topic_35
+
+closing.
+
+closing.
+[INFO] [1786686685.862506050] [rosbag2_storage]: Opened database '/mnt/win_share/Data_Storage/研发/HIT/防吊起/655_2026_06_23_ATL1/2026_06_23_0.db3' for READ_ONLY.
+[INFO] [1786686685.862544657] [rosbag2_player]: Set rate to 1
+[INFO] [1786686685.867242676] [rosbag2_player]: Adding keyboard callbacks.
+[INFO] [1786686685.867264906] [rosbag2_player]: Press SPACE for Pause/Resume
+[INFO] [1786686685.867276190] [rosbag2_player]: Press CURSOR_RIGHT for Play Next Message
+[INFO] [1786686685.867285644] [rosbag2_player]: Press CURSOR_UP for Increase Rate 10%
+[INFO] [1786686685.867294276] [rosbag2_player]: Press CURSOR_DOWN for Decrease Rate 10%
+
+closing.
+
+closing.
+[INFO] [1786686685.867603907] [rosbag2_storage]: Opened database '/mnt/win_share/Data_Storage/研发/HIT/防吊起/655_2026_06_23_ATL1/2026_06_23_0.db3' for READ_ONLY.
+[INFO] [1786686687.726502475] [rosbag2_player]: Resuming play.
+
+rosbag2_bagfile_information:
+  version: 5
+  storage_identifier: sqlite3
+  duration:
+    nanoseconds: 20671515839
+  starting_time:
+    nanoseconds_since_epoch: 1786686646954146606
+  message_count: 517
+  topics_with_message_count:
+    - topic_metadata:
+        name: /rtg/task_exec_status
+        type: rtg_algorithm_interfaces/msg/ExecStatusMsg
+        serialization_format: cdr
+        offered_qos_profiles: ""
+      message_count: 6
+    - topic_metadata:
+        name: /rtg/plc_topic_35
+        type: sensor_device_interfaces/msg/PlcMsg
+        serialization_format: cdr
+        offered_qos_profiles: ""
+      message_count: 511
+  compression_format: zstd
+  compression_mode: FILE
+  relative_file_paths:
+    - rtg_change_event_2026_08_14_13_50_47_085_0.db3.zstd
+  files:
+    - path: rtg_change_event_2026_08_14_13_50_47_085_0.db3
+      starting_time:
+        nanoseconds_since_epoch: 1786686646954146606
+      duration:
+        nanoseconds: 20671515839
+      message_count: 517
+
+rosbag2_bagfile_information:
+  version: 5
+  storage_identifier: sqlite3
+  duration:
+    nanoseconds: 109655982746
+  starting_time:
+    nanoseconds_since_epoch: 1786686650044712465
+  message_count: 1777
+  topics_with_message_count:
+    - topic_metadata:
+        name: /rtg/task_exec_status
+        type: rtg_algorithm_interfaces/msg/ExecStatusMsg
+        serialization_format: cdr
+        offered_qos_profiles: ""
+      message_count: 1
+    - topic_metadata:
+        name: /rtg/plc_topic_35
+        type: sensor_device_interfaces/msg/PlcMsg
+        serialization_format: cdr
+        offered_qos_profiles: ""
+      message_count: 1776
+  compression_format: zstd
+  compression_mode: FILE
+  relative_file_paths:
+    - rtg_change_event_2026_08_14_13_51_28_741_0.db3.zstd
+  files:
+    - path: rtg_change_event_2026_08_14_13_51_28_741_0.db3
+      starting_time:
+        nanoseconds_since_epoch: 1786686650044712465
+      duration:
+        nanoseconds: 109655982746
+      message_count: 1777

@@ -1,0 +1,119 @@
+dnt@rw-4090:~/ws_ros2_rtg$ grep -n 'temporary_source = temporary_path / source.name' /home/dnt/ws_ros2_rtg/src/rtg_auto_bag_compress/scripts/extract_time_range.py
+84:        temporary_source = temporary_path / source.name
+dnt@rw-4090:~/ws_ros2_rtg$ grep -n 'str(temporary_source)' /home/dnt/ws_ros2_rtg/src/rtg_auto_bag_compress/scripts/extract_time_range.py
+102:                str(temporary_source),
+dnt@rw-4090:~/ws_ros2_rtg$ cd /home/dnt/ws_ros2_rtg
+
+  unset TZ
+
+  source /opt/ros/humble/setup.bash
+
+  chmod +x /home/dnt/ws_ros2_rtg/src/rtg_auto_bag_compress/scripts/extract_time_range.py
+
+  colcon build --packages-select rtg_auto_bag_compress --symlink-install
+
+  source /home/dnt/ws_ros2_rtg/install/setup.bash
+Starting >>> rtg_auto_bag_compress
+Finished <<< rtg_auto_bag_compress [6.50s]                     
+
+Summary: 1 package finished [6.68s]
+dnt@rw-4090:~/ws_ros2_rtg$ ros2 pkg prefix rtg_auto_bag_compress
+/home/dnt/ws_ros2_rtg/install/rtg_auto_bag_compress
+dnt@rw-4090:~/ws_ros2_rtg$ grep -n 'temporary_source = temporary_path / source.name' /home/dnt/ws_ros2_rtg/install/rtg_auto_bag_compress/lib/rtg_auto_bag_compress/extra
+ct_time_range.py
+84:        temporary_source = temporary_path / source.name
+dnt@rw-4090:~/ws_ros2_rtg$ export RTG_SOURCE=/home/dnt/ws_ros2_rtg/ros_bag/change_events
+
+  export RTG_BAG1=/home/dnt/ws_ros2_rtg/ros_bag/change_events/2026_08_14/rtg_change_event_2026_08_14_23_59_19_720
+
+  export RTG_BAG2=/home/dnt/ws_ros2_rtg/ros_bag/change_events/2026_08_15/rtg_change_event_2026_08_15_00_00_00_087
+
+  export RTG_OUTPUT=/home/dnt/ws_ros2_rtg/ros_bag/exports/no_source_write_test01
+
+  export RTG_LOG=/tmp/no_source_write_test01.log
+dnt@rw-4090:~/ws_ros2_rtg$ test ! -e "$RTG_OUTPUT" && echo "PASS：输出目录不存在，可以开始测试"
+PASS：输出目录不存在，可以开始测试
+dnt@rw-4090:~/ws_ros2_rtg$ find "$RTG_BAG1" "$RTG_BAG2" -type f -printf '%p\n' | sort > /tmp/rtg_source_files_before.txt
+
+  find "$RTG_BAG1" "$RTG_BAG2" -type f -exec sha256sum {} + | sort -k2 > /tmp/rtg_source_sha256_before.txt
+dnt@rw-4090:~/ws_ros2_rtg$ cat /tmp/rtg_source_files_before.txt
+/home/dnt/ws_ros2_rtg/ros_bag/change_events/2026_08_14/rtg_change_event_2026_08_14_23_59_19_720/metadata.yaml
+/home/dnt/ws_ros2_rtg/ros_bag/change_events/2026_08_14/rtg_change_event_2026_08_14_23_59_19_720/rtg_change_event_2026_08_14_23_59_19_720_0.db3.zstd
+/home/dnt/ws_ros2_rtg/ros_bag/change_events/2026_08_15/rtg_change_event_2026_08_15_00_00_00_087/metadata.yaml
+/home/dnt/ws_ros2_rtg/ros_bag/change_events/2026_08_15/rtg_change_event_2026_08_15_00_00_00_087/rtg_change_event_2026_08_15_00_00_00_087_0.db3.zstd
+dnt@rw-4090:~/ws_ros2_rtg$ ros2 run rtg_auto_bag_compress extract_time_range.py --source "$RTG_SOURCE" --start "2026-08-14 14:20:30.000000000" --end "2026-08-
+14 14:20:40.000000000" --output "$RTG_OUTPUT" 2>&1 | tee "$RTG_LOG"
+[INFO] [1786693146.175350009] [rosbag2_compression]: Decompressing /tmp/rtg_bag_convert_aa_6dnob/rtg_change_event_2026_08_14_23_59_19_720/rtg_change_event_2026_08_14_23_59_19_720_0.db3.zstd
+[INFO] [1786693146.176019889] [rosbag2_storage]: Opened database '/tmp/rtg_bag_convert_aa_6dnob/rtg_change_event_2026_08_14_23_59_19_720/rtg_change_event_2026_08_14_23_59_19_720_0.db3' for READ_ONLY.
+[INFO] [1786693146.177669790] [rosbag2_storage]: Opened database '/home/dnt/ws_ros2_rtg/ros_bag/exports/no_source_write_test01/2026_08_14/rtg_change_event_2026_08_14_23_59_19_720/rtg_change_event_2026_08_14_23_59_19_720_0.db3' for READ_WRITE.
+[INFO] [1786693146.329521417] [rosbag2_cpp]: Beginning reindexing bag in directory: /home/dnt/ws_ros2_rtg/ros_bag/exports/no_source_write_test01/2026_08_14/rtg_change_event_2026_08_14_23_59_19_720
+[INFO] [1786693146.330100819] [rosbag2_storage]: Opened database '/home/dnt/ws_ros2_rtg/ros_bag/exports/no_source_write_test01/2026_08_14/rtg_change_event_2026_08_14_23_59_19_720/rtg_change_event_2026_08_14_23_59_19_720_0.db3' for READ_ONLY.
+[INFO] [1786693146.330392244] [rosbag2_cpp]: Reindexing complete.
+[INFO] [1786693146.474399909] [rosbag2_compression]: Decompressing /tmp/rtg_bag_convert_t1bung3a/rtg_change_event_2026_08_15_00_00_00_087/rtg_change_event_2026_08_15_00_00_00_087_0.db3.zstd
+[INFO] [1786693146.475096544] [rosbag2_storage]: Opened database '/tmp/rtg_bag_convert_t1bung3a/rtg_change_event_2026_08_15_00_00_00_087/rtg_change_event_2026_08_15_00_00_00_087_0.db3' for READ_ONLY.
+[INFO] [1786693146.476742552] [rosbag2_storage]: Opened database '/home/dnt/ws_ros2_rtg/ros_bag/exports/no_source_write_test01/2026_08_15/rtg_change_event_2026_08_15_00_00_00_087/rtg_change_event_2026_08_15_00_00_00_087_0.db3' for READ_WRITE.
+查询区间 [2026-08-14 14:20:30.000000000, 2026-08-14 14:20:40.000000000)，命中 2 个事件包
+  /home/dnt/ws_ros2_rtg/ros_bag/change_events/2026_08_14/rtg_change_event_2026_08_14_23_59_19_720
+    原始范围 2026-08-14 14:20:13.193680352 ~ 2026-08-14 14:20:53.964584967，255 条
+  /home/dnt/ws_ros2_rtg/ros_bag/change_events/2026_08_15/rtg_change_event_2026_08_15_00_00_00_087
+    原始范围 2026-08-14 14:20:25.555618212 ~ 2026-08-14 14:21:35.879136952，264 条
+转换为未压缩 bag: /home/dnt/ws_ros2_rtg/ros_bag/change_events/2026_08_14/rtg_change_event_2026_08_14_23_59_19_720 -> /home/dnt/ws_ros2_rtg/ros_bag/exports/no_source_write_test01/2026_08_14/rtg_change_event_2026_08_14_23_59_19_720
+  精确保留 62 条消息
+转换为未压缩 bag: /home/dnt/ws_ros2_rtg/ros_bag/change_events/2026_08_15/rtg_change_event_2026_08_15_00_00_00_087 -> /home/dnt/ws_ros2_rtg/ros_bag/exports/no_source_write_test01/2026_08_15/rtg_change_event_2026_08_15_00_00_00_087
+  精确时间范围内没有消息，跳过该候选事件包
+导出完成：候选事件包共 519 条，时间范围内保留 62 条
+结果目录: /home/dnt/ws_ros2_rtg/ros_bag/exports/no_source_write_test01
+dnt@rw-4090:~/ws_ros2_rtg$ grep 'Decompressing' "$RTG_LOG"
+[INFO] [1786693146.175350009] [rosbag2_compression]: Decompressing /tmp/rtg_bag_convert_aa_6dnob/rtg_change_event_2026_08_14_23_59_19_720/rtg_change_event_2026_08_14_23_59_19_720_0.db3.zstd
+[INFO] [1786693146.474399909] [rosbag2_compression]: Decompressing /tmp/rtg_bag_convert_t1bung3a/rtg_change_event_2026_08_15_00_00_00_087/rtg_change_event_2026_08_15_00_00_00_087_0.db3.zstd
+dnt@rw-4090:~/ws_ros2_rtg$ find "$RTG_BAG1" "$RTG_BAG2" -type f -printf '%p\n' | sort > /tmp/rtg_source_files_after.txt
+
+  diff -u /tmp/rtg_source_files_before.txt /tmp/rtg_source_files_after.txt
+dnt@rw-4090:~/ws_ros2_rtg$ sha256sum -c /tmp/rtg_source_sha256_before.txt
+/home/dnt/ws_ros2_rtg/ros_bag/change_events/2026_08_14/rtg_change_event_2026_08_14_23_59_19_720/metadata.yaml: OK
+/home/dnt/ws_ros2_rtg/ros_bag/change_events/2026_08_14/rtg_change_event_2026_08_14_23_59_19_720/rtg_change_event_2026_08_14_23_59_19_720_0.db3.zstd: OK
+/home/dnt/ws_ros2_rtg/ros_bag/change_events/2026_08_15/rtg_change_event_2026_08_15_00_00_00_087/metadata.yaml: OK
+/home/dnt/ws_ros2_rtg/ros_bag/change_events/2026_08_15/rtg_change_event_2026_08_15_00_00_00_087/rtg_change_event_2026_08_15_00_00_00_087_0.db3.zstd: OK
+dnt@rw-4090:~/ws_ros2_rtg$ find "$RTG_OUTPUT" -type f | sort
+/home/dnt/ws_ros2_rtg/ros_bag/exports/no_source_write_test01/2026_08_14/rtg_change_event_2026_08_14_23_59_19_720/metadata.yaml
+/home/dnt/ws_ros2_rtg/ros_bag/exports/no_source_write_test01/2026_08_14/rtg_change_event_2026_08_14_23_59_19_720/rtg_change_event_2026_08_14_23_59_19_720_0.db3
+dnt@rw-4090:~/ws_ros2_rtg$ find "$RTG_OUTPUT" -name metadata.yaml | wc -l
+1
+dnt@rw-4090:~/ws_ros2_rtg$ find "$RTG_OUTPUT" -name '*.db3' | wc -l
+1
+dnt@rw-4090:~/ws_ros2_rtg$ find "$RTG_OUTPUT" -name '*.zstd'
+dnt@rw-4090:~/ws_ros2_rtg$ find "$RTG_OUTPUT" -name metadata.yaml -print0 | while IFS= read -r -d '' metadata; do ros2 bag info "$(dirname "$metadata")"; done
+ 
+Files:             rtg_change_event_2026_08_14_23_59_19_720_0.db3
+Bag size:          48.7 KiB
+Storage id:        sqlite3
+Duration:          9.758332057s
+Start:             Aug 14 2026 14:20:30.120051522 (1786688430.120051522)
+End:               Aug 14 2026 14:20:39.878383579 (1786688439.878383579)
+Messages:          62
+Topic information: Topic: /rtg/plc_topic_35 | Type: sensor_device_interfaces/msg/PlcMsg | Count: 62 | Serialization Format: cdr
+                   Topic: /rtg/task_exec_status | Type: rtg_algorithm_interfaces/msg/ExecStatusMsg | Count: 0 | Serialization Format: cdr
+简洁版
+
+dnt@rw-4090:~/ws_ros2_rtg$ source /home/dnt/ws_ros2_rtg/install/setup.bash
+dnt@rw-4090:~/ws_ros2_rtg$ ros2 run rtg_auto_bag_compress extract_time_range.py --source /home/dnt/ws_ros2_rtg/ros_bag/change_events --start "2026-08-14 14:20:30.000000000" --end "2026-08-14 14:20:40.000000000" --output /home/dnt/ws_ros2_rtg/ros_bag/exports/export_20260814_142030_142040
+查询区间 [2026-08-14 14:20:30.000000000, 2026-08-14 14:20:40.000000000)，命中 2 个事件包
+  /home/dnt/ws_ros2_rtg/ros_bag/change_events/2026_08_14/rtg_change_event_2026_08_14_23_59_19_720
+    原始范围 2026-08-14 14:20:13.193680352 ~ 2026-08-14 14:20:53.964584967，255 条
+  /home/dnt/ws_ros2_rtg/ros_bag/change_events/2026_08_15/rtg_change_event_2026_08_15_00_00_00_087
+    原始范围 2026-08-14 14:20:25.555618212 ~ 2026-08-14 14:21:35.879136952，264 条
+转换为未压缩 bag: /home/dnt/ws_ros2_rtg/ros_bag/change_events/2026_08_14/rtg_change_event_2026_08_14_23_59_19_720 -> /home/dnt/ws_ros2_rtg/ros_bag/exports/export_20260814_142030_142040/2026_08_14/rtg_change_event_2026_08_14_23_59_19_720
+[INFO] [1786693445.306467130] [rosbag2_compression]: Decompressing /tmp/rtg_bag_convert_2lttv1_f/rtg_change_event_2026_08_14_23_59_19_720/rtg_change_event_2026_08_14_23_59_19_720_0.db3.zstd
+[INFO] [1786693445.307121043] [rosbag2_storage]: Opened database '/tmp/rtg_bag_convert_2lttv1_f/rtg_change_event_2026_08_14_23_59_19_720/rtg_change_event_2026_08_14_23_59_19_720_0.db3' for READ_ONLY.
+[INFO] [1786693445.308744016] [rosbag2_storage]: Opened database '/home/dnt/ws_ros2_rtg/ros_bag/exports/export_20260814_142030_142040/2026_08_14/rtg_change_event_2026_08_14_23_59_19_720/rtg_change_event_2026_08_14_23_59_19_720_0.db3' for READ_WRITE.
+[INFO] [1786693445.459447909] [rosbag2_cpp]: Beginning reindexing bag in directory: /home/dnt/ws_ros2_rtg/ros_bag/exports/export_20260814_142030_142040/2026_08_14/rtg_change_event_2026_08_14_23_59_19_720
+[INFO] [1786693445.459992710] [rosbag2_storage]: Opened database '/home/dnt/ws_ros2_rtg/ros_bag/exports/export_20260814_142030_142040/2026_08_14/rtg_change_event_2026_08_14_23_59_19_720/rtg_change_event_2026_08_14_23_59_19_720_0.db3' for READ_ONLY.
+[INFO] [1786693445.460290390] [rosbag2_cpp]: Reindexing complete.
+  精确保留 62 条消息
+转换为未压缩 bag: /home/dnt/ws_ros2_rtg/ros_bag/change_events/2026_08_15/rtg_change_event_2026_08_15_00_00_00_087 -> /home/dnt/ws_ros2_rtg/ros_bag/exports/export_20260814_142030_142040/2026_08_15/rtg_change_event_2026_08_15_00_00_00_087
+[INFO] [1786693445.592168320] [rosbag2_compression]: Decompressing /tmp/rtg_bag_convert_87dmaa88/rtg_change_event_2026_08_15_00_00_00_087/rtg_change_event_2026_08_15_00_00_00_087_0.db3.zstd
+[INFO] [1786693445.592788161] [rosbag2_storage]: Opened database '/tmp/rtg_bag_convert_87dmaa88/rtg_change_event_2026_08_15_00_00_00_087/rtg_change_event_2026_08_15_00_00_00_087_0.db3' for READ_ONLY.
+[INFO] [1786693445.594346604] [rosbag2_storage]: Opened database '/home/dnt/ws_ros2_rtg/ros_bag/exports/export_20260814_142030_142040/2026_08_15/rtg_change_event_2026_08_15_00_00_00_087/rtg_change_event_2026_08_15_00_00_00_087_0.db3' for READ_WRITE.
+  精确时间范围内没有消息，跳过该候选事件包
+导出完成：候选事件包共 519 条，时间范围内保留 62 条
+结果目录: /home/dnt/ws_ros2_rtg/ros_bag/exports/export_20260814_142030_142040

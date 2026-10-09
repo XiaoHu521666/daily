@@ -1,0 +1,208 @@
+大车防撞录包程序：报警来源区分与发布端掉线虚拟测试
+
+一、复制规则
+============
+
+【整块复制】表示：把该标题下面的整个命令块一次性复制到对应终端执行。
+【不要复制】表示：这是预期结果或说明，只用于核对。
+
+本测试使用 ROS_DOMAIN_ID=98，与现场 ROS 域隔离。
+虚拟 PointCloud2 是空消息，只验证来源隔离、状态机和 DB3 写入，不验证真实点云吞吐。
+
+
+二、终端 0：确认源码、重新编译并执行单元测试
+================================================
+
+【整块复制：从 cd 开始，到最后一条 ros2 pkg executables 结束】
+
+cd /home/dnt/ws_ros2_rtg
+source /opt/ros/humble/setup.bash
+source /home/dnt/ws_ros2_rtg/install/setup.bash
+
+test -f /home/dnt/ws_ros2_rtg/src/rtg_gantry_collision_bag_recorder/package.xml
+test -f /home/dnt/ws_ros2_rtg/src/rtg_gantry_collision_bag_recorder/scripts/source_integration_test.py
+colcon list | grep '^rtg_gantry_collision_bag_recorder'
+
+colcon build --packages-select rtg_gantry_collision_bag_recorder --symlink-install --cmake-args -DBUILD_TESTING=ON
+source /home/dnt/ws_ros2_rtg/install/setup.bash
+
+colcon test --packages-select rtg_gantry_collision_bag_recorder --event-handlers console_direct+
+colcon test-result --verbose
+
+ros2 pkg prefix rtg_gantry_collision_bag_recorder
+ros2 pkg executables rtg_gantry_collision_bag_recorder
+
+【不要复制：终端 0 通过标准】
+
+- 编译显示 Summary: 1 package finished，不能出现 Failed。
+- 单元测试显示 0 errors、0 failures。
+- 可执行程序列表必须包含 gantry_collision_bag_recorder_node 和 source_integration_test。
+
+
+三、终端 1：持续发布四路虚拟点云和 PLC
+========================================
+
+【整块复制：执行后保持该终端运行】
+
+cd /home/dnt/ws_ros2_rtg
+source /opt/ros/humble/setup.bash
+source /home/dnt/ws_ros2_rtg/install/setup.bash
+export ROS_DOMAIN_ID=98
+
+trap 'jobs -pr | xargs -r kill' EXIT INT TERM
+
+ros2 topic pub /livox/lidar_3GGDJA600101431 sensor_msgs/msg/PointCloud2 '{}' --rate 10 --print 1000 &
+ros2 topic pub /livox/lidar_3GGDJA500101151 sensor_msgs/msg/PointCloud2 '{}' --rate 10 --print 1000 &
+ros2 topic pub /livox/lidar_3GGDJ9S00100741 sensor_msgs/msg/PointCloud2 '{}' --rate 10 --print 1000 &
+ros2 topic pub /livox/lidar_3GGDJA600101201 sensor_msgs/msg/PointCloud2 '{}' --rate 10 --print 1000 &
+ros2 topic pub /rtg/plc_topic_35 sensor_device_interfaces/msg/PlcMsg '{plc_connect: true}' --rate 10 --print 1000 &
+
+wait
+
+【不要复制：说明】
+
+本终端不再单独发布 area 7 报警心跳。报警发布者由终端 3 的来源测试工具创建，
+并用两个持续存在的 publisher 分别模拟大车防撞来源和侧面集卡来源。
+
+
+四、终端 2：生成独立测试配置并启动录包节点
+================================================
+
+先确认终端 1 已开始发布，再执行本终端。
+
+【整块复制：从 cd 开始，到 ros2 launch 结束】
+
+cd /home/dnt/ws_ros2_rtg
+source /opt/ros/humble/setup.bash
+source /home/dnt/ws_ros2_rtg/install/setup.bash
+export ROS_DOMAIN_ID=98
+
+mkdir -p /home/dnt/ws_ros2_rtg/virtual_test_output/gantry_source_filter
+mkdir -p /home/dnt/ws_ros2_rtg/virtual_test_output/logs
+touch /tmp/gantry_source_filter_test_start
+
+sed 's#output_base_directory: "./ros_bag/gantry_collision"#output_base_directory: "/home/dnt/ws_ros2_rtg/virtual_test_output/gantry_source_filter"#' /home/dnt/ws_ros2_rtg/install/rtg_gantry_collision_bag_recorder/share/rtg_gantry_collision_bag_recorder/config/recorder_654.yaml > /tmp/recorder_654_source_filter_test.yaml
+
+test -r /tmp/recorder_654_source_filter_test.yaml
+grep -nE 'output_base_directory|collision_side|lidar_topics|slow_distance_m|stop_distance_m' /tmp/recorder_654_source_filter_test.yaml
+
+ros2 launch rtg_gantry_collision_bag_recorder gantry_collision_bag_recorder.launch.py config:=/tmp/recorder_654_source_filter_test.yaml 2>&1 | tee /home/dnt/ws_ros2_rtg/virtual_test_output/logs/gantry_source_filter_$(date +%Y%m%d_%H%M%S).log
+
+【不要复制：终端 2 启动通过标准】
+
+- 左右节点不能出现“请填写本组两路真实点云话题”的 FATAL。
+- 左侧显示 L21、L18 两路 654 点云；右侧显示 L20、L19 两路 654 点云。
+- 输出目录必须是 /home/dnt/ws_ros2_rtg/virtual_test_output/gantry_source_filter。
+- 启动后尚未运行终端 3 时，区域 1-4 来源未确认属于预期现象。
+
+
+五、终端 3：自动执行来源区分和掉线测试
+==========================================
+
+终端 1 和终端 2 正常运行后再执行。
+
+【整块复制：复制下面完整命令块】
+
+cd /home/dnt/ws_ros2_rtg
+source /opt/ros/humble/setup.bash
+source /home/dnt/ws_ros2_rtg/install/setup.bash
+export ROS_DOMAIN_ID=98
+
+ros2 run rtg_gantry_collision_bag_recorder source_integration_test
+
+【不要复制：终端 3 说明】
+
+工具自动执行 11 步测试。最后显示：
+
+测试序列完成；核对录包日志后按 Ctrl+C 退出
+
+此时先不要按 Ctrl+C，先执行终端 4 的验收命令。
+
+
+六、终端 2 日志通过标准
+========================
+
+【不要复制】
+
+1. 只有侧面发布者时，区域 1-4 仍提示来源未确认。
+2. 侧面 frame_id 冒用区域 1/3 时不能开包。
+3. 真正防撞来源发送区域 1-4 后健康状态恢复。
+4. 正确 frame_id 发送区域 7/8 时不能开包。
+5. 区域 1 距离 10 m 时只创建 left 包。
+6. 侧面来源发送区域 1/3 的 20 m 时不能关闭 left 包。
+7. 真正来源解除区域 1/3 后 left 以 alarm_cleared 关闭。
+8. 区域 2 距离 10 m 时只创建 right 包。
+9. 真正防撞发布端销毁而侧面发布端仍在时，必须提示防撞来源离线。
+10. 来源掉线不能把 right 包误判为正常解除。
+11. 重建来源后只恢复区域 2 时不能关包，补充区域 4 后 right 才正常关闭。
+
+本轮最终只能产生两个事件目录：一个 left、一个 right。
+
+
+七、终端 4：核验本轮事件、event.txt 和 DB3
+=============================================
+
+终端 3 显示“测试序列完成”后执行。
+
+【整块复制：复制下面完整命令块】
+
+cd /home/dnt/ws_ros2_rtg
+source /opt/ros/humble/setup.bash
+source /home/dnt/ws_ros2_rtg/install/setup.bash
+export ROS_DOMAIN_ID=98
+
+echo '本轮事件总数、left 数、right 数，预期依次为 2、1、1：'
+find /home/dnt/ws_ros2_rtg/virtual_test_output/gantry_source_filter -mindepth 2 -maxdepth 2 -type d -newer /tmp/gantry_source_filter_test_start | wc -l
+find /home/dnt/ws_ros2_rtg/virtual_test_output/gantry_source_filter -mindepth 2 -maxdepth 2 -type d -newer /tmp/gantry_source_filter_test_start -name '*_left_*' | wc -l
+find /home/dnt/ws_ros2_rtg/virtual_test_output/gantry_source_filter -mindepth 2 -maxdepth 2 -type d -newer /tmp/gantry_source_filter_test_start -name '*_right_*' | wc -l
+
+find /home/dnt/ws_ros2_rtg/virtual_test_output/gantry_source_filter -mindepth 2 -maxdepth 2 -type d -newer /tmp/gantry_source_filter_test_start -print0 | sort -z | while IFS= read -r -d '' bag
+do
+  echo "===== $bag ====="
+  cat "$bag/event.txt"
+  ros2 bag info "$bag"
+done
+
+【不要复制：终端 4 通过标准】
+
+- 三个计数依次为 2、1、1。
+- 两个 event.txt 都是 status=alarm_cleared。
+- 两个 bag 都能被 ros2 bag info 正常读取。
+- 每包恰好四个 Topic，PLC、报警和两路本组点云的 Count 均大于 0。
+
+
+八、终端 4：检查本轮节点日志
+================================
+
+【整块复制】
+
+grep -nE 'FATAL|ERROR|process has died|写入失败|磁盘空间不足|报警前缓存达到容量上限' "$(find /home/dnt/ws_ros2_rtg/virtual_test_output/logs -maxdepth 1 -type f -name 'gantry_source_filter_*.log' -printf '%T@ %p\n' | sort -n | tail -1 | cut -d' ' -f2-)"
+
+【不要复制：通过标准】
+
+grep 没有任何输出才通过。来源未确认或来源离线的 WARNING 是本专项主动制造的预期结果，
+但不能出现 FATAL、ERROR 或 process has died。
+
+
+九、测试结束
+============
+
+【人工操作，不是命令块】
+
+1. 终端 4 验收完成后，在终端 3 按 Ctrl+C，退出测试发布端。
+2. 在终端 2 按 Ctrl+C，确认两个录包节点 cleanly 退出。
+3. 在终端 1 按 Ctrl+C，停止 PLC 和四路虚拟点云。
+
+终端 1 同时停止多个 ros2 topic pub 时，若出现 failed to initialize wait set，
+属于 ROS2 CLI 退出噪声，不代表录包节点失败。
+
+
+十、验收边界
+============
+
+通过本流程后，可以确认：新版能够读取 654 配置、frame_id 来源过滤有效、侧面发布端不能
+冒充防撞健康来源、防撞发布端掉线不会被侧面发布端掩盖、掉线不会误关包、左右事件独立、
+event.txt 与 DB3 可读。
+
+仍未确认：真实点云吞吐、真实算法进程是否使用相同 frame_id、现场 DDS 发现延迟、真实单帧
+容量、长时间运行和断电恢复。这些需要使用现场真实 Topic 继续验收。

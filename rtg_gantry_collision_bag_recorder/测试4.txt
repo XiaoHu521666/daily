@@ -1,0 +1,212 @@
+dnt@rw-4090:~/ws_ros2_rtg$ cd /home/dnt/ws_ros2_rtg
+source /opt/ros/humble/setup.bash
+source /home/dnt/ws_ros2_rtg/install/setup.bash
+
+test -f /home/dnt/ws_ros2_rtg/src/rtg_gantry_collision_bag_recorder/package.xml
+test -f /home/dnt/ws_ros2_rtg/src/rtg_gantry_collision_bag_recorder/scripts/source_integration_test.py
+colcon list | grep '^rtg_gantry_collision_bag_recorder'
+
+colcon build --packages-select rtg_gantry_collision_bag_recorder --symlink-install --cmake-args -DBUILD_TESTING=ON
+source /home/dnt/ws_ros2_rtg/install/setup.bash
+
+colcon test --packages-select rtg_gantry_collision_bag_recorder --event-handlers console_direct+
+colcon test-result --verbose
+
+ros2 pkg prefix rtg_gantry_collision_bag_recorder
+ros2 pkg executables rtg_gantry_collision_bag_recorder
+rtg_gantry_collision_bag_recorder       src/rtg_gantry_collision_bag_recorder   (ros.ament_cmake)
+Starting >>> rtg_gantry_collision_bag_recorder
+[0.246s] colcon.colcon_core.shell WARNING The following packages are in the workspace but haven't been built:
+- rtg_algorithm_interfaces
+They are being used from the following locations instead:
+- /home/dnt/ws_ros2_rtg/cpp_install/rtg_algorithm_interfaces
+To suppress this warning ignore these packages in the workspace:
+--packages-ignore rtg_algorithm_interfaces
+Finished <<< rtg_gantry_collision_bag_recorder [7.53s]                     
+
+Summary: 1 package finished [7.71s]
+Starting >>> rtg_gantry_collision_bag_recorder
+[0.243s] colcon.colcon_core.shell WARNING The following packages are in the workspace but haven't been built:
+- rtg_algorithm_interfaces
+They are being used from the following locations instead:
+- /home/dnt/ws_ros2_rtg/cpp_install/rtg_algorithm_interfaces
+To suppress this warning ignore these packages in the workspace:
+--packages-ignore rtg_algorithm_interfaces
+UpdateCTestConfiguration  from :/home/dnt/ws_ros2_rtg/build/rtg_gantry_collision_bag_recorder/CTestConfiguration.ini
+Parse Config file:/home/dnt/ws_ros2_rtg/build/rtg_gantry_collision_bag_recorder/CTestConfiguration.ini
+   Site: rw-4090
+   Build name: (empty)
+ Add coverage exclude regular expressions.
+Create new tag: 20260909-0613 - Experimental
+UpdateCTestConfiguration  from :/home/dnt/ws_ros2_rtg/build/rtg_gantry_collision_bag_recorder/CTestConfiguration.ini
+Parse Config file:/home/dnt/ws_ros2_rtg/build/rtg_gantry_collision_bag_recorder/CTestConfiguration.ini
+Test project /home/dnt/ws_ros2_rtg/build/rtg_gantry_collision_bag_recorder
+Constructing a list of tests
+Done constructing a list of tests
+Updating test list for fixtures
+Added 0 tests to meet fixture requirements
+Checking test dependency graph...
+Checking test dependency graph end
+test 1
+    Start 1: alarm_state
+
+1: Test command: /home/dnt/ws_ros2_rtg/build/rtg_gantry_collision_bag_recorder/test_alarm_state
+1: Working Directory: /home/dnt/ws_ros2_rtg/build/rtg_gantry_collision_bag_recorder
+1: Test timeout computed to be: 10000000
+1: alarm_state tests passed
+1/2 Test #1: alarm_state ......................   Passed    0.00 sec
+test 2
+    Start 2: pre_record_buffer
+
+2: Test command: /home/dnt/ws_ros2_rtg/build/rtg_gantry_collision_bag_recorder/test_pre_record_buffer
+2: Working Directory: /home/dnt/ws_ros2_rtg/build/rtg_gantry_collision_bag_recorder
+2: Test timeout computed to be: 10000000
+2: pre_record_buffer tests passed
+2/2 Test #2: pre_record_buffer ................   Passed    0.00 sec
+
+100% tests passed, 0 tests failed out of 2
+
+Total Test time (real) =   0.00 sec
+Finished <<< rtg_gantry_collision_bag_recorder [0.07s]
+
+Summary: 1 package finished [0.25s]
+Summary: 2 tests, 0 errors, 0 failures, 0 skipped
+/home/dnt/ws_ros2_rtg/install/rtg_gantry_collision_bag_recorder
+rtg_gantry_collision_bag_recorder gantry_collision_bag_recorder_node
+rtg_gantry_collision_bag_recorder source_integration_test
+
+dnt@rw-4090:~/ws_ros2_rtg$ cd /home/dnt/ws_ros2_rtg
+source /opt/ros/humble/setup.bash
+source /home/dnt/ws_ros2_rtg/install/setup.bash
+export ROS_DOMAIN_ID=98
+
+trap 'jobs -pr | xargs -r kill' EXIT INT TERM
+
+ros2 topic pub /livox/lidar_3GGDJA600101431 sensor_msgs/msg/PointCloud2 '{}' --rate 10 --print 1000 &
+ros2 topic pub /livox/lidar_3GGDJA500101151 sensor_msgs/msg/PointCloud2 '{}' --rate 10 --print 1000 &
+ros2 topic pub /livox/lidar_3GGDJ9S00100741 sensor_msgs/msg/PointCloud2 '{}' --rate 10 --print 1000 &
+ros2 topic pub /livox/lidar_3GGDJA600101201 sensor_msgs/msg/PointCloud2 '{}' --rate 10 --print 1000 &
+ros2 topic pub /rtg/plc_topic_35 sensor_device_interfaces/msg/PlcMsg '{plc_connect: true}' --rate 10 --print 1000 &
+
+wait
+[1] 3903207
+[2] 3903208
+[3] 3903209
+[4] 3903210
+[5] 3903211
+publisher: beginning loop
+publisher: beginning loop
+publisher: beginning loop
+publisher: beginning loop
+publisher: beginning loop
+publishing #1000: sensor_msgs.msg.PointCloud2(header=std_msgs.msg.Header(stamp=builtin_interfaces.msg.Time(sec=0, nanosec=0), frame_id=''), height=0, width=0, fields=[], is_bigendian=False, point_step=0, row_step=0, data=[], is_dense=False)
+
+publishing #1000: sensor_msgs.msg.PointCloud2(header=std_msgs.msg.Header(stamp=builtin_interfaces.msg.Time(sec=0, nanosec=0), frame_id=''), height=0, width=0, fields=[], is_bigendian=False, point_step=0, row_step=0, data=[], is_dense=False)
+
+publishing #1000: sensor_msgs.msg.PointCloud2(header=std_msgs.msg.Header(stamp=builtin_interfaces.msg.Time(sec=0, nanosec=0), frame_id=''), height=0, width=0, fields=[], is_bigendian=False, point_step=0, row_step=0, data=[], is_dense=False)
+
+publishing #1000: sensor_device_interfaces.msg.PlcMsg(header=std_msgs.msg.Header(stamp=builtin_interfaces.msg.Time(sec=0, nanosec=0), frame_id=''), plc_id=0, source_timestamp=0, plc_connect=True, no_estop=False, spreader_lock=False, spreader_unlock=False, spreader_20f=False, spreader_40f=False, spreader_45f=False, spreader_landed=False, spreader_pump_on_state=0, spreader_home=0, spreader_weight=0.0, ctrl_on_state=0, ctrl_mode_local=False, ctrl_mode_remote=False, ctrl_mode_manual=False, ctrl_mode_auto=False, ros_connect_state=False, gantry_velocity_1=0.0, gantry_velocity_2=0.0, gantry_velocity_3=0.0, gantry_velocity_4=0.0, gantry_pos=0.0, joystick_gantry_fb=0, joystick_trolley_fb=0, joystick_hoist_fb=0, trolley_pos=0.0, trolley_velocity=0.0, hoist_height=0.0, hoist_velocity=0.0, left_crane_state=0, left_crane_gantry_pos=0.0, left_crane_gantry_velocity=0.0, right_crane_state=0, right_crane_gantry_pos=0.0, right_crane_gantry_velocity=0.0, trolley_anchor_state=0, spreader_skew_right=False, spreader_skew_left=False, spreader20ft_cmd=False, spreader40ft_cmd=False, spreader45ft_cmd=False, spreader_rope_loose=False, flipper_left_down=False, flipper_right_down=False, over_load_fb=False, wheel_at0=False, wheel_at90=False, wheel_at16=False, wheel_at_park=False, wheel_locked=False, wheel_unlocked=False, wheel_pump1_on=False, wheel_pump2_on=False, wheel_pump_off=False, wheel_turn_auto_fb=False, wheel_turn_manual_fb=False, laser1_fault=False, laser2_fault=False, laser3_fault=False, laser4_fault=False, laser5_fault=False, laser6_fault=False, laser7_fault=False, laser8_fault=False, laser1_height=0, laser2_height=0, laser3_height=0, laser4_height=0, laser5_height=0, laser6_height=0, laser7_height=0, laser8_height=0, auto_anti_sway=False, gantry_move_assist=False, agss1=0, agss2=0, aptt_gsd=False, general_bypass_fb=False, human_bypass_fb=False, agss_left_gsd=False, agss_right_gsd=False, speed_limit=False, spreader_not_top_limit=False, bypass_atl_fb=False, bypass_jack_set_fb=False, bypass_landing_fb=False, bypass_ls_fb=False, bypass_over_height_fb=False, bypass_over_load_fb=False, bypass_spreader_fb=False, gantry_run_permit_left=False, gantry_run_permit_right=False, trolley_run_permit_forward=False, trolley_run_permit_backward=False, hoist_run_permit_up=False, hoist_run_permit_down=False, skew_pos=0)
+
+publishing #1000: sensor_msgs.msg.PointCloud2(header=std_msgs.msg.Header(stamp=builtin_interfaces.msg.Time(sec=0, nanosec=0), frame_id=''), height=0, width=0, fields=[], is_bigendian=False, point_step=0, row_step=0, data=[], is_dense=False)
+
+dnt@rw-4090:~/ws_ros2_rtg$ cd /home/dnt/ws_ros2_rtg
+source /opt/ros/humble/setup.bash
+source /home/dnt/ws_ros2_rtg/install/setup.bash
+export ROS_DOMAIN_ID=98
+
+mkdir -p /home/dnt/ws_ros2_rtg/virtual_test_output/gantry_source_filter
+mkdir -p /home/dnt/ws_ros2_rtg/virtual_test_output/logs
+touch /tmp/gantry_source_filter_test_start
+
+sed 's#output_base_directory: "./ros_bag/gantry_collision"#output_base_directory: "/home/dnt/ws_ros2_rtg/virtual_test_output/gantry_source_filter"#' /home/dnt/ws_ros2_rtg/install/rtg_gantry_collision_bag_recorder/share/rtg_gantry_collision_bag_recorder/config/recorder_654.yaml > /tmp/recorder_654_source_filter_test.yaml
+
+test -r /tmp/recorder_654_source_filter_test.yaml
+grep -nE 'output_base_directory|collision_side|lidar_topics|slow_distance_m|stop_distance_m' /tmp/recorder_654_source_filter_test.yaml
+
+ros2 launch rtg_gantry_collision_bag_recorder gantry_collision_bag_recorder.launch.py config:=/tmp/recorder_654_source_filter_test.yaml 2>&1 | tee /home/dnt/ws_ros2_rtg/virtual_test_output/logs/gantry_source_filter_$(date +%Y%m%d_%H%M%S).log
+4:    output_base_directory: "/home/dnt/ws_ros2_rtg/virtual_test_output/gantry_source_filter"
+9:    slow_distance_m: 16.0
+10:    stop_distance_m: 5.5
+23:    collision_side: "left"
+24:    lidar_topics:
+30:    collision_side: "right"
+31:    lidar_topics:
+[INFO] [launch]: All log files can be found below /home/dnt/.ros/log/2026-09-09-14-14-36-834575-rw-4090-3903815
+[INFO] [launch]: Default logging verbosity is set to INFO
+[INFO] [gantry_collision_bag_recorder_node-1]: process started with pid [3903828]
+[INFO] [gantry_collision_bag_recorder_node-2]: process started with pid [3903830]
+[gantry_collision_bag_recorder_node-2] [INFO] [1788934476.873051686] [gantry_collision_bag_recorder_right]: right 组全天监听：报警立即录制，两区域明确解除并保持 3.00 秒后结束
+[gantry_collision_bag_recorder_node-2] [INFO] [1788934476.873096536] [gantry_collision_bag_recorder_right]: 输出目录：/home/dnt/ws_ros2_rtg/virtual_test_output/gantry_source_filter
+[gantry_collision_bag_recorder_node-2] [INFO] [1788934476.873100220] [gantry_collision_bag_recorder_right]: 报警来源：header.frame_id=gantry_collision_detect_frame，仅接收本组区域
+[gantry_collision_bag_recorder_node-2] [INFO] [1788934476.873102497] [gantry_collision_bag_recorder_right]: 报警前缓存：2.00 秒，每实例序列化容量上限 128 MiB
+[gantry_collision_bag_recorder_node-2] [INFO] [1788934476.873105174] [gantry_collision_bag_recorder_right]: 点云：/livox/lidar_3GGDJ9S00100741
+[gantry_collision_bag_recorder_node-2] [INFO] [1788934476.873108327] [gantry_collision_bag_recorder_right]: 点云：/livox/lidar_3GGDJA600101201
+[gantry_collision_bag_recorder_node-1] [INFO] [1788934476.876013033] [gantry_collision_bag_recorder_left]: left 组全天监听：报警立即录制，两区域明确解除并保持 3.00 秒后结束
+[gantry_collision_bag_recorder_node-1] [INFO] [1788934476.876048180] [gantry_collision_bag_recorder_left]: 输出目录：/home/dnt/ws_ros2_rtg/virtual_test_output/gantry_source_filter
+[gantry_collision_bag_recorder_node-1] [INFO] [1788934476.876051801] [gantry_collision_bag_recorder_left]: 报警来源：header.frame_id=gantry_collision_detect_frame，仅接收本组区域
+[gantry_collision_bag_recorder_node-1] [INFO] [1788934476.876054168] [gantry_collision_bag_recorder_left]: 报警前缓存：2.00 秒，每实例序列化容量上限 128 MiB
+[gantry_collision_bag_recorder_node-1] [INFO] [1788934476.876057712] [gantry_collision_bag_recorder_left]: 点云：/livox/lidar_3GGDJA600101431
+[gantry_collision_bag_recorder_node-1] [INFO] [1788934476.876059793] [gantry_collision_bag_recorder_left]: 点云：/livox/lidar_3GGDJA500101151
+[gantry_collision_bag_recorder_node-2] [WARN] [1788934477.873222425] [gantry_collision_bag_recorder_right]: 数据异常，缺失部分无法补录，不视为报警解除： /algl/GantryColDetMsg(区域2防撞来源未确认或已离线，frame_id=gantry_collision_detect_frame) /algl/GantryColDetMsg(区域4防撞来源未确认或已离线，frame_id=gantry_collision_detect_frame)
+[gantry_collision_bag_recorder_node-1] [WARN] [1788934477.876113238] [gantry_collision_bag_recorder_left]: 数据异常，缺失部分无法补录，不视为报警解除： /algl/GantryColDetMsg(区域1防撞来源未确认或已离线，frame_id=gantry_collision_detect_frame) /algl/GantryColDetMsg(区域3防撞来源未确认或已离线，frame_id=gantry_collision_detect_frame)
+[gantry_collision_bag_recorder_node-2] [WARN] [1788934511.873921945] [gantry_collision_bag_recorder_right]: 数据异常，缺失部分无法补录，不视为报警解除： /algl/GantryColDetMsg(区域4防撞来源未确认或已离线，frame_id=gantry_collision_detect_frame)
+[gantry_collision_bag_recorder_node-1] [WARN] [1788934511.876994324] [gantry_collision_bag_recorder_left]: 数据异常，缺失部分无法补录，不视为报警解除： /algl/GantryColDetMsg(区域3防撞来源未确认或已离线，frame_id=gantry_collision_detect_frame)
+[gantry_collision_bag_recorder_node-1] [INFO] [1788934512.876894637] [gantry_collision_bag_recorder_left]: PLC、本组两路点云及报警发布者检查恢复正常
+[gantry_collision_bag_recorder_node-2] [INFO] [1788934513.874088778] [gantry_collision_bag_recorder_right]: PLC、本组两路点云及报警发布者检查恢复正常
+[gantry_collision_bag_recorder_node-1] [INFO] [1788934521.755974844] [rosbag2_storage]: Opened database '/home/dnt/ws_ros2_rtg/virtual_test_output/gantry_source_filter/2026_09_09/rtg_654_gantry_collision_left_2026_09_09_14_15_21_734435949/rtg_654_gantry_collision_left_2026_09_09_14_15_21_734435949_0.db3' for READ_WRITE.
+[gantry_collision_bag_recorder_node-1] [INFO] [1788934521.759658238] [gantry_collision_bag_recorder_left]: 区域 1 报警，开始录包：/home/dnt/ws_ros2_rtg/virtual_test_output/gantry_source_filter/2026_09_09/rtg_654_gantry_collision_left_2026_09_09_14_15_21_734435949
+[gantry_collision_bag_recorder_node-1] [INFO] [1788934535.891921194] [gantry_collision_bag_recorder_left]: 结束录包：/home/dnt/ws_ros2_rtg/virtual_test_output/gantry_source_filter/2026_09_09/rtg_654_gantry_collision_left_2026_09_09_14_15_21_734435949，原因：alarm_cleared
+[gantry_collision_bag_recorder_node-1] [INFO] [1788934535.892030494] [gantry_collision_bag_recorder_left]:   /rtg/plc_topic_35：162 条
+[gantry_collision_bag_recorder_node-1] [INFO] [1788934535.892046949] [gantry_collision_bag_recorder_left]:   /algl/GantryColDetMsg：9 条
+[gantry_collision_bag_recorder_node-1] [INFO] [1788934535.892057737] [gantry_collision_bag_recorder_left]:   /livox/lidar_3GGDJA600101431：162 条
+[gantry_collision_bag_recorder_node-1] [INFO] [1788934535.892068244] [gantry_collision_bag_recorder_left]:   /livox/lidar_3GGDJA500101151：162 条
+[gantry_collision_bag_recorder_node-2] [INFO] [1788934538.808017386] [rosbag2_storage]: Opened database '/home/dnt/ws_ros2_rtg/virtual_test_output/gantry_source_filter/2026_09_09/rtg_654_gantry_collision_right_2026_09_09_14_15_38_788965414/rtg_654_gantry_collision_right_2026_09_09_14_15_38_788965414_0.db3' for READ_WRITE.
+[gantry_collision_bag_recorder_node-2] [INFO] [1788934538.811760102] [gantry_collision_bag_recorder_right]: 区域 2 报警，开始录包：/home/dnt/ws_ros2_rtg/virtual_test_output/gantry_source_filter/2026_09_09/rtg_654_gantry_collision_right_2026_09_09_14_15_38_788965414
+[gantry_collision_bag_recorder_node-2] [WARN] [1788934542.874590990] [gantry_collision_bag_recorder_right]: 数据异常，缺失部分无法补录，不视为报警解除： /algl/GantryColDetMsg(区域2防撞来源未确认或已离线，frame_id=gantry_collision_detect_frame) /algl/GantryColDetMsg(区域4防撞来源未确认或已离线，frame_id=gantry_collision_detect_frame)
+[gantry_collision_bag_recorder_node-1] [WARN] [1788934542.877565421] [gantry_collision_bag_recorder_left]: 数据异常，缺失部分无法补录，不视为报警解除： /algl/GantryColDetMsg(区域1防撞来源未确认或已离线，frame_id=gantry_collision_detect_frame) /algl/GantryColDetMsg(区域3防撞来源未确认或已离线，frame_id=gantry_collision_detect_frame)
+[gantry_collision_bag_recorder_node-1] [WARN] [1788934553.877856777] [gantry_collision_bag_recorder_left]: 数据异常，缺失部分无法补录，不视为报警解除： /algl/GantryColDetMsg(区域3防撞来源未确认或已离线，frame_id=gantry_collision_detect_frame)
+[gantry_collision_bag_recorder_node-2] [WARN] [1788934554.874931931] [gantry_collision_bag_recorder_right]: 数据异常，缺失部分无法补录，不视为报警解除： /algl/GantryColDetMsg(区域4防撞来源未确认或已离线，frame_id=gantry_collision_detect_frame)
+[gantry_collision_bag_recorder_node-1] [INFO] [1788934554.877782443] [gantry_collision_bag_recorder_left]: PLC、本组两路点云及报警发布者检查恢复正常
+[gantry_collision_bag_recorder_node-2] [INFO] [1788934560.874904579] [gantry_collision_bag_recorder_right]: PLC、本组两路点云及报警发布者检查恢复正常
+[gantry_collision_bag_recorder_node-2] [INFO] [1788934563.883853765] [gantry_collision_bag_recorder_right]: 结束录包：/home/dnt/ws_ros2_rtg/virtual_test_output/gantry_source_filter/2026_09_09/rtg_654_gantry_collision_right_2026_09_09_14_15_38_788965414，原因：alarm_cleared
+[gantry_collision_bag_recorder_node-2] [INFO] [1788934563.883918245] [gantry_collision_bag_recorder_right]:   /rtg/plc_topic_35：271 条
+[gantry_collision_bag_recorder_node-2] [INFO] [1788934563.883926967] [gantry_collision_bag_recorder_right]:   /algl/GantryColDetMsg：9 条
+[gantry_collision_bag_recorder_node-2] [INFO] [1788934563.883933043] [gantry_collision_bag_recorder_right]:   /livox/lidar_3GGDJ9S00100741：271 条
+[gantry_collision_bag_recorder_node-2] [INFO] [1788934563.883938715] [gantry_collision_bag_recorder_right]:   /livox/lidar_3GGDJA600101201：271 条
+[gantry_collision_bag_recorder_node-2] [WARN] [1788934611.875983279] [gantry_collision_bag_recorder_right]: 数据异常，缺失部分无法补录，不视为报警解除： /algl/GantryColDetMsg(区域2防撞来源未确认或已离线，frame_id=gantry_collision_detect_frame) /algl/GantryColDetMsg(区域4防撞来源未确认或已离线，frame_id=gantry_collision_detect_frame)
+[gantry_collision_bag_recorder_node-1] [WARN] [1788934611.878940071] [gantry_collision_bag_recorder_left]: 数据异常，缺失部分无法补录，不视为报警解除： /algl/GantryColDetMsg(区域1防撞来源未确认或已离线，frame_id=gantry_collision_detect_frame) /algl/GantryColDetMsg(区域3防撞来源未确认或已离线，frame_id=gantry_collision_detect_frame)
+^C
+
+dnt@rw-4090:~/ws_ros2_rtg$ cd /home/dnt/ws_ros2_rtg
+source /opt/ros/humble/setup.bash
+source /home/dnt/ws_ros2_rtg/install/setup.bash
+export ROS_DOMAIN_ID=98
+
+ros2 run rtg_gantry_collision_bag_recorder source_integration_test
+1/11 仅侧面发布者：区域1-4来源应保持未确认
+2/11 侧面冒用区域1/3：不能触发left
+3/11 创建防撞发布者并初始化区域1-4
+4/11 正确frame但区域7/8：不能触发
+5/11 区域1报警：仅left开包
+6/11 侧面伪解除区域1/3：left不能关闭
+7/11 防撞来源解除区域1/3：left正常关闭
+8/11 区域2报警：仅right开包
+9/11 销毁防撞发布端：应报告离线且right不能关闭
+10/11 重建发布端但不发送区域4：right不能关闭
+11/11 补充区域4解除：right正常关闭
+测试序列完成；核对录包日志后按 Ctrl+C 退出
+^CTraceback (most recent call last):
+  File "/home/dnt/ws_ros2_rtg/install/rtg_gantry_collision_bag_recorder/lib/rtg_gantry_collision_bag_recorder/source_integration_test", line 111, in <module>
+    main()
+  File "/home/dnt/ws_ros2_rtg/install/rtg_gantry_collision_bag_recorder/lib/rtg_gantry_collision_bag_recorder/source_integration_test", line 107, in main
+    rclpy.shutdown()
+  File "/opt/ros/humble/local/lib/python3.10/dist-packages/rclpy/__init__.py", line 130, in shutdown
+    _shutdown(context=context)
+  File "/opt/ros/humble/local/lib/python3.10/dist-packages/rclpy/utilities.py", line 58, in shutdown
+    return context.shutdown()
+  File "/opt/ros/humble/local/lib/python3.10/dist-packages/rclpy/context.py", line 102, in shutdown
+    self.__context.shutdown()
+rclpy._rclpy_pybind11.RCLError: failed to shutdown: rcl_shutdown already called on the given context, at ./src/rcl/init.c:241
+[ros2run]: Process exited with failure 1
+
+

@@ -1,0 +1,220 @@
+大车防撞录包程序：前录、报警续期和 120 秒切包虚拟测试
+
+一、复制规则
+============
+
+【整块复制】表示把标题下的整个命令块一次性复制到对应终端执行。
+【不要复制】表示这是预期结果或说明，只用于核对。
+
+本测试使用 ROS_DOMAIN_ID=98，与现场 ROS 域隔离。
+虚拟 PointCloud2 是空消息，只验证录制时间窗口、切包状态机和 DB3 写入，不验证真实点云吞吐。
+
+本流程按当前代码和 654 配置验证：
+
+1. 报警前预录 2 秒。
+2. 每条有效报警将结束时间刷新为当前时间加 5 秒。
+3. 从首次触发开始，单个 bag 最多录制 120 秒。
+4. 持续报警超过 120 秒时关闭旧包，后续有效报警直接开新包。
+5. 新包重新补写前 2 秒缓存，并独立计算新的 120 秒上限。
+6. 当前每个事件包应包含 PLC、报警和四路点云，共 6 个 Topic。
+
+
+二、终端 0：确认源码、重新编译并执行单元测试
+================================================
+
+【整块复制】
+
+cd /home/dnt/ws_ros2_rtg
+source /opt/ros/humble/setup.bash
+source /home/dnt/ws_ros2_rtg/install/setup.bash
+
+test -f /home/dnt/ws_ros2_rtg/src/rtg_gantry_collision_bag_recorder/package.xml
+test -f /home/dnt/ws_ros2_rtg/src/rtg_gantry_collision_bag_recorder/include/rtg_gantry_collision_bag_recorder/recording_window.hpp
+colcon list | grep '^rtg_gantry_collision_bag_recorder'
+
+colcon build --packages-select rtg_gantry_collision_bag_recorder --symlink-install --cmake-args -DBUILD_TESTING=ON
+source /home/dnt/ws_ros2_rtg/install/setup.bash
+
+colcon test --packages-select rtg_gantry_collision_bag_recorder --event-handlers console_direct+
+colcon test-result --verbose
+
+ros2 pkg prefix rtg_gantry_collision_bag_recorder
+ros2 pkg executables rtg_gantry_collision_bag_recorder
+grep -nE 'pre_record_seconds|post_record_seconds|max_record_seconds|pre_record_max_mb' /home/dnt/ws_ros2_rtg/install/rtg_gantry_collision_bag_recorder/share/rtg_gantry_collision_bag_recorder/config/recorder_654.yaml
+
+【不要复制：终端 0 通过标准】
+
+- 编译显示 Summary: 1 package finished，不能出现 Failed。
+- 测试显示 3 tests，0 errors，0 failures。
+- 可执行程序包含 gantry_collision_bag_recorder_node、recording_window_integration_test 和 verify_recording_window_test。
+- 安装后配置必须显示 2.0、5.0、120.0、256。
+
+
+三、终端 1：持续发布四路虚拟点云和 PLC
+========================================
+
+【整块复制：执行后保持该终端运行】
+
+cd /home/dnt/ws_ros2_rtg
+source /opt/ros/humble/setup.bash
+source /home/dnt/ws_ros2_rtg/install/setup.bash
+export ROS_DOMAIN_ID=98
+
+trap 'jobs -pr | xargs -r kill' EXIT INT TERM
+
+ros2 topic pub /livox/lidar_3GGDJA600101431 sensor_msgs/msg/PointCloud2 '{}' --rate 10 --print 1000 &
+ros2 topic pub /livox/lidar_3GGDJA500101151 sensor_msgs/msg/PointCloud2 '{}' --rate 10 --print 1000 &
+ros2 topic pub /livox/lidar_3GGDJ9S00100741 sensor_msgs/msg/PointCloud2 '{}' --rate 10 --print 1000 &
+ros2 topic pub /livox/lidar_3GGDJA600101201 sensor_msgs/msg/PointCloud2 '{}' --rate 10 --print 1000 &
+ros2 topic pub /rtg/plc_topic_35 sensor_device_interfaces/msg/PlcMsg '{plc_connect: true}' --rate 10 --print 1000 &
+
+wait
+
+【不要复制：说明】
+
+本终端只提供持续数据。报警由终端 3 的持久 publisher 发送，避免每条命令重新建立 DDS 发现连接。
+
+
+四、终端 2：生成独立测试配置并启动录包节点
+================================================
+
+先确认终端 1 已开始发布，再执行本终端。
+
+【整块复制：从 cd 开始，到 ros2 launch 结束】
+
+cd /home/dnt/ws_ros2_rtg
+source /opt/ros/humble/setup.bash
+source /home/dnt/ws_ros2_rtg/install/setup.bash
+export ROS_DOMAIN_ID=98
+
+mkdir -p /home/dnt/ws_ros2_rtg/virtual_test_output/gantry_recording_window
+mkdir -p /home/dnt/ws_ros2_rtg/virtual_test_output/logs
+touch /tmp/gantry_recording_window_test_start
+
+sed 's#output_base_directory: "./ros_bag/gantry_collision"#output_base_directory: "/home/dnt/ws_ros2_rtg/virtual_test_output/gantry_recording_window"#' /home/dnt/ws_ros2_rtg/install/rtg_gantry_collision_bag_recorder/share/rtg_gantry_collision_bag_recorder/config/recorder_654.yaml > /tmp/recorder_654_recording_window_test.yaml
+
+test -r /tmp/recorder_654_recording_window_test.yaml
+grep -nE 'output_base_directory|pre_record_seconds|post_record_seconds|max_record_seconds|pre_record_max_mb|collision_side|lidar_topics' /tmp/recorder_654_recording_window_test.yaml
+
+ros2 launch rtg_gantry_collision_bag_recorder gantry_collision_bag_recorder.launch.py config:=/tmp/recorder_654_recording_window_test.yaml 2>&1 | tee /home/dnt/ws_ros2_rtg/virtual_test_output/logs/gantry_recording_window_$(date +%Y%m%d_%H%M%S).log
+
+【不要复制：终端 2 启动通过标准】
+
+- left 和 right 都显示：预录 2.00 秒，每条报警续录 5.00 秒，最大录制 120.00 秒。
+- 输出目录必须是 /home/dnt/ws_ros2_rtg/virtual_test_output/gantry_recording_window。
+- 两个节点都显示四路 654 点云 Topic。
+- 不能出现 FATAL、ERROR 或 process has died。
+
+
+五、终端 3：自动执行四个录制用例
+========================================
+
+终端 1 和终端 2 正常运行后再执行。本测试大约需要 3 分钟。
+
+【整块复制】
+
+cd /home/dnt/ws_ros2_rtg
+source /opt/ros/humble/setup.bash
+source /home/dnt/ws_ros2_rtg/install/setup.bash
+export ROS_DOMAIN_ID=98
+
+ros2 run rtg_gantry_collision_bag_recorder recording_window_integration_test
+
+【不要复制：终端 3 预期结果】
+
+- 用例 1 产生 1 个 left 包，结束原因为 capture_window_complete。
+- 用例 2 只产生 1 个 left 包，不能分成两包。
+- 用例 3 产生 2 个 left 包：第一个是 max_record_duration，第二个是 capture_window_complete。
+- 用例 4 产生 1 个 right 包。
+- 本轮共 5 个包：left=4，right=1。
+
+
+六、终端 4：核验运行参数、事件状态和 DB3
+==============================================
+
+终端 3 显示“测试序列完成”后执行。
+
+【整块复制 A：核验参数和 bag 基本信息】
+
+cd /home/dnt/ws_ros2_rtg
+source /opt/ros/humble/setup.bash
+source /home/dnt/ws_ros2_rtg/install/setup.bash
+export ROS_DOMAIN_ID=98
+
+ros2 param get /gantry_collision_bag_recorder_left pre_record_seconds
+ros2 param get /gantry_collision_bag_recorder_left post_record_seconds
+ros2 param get /gantry_collision_bag_recorder_left max_record_seconds
+ros2 param get /gantry_collision_bag_recorder_right pre_record_seconds
+ros2 param get /gantry_collision_bag_recorder_right post_record_seconds
+ros2 param get /gantry_collision_bag_recorder_right max_record_seconds
+
+echo '本轮事件总数、left 数、right 数，预期依次为 5、4、1：'
+find /home/dnt/ws_ros2_rtg/virtual_test_output/gantry_recording_window -mindepth 2 -maxdepth 2 -type d -newer /tmp/gantry_recording_window_test_start | wc -l
+find /home/dnt/ws_ros2_rtg/virtual_test_output/gantry_recording_window -mindepth 2 -maxdepth 2 -type d -newer /tmp/gantry_recording_window_test_start -name '*_left_*' | wc -l
+find /home/dnt/ws_ros2_rtg/virtual_test_output/gantry_recording_window -mindepth 2 -maxdepth 2 -type d -newer /tmp/gantry_recording_window_test_start -name '*_right_*' | wc -l
+
+find /home/dnt/ws_ros2_rtg/virtual_test_output/gantry_recording_window -mindepth 2 -maxdepth 2 -type d -newer /tmp/gantry_recording_window_test_start -print0 | sort -z | while IFS= read -r -d '' bag
+do
+  echo "===== $bag ====="
+  cat "$bag/event.txt"
+  ros2 bag info "$bag"
+done
+
+【不要复制：复制 A 通过标准】
+
+- 左右参数都应为 pre=2.0、post=5.0、max=120.0。
+- 事件总数为 5，left=4，right=1。
+- 所有 bag 都能被 ros2 bag info 读取。
+- 每包应有 6 个 Topic：PLC、GantryColDetMsg 和四路点云。
+- 每个 Topic 的 Count 都应大于 0。
+
+
+【整块复制 B：用 SQLite 时间戳自动验证新功能】
+
+ros2 run rtg_gantry_collision_bag_recorder verify_recording_window_test
+
+【不要复制：复制 B 通过标准】
+
+- 最后显示“总结论：通过”。
+- 单次报警包的报警数为 1，触发后窗口约 5 秒。
+- 二次报警只有一个包，报警数为 2，触发后窗口约 8 秒。
+- 120 秒旧包状态为 max_record_duration，窗口为 120 秒。
+- 超限后新包状态为 capture_window_complete，它有独立的前 2 秒和新的录制窗口。
+- 每包的实际最早消息位于触发前约 1.5～2.3 秒。
+
+
+七、终端 4：检查本轮节点日志
+================================
+
+【整块复制】
+
+grep -nE 'FATAL|ERROR|process has died|写入失败|磁盘空间不足|报警前缓存达到容量上限' "$(find /home/dnt/ws_ros2_rtg/virtual_test_output/logs -maxdepth 1 -type f -name 'gantry_recording_window_*.log' -printf '%T@ %p\n' | sort -n | tail -1 | cut -d' ' -f2-)"
+
+【不要复制：通过标准】
+
+grep 没有任何输出才通过。
+
+
+八、测试结束
+============
+
+【人工操作，不是命令块】
+
+1. 终端 4 验收完成后，在终端 2 按 Ctrl+C，确认两个录包节点正常退出。
+2. 在终端 1 按 Ctrl+C，停止 PLC 和四路虚拟点云。
+3. 终端 1 同时停止多个 ros2 topic pub 时，如出现 failed to initialize wait set，属于 ROS2 CLI 退出噪声，不代表录包节点失败。
+
+
+九、验收边界
+============
+
+本流程通过后，可以确认：
+
+- 当前安装包使用 2/5/120 秒时间参数。
+- 单条报警可以开包，补写前 2 秒并在最后报警后续录 5 秒。
+- 5 秒窗口内再次报警只续期，不新建 bag。
+- 单包到 120 秒会以 max_record_duration 关闭。
+- 持续报警会由后续报警打开新包，新包重新补写前 2 秒。
+- left/right 可以独立触发，每个事件包都写入 6 个 Topic。
+
+本流程仍不能确认：真实点云带宽、DDS 丢包、现场算法消息时序、磁盘持续吞吐、长时间运行和断电恢复。

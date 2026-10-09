@@ -1,0 +1,240 @@
+大车防撞录包程序：clear_hold_seconds 新版本服务器虚拟测试
+
+适用版本
+========
+
+本流程针对以下新逻辑：
+
+1. 首次报警仍立即开包。
+2. 本组两个区域均明确解除后开始计时。
+3. 连续解除保持 clear_hold_seconds=3.0 秒后关闭 bag。
+4. 等待期间，本组任一区再次报警会取消计时并继续写同一个 bag。
+5. 左组 area 1/3 与右组 area 2/4 独立处理。
+
+本流程使用 ROS_DOMAIN_ID=98，与现场 ROS 域隔离；虚拟点云为空 PointCloud2，只验证状态机、录包流程和 DB3 落盘，不代表真实雷达吞吐测试通过。
+
+拖入服务器后的目录必须是：
+
+/home/dnt/ws_ros2_rtg/src/rtg_gantry_collision_bag_recorder/package.xml
+
+如果实际工作区不是 /home/dnt/ws_ros2_rtg，需要把下列命令中的工作区绝对路径统一替换。
+
+
+终端 0：核对目录、编译并运行单元测试
+====================================
+
+cd /home/dnt/ws_ros2_rtg
+source /opt/ros/humble/setup.bash
+source /home/dnt/ws_ros2_rtg/install/setup.bash
+
+test -f /home/dnt/ws_ros2_rtg/src/rtg_gantry_collision_bag_recorder/package.xml
+colcon list | grep '^rtg_gantry_collision_bag_recorder'
+
+colcon build --packages-select rtg_gantry_collision_bag_recorder --symlink-install --cmake-args -DBUILD_TESTING=ON
+source /home/dnt/ws_ros2_rtg/install/setup.bash
+
+colcon test --packages-select rtg_gantry_collision_bag_recorder --event-handlers console_direct+
+colcon test-result --verbose
+
+ros2 pkg prefix rtg_gantry_collision_bag_recorder
+grep -n 'clear_hold_seconds' /home/dnt/ws_ros2_rtg/install/rtg_gantry_collision_bag_recorder/share/rtg_gantry_collision_bag_recorder/config/recorder.yaml
+
+通过标准：
+
+- colcon build 显示 1 package finished，不能有 Failed。
+- colcon test-result 显示 1 test, 0 errors, 0 failures, 0 skipped。
+- ros2 pkg prefix 输出 /home/dnt/ws_ros2_rtg/install/rtg_gantry_collision_bag_recorder。
+- 安装后的 recorder.yaml 显示 clear_hold_seconds: 3.0。
+
+
+终端 1：持续发布四路虚拟点云、PLC 和报警心跳
+================================================
+
+下面整块复制执行，并让该终端持续运行。area 7 只保持报警话题发布者在线，不参与左右四角状态判断。
+
+cd /home/dnt/ws_ros2_rtg
+source /opt/ros/humble/setup.bash
+source /home/dnt/ws_ros2_rtg/install/setup.bash
+export ROS_DOMAIN_ID=98
+
+trap 'jobs -pr | xargs -r kill' EXIT INT TERM
+
+ros2 topic pub /livox/lidar_3GGDJA600101431 sensor_msgs/msg/PointCloud2 '{}' --rate 10 --print 1000 &
+ros2 topic pub /livox/lidar_3GGDJA500101151 sensor_msgs/msg/PointCloud2 '{}' --rate 10 --print 1000 &
+ros2 topic pub /livox/lidar_3GGDJ9S00100741 sensor_msgs/msg/PointCloud2 '{}' --rate 10 --print 1000 &
+ros2 topic pub /livox/lidar_3GGDJA600101201 sensor_msgs/msg/PointCloud2 '{}' --rate 10 --print 1000 &
+ros2 topic pub /rtg/plc_topic_35 sensor_device_interfaces/msg/PlcMsg '{plc_connect: true}' --rate 10 --print 1000 &
+ros2 topic pub /algl/GantryColDetMsg rtg_algorithm_interfaces/msg/SafetyDetectMsg '{area_code: 7, has_object: false, object_distance: 100.0}' --rate 2 --print 1000 &
+
+wait
+
+
+终端 2：生成隔离测试配置并启动新版节点
+========================================
+
+该测试配置写入 /tmp，不改服务器正式配置；bag 写入独立测试目录，不混入现场 bag。
+
+cd /home/dnt/ws_ros2_rtg
+source /opt/ros/humble/setup.bash
+source /home/dnt/ws_ros2_rtg/install/setup.bash
+export ROS_DOMAIN_ID=98
+
+mkdir -p /home/dnt/ws_ros2_rtg/virtual_test_output/gantry_collision
+mkdir -p /home/dnt/ws_ros2_rtg/virtual_test_output/logs
+touch /tmp/gantry_clear_hold_test_start
+
+sed 's#output_base_directory: "./ros_bag/gantry_collision"#output_base_directory: "/home/dnt/ws_ros2_rtg/virtual_test_output/gantry_collision"#' /home/dnt/ws_ros2_rtg/install/rtg_gantry_collision_bag_recorder/share/rtg_gantry_collision_bag_recorder/config/recorder.yaml > /tmp/recorder_654_virtual_test.yaml
+
+grep -nE 'output_base_directory|bag_name_prefix|clear_hold_seconds|lidar_' /tmp/recorder_654_virtual_test.yaml
+
+ros2 launch rtg_gantry_collision_bag_recorder gantry_collision_bag_recorder.launch.py config:=/tmp/recorder_654_virtual_test.yaml 2>&1 | tee /home/dnt/ws_ros2_rtg/virtual_test_output/logs/gantry_clear_hold_$(date +%Y%m%d_%H%M%S).log
+
+启动后必须看到：
+
+- left 组全天监听：报警立即录制，两区域明确解除并保持 3.00 秒后结束
+- right 组全天监听：报警立即录制，两区域明确解除并保持 3.00 秒后结束
+- 左侧点云为 L21、L18 对应的两个 654 Topic。
+- 右侧点云为 L20、L19 对应的两个 654 Topic。
+
+
+终端 3：执行完整虚拟报警序列
+================================
+
+先等终端 1 和终端 2 均正常运行，再整块复制执行。
+
+cd /home/dnt/ws_ros2_rtg
+source /opt/ros/humble/setup.bash
+source /home/dnt/ws_ros2_rtg/install/setup.bash
+export ROS_DOMAIN_ID=98
+
+alarm()
+{
+  ros2 topic pub /algl/GantryColDetMsg rtg_algorithm_interfaces/msg/SafetyDetectMsg "{area_code: $1, has_object: false, object_distance: $2}" --once
+}
+
+bag_count()
+{
+  find /home/dnt/ws_ros2_rtg/virtual_test_output/gantry_collision -mindepth 2 -maxdepth 2 -type d -newer /tmp/gantry_clear_hold_test_start | wc -l
+}
+
+# 初始化四个区域为正常。此时不能创建 bag。
+alarm 1 20.0
+alarm 2 20.0
+alarm 3 20.0
+alarm 4 20.0
+sleep 2
+echo '初始化后 bag 数，预期 0：'
+bag_count
+
+# 用例 1：同一区域在 3 秒等待期内反复报警。
+# 三次短报警必须合并为一个 left bag，不能产生三个短包。
+alarm 1 10.0
+sleep 0.3
+alarm 1 20.0
+sleep 1
+alarm 1 10.0
+sleep 0.3
+alarm 1 20.0
+sleep 1
+alarm 1 10.0
+sleep 0.3
+alarm 1 20.0
+sleep 1
+echo '最后一次解除后约 1 秒，预期仍只有 1 个 recording bag：'
+bag_count
+find /home/dnt/ws_ros2_rtg/virtual_test_output/gantry_collision -mindepth 2 -maxdepth 2 -type f -name event.txt -newer /tmp/gantry_clear_hold_test_start -exec grep -H '^status=' {} \;
+sleep 4
+echo '用例 1 完成后累计 bag 数，预期 1：'
+bag_count
+
+# 用例 2：area 1 解除后，等待期内同组 area 3 报警。
+# area 3 必须取消左组关包计时，最终仍只增加一个 left bag。
+alarm 1 10.0
+sleep 0.3
+alarm 1 20.0
+sleep 1
+alarm 3 4.0
+sleep 0.3
+alarm 3 20.0
+sleep 1
+echo 'area 3 最后解除后约 1 秒，预期新增 bag 仍为 recording：'
+find /home/dnt/ws_ros2_rtg/virtual_test_output/gantry_collision -mindepth 2 -maxdepth 2 -type f -name event.txt -newer /tmp/gantry_clear_hold_test_start -exec grep -H '^status=' {} \;
+sleep 4
+echo '用例 2 完成后累计 bag 数，预期 2：'
+bag_count
+
+# 用例 3：左右两组同时报警、同时解除。
+# 必须独立新增一个 left bag 和一个 right bag，解除约 1 秒时两包都仍在录制。
+alarm 1 10.0
+alarm 2 10.0
+sleep 0.5
+alarm 1 20.0
+alarm 2 20.0
+sleep 1
+echo '左右解除后约 1 秒，预期累计 4 个 bag，最新两个仍为 recording：'
+bag_count
+find /home/dnt/ws_ros2_rtg/virtual_test_output/gantry_collision -mindepth 2 -maxdepth 2 -type f -name event.txt -newer /tmp/gantry_clear_hold_test_start -exec grep -H '^status=' {} \;
+sleep 4
+echo '全部用例完成后累计 bag 数，预期 4：'
+bag_count
+
+
+终端 4：核验运行参数、事件状态和 DB3
+======================================
+
+终端 2 保持运行时执行以下命令。
+
+cd /home/dnt/ws_ros2_rtg
+source /opt/ros/humble/setup.bash
+source /home/dnt/ws_ros2_rtg/install/setup.bash
+export ROS_DOMAIN_ID=98
+
+ros2 param get /gantry_collision_bag_recorder_left clear_hold_seconds
+ros2 param get /gantry_collision_bag_recorder_right clear_hold_seconds
+ros2 param get /gantry_collision_bag_recorder_left lidar_topics
+ros2 param get /gantry_collision_bag_recorder_right lidar_topics
+
+echo '本轮事件总数，预期 4：'
+find /home/dnt/ws_ros2_rtg/virtual_test_output/gantry_collision -mindepth 2 -maxdepth 2 -type d -newer /tmp/gantry_clear_hold_test_start | wc -l
+
+echo '本轮 left/right 数量，预期 left=3，right=1：'
+find /home/dnt/ws_ros2_rtg/virtual_test_output/gantry_collision -mindepth 2 -maxdepth 2 -type d -newer /tmp/gantry_clear_hold_test_start -name '*_left_*' | wc -l
+find /home/dnt/ws_ros2_rtg/virtual_test_output/gantry_collision -mindepth 2 -maxdepth 2 -type d -newer /tmp/gantry_clear_hold_test_start -name '*_right_*' | wc -l
+
+find /home/dnt/ws_ros2_rtg/virtual_test_output/gantry_collision -mindepth 2 -maxdepth 2 -type d -newer /tmp/gantry_clear_hold_test_start -print0 | sort -z | while IFS= read -r -d '' bag
+do
+  echo "===== $bag ====="
+  cat "$bag/event.txt"
+  ros2 bag info "$bag"
+done
+
+最终通过标准：
+
+1. 参数查询左右均为 Double value is: 3.0。
+2. 本轮共 4 个事件目录：3 个 left、1 个 right。
+3. 所有 event.txt 均为 status=alarm_cleared，不能残留 recording、shutdown_before_clear 或 error_before_clear。
+4. 每个 bag 的 ros2 bag info 都能正常读取，Messages 大于 0。
+5. 每个 left bag 恰好有 PLC、GantryColDetMsg、L21、L18 四个 Topic。
+6. right bag 恰好有 PLC、GantryColDetMsg、L20、L19 四个 Topic。
+7. 四个 Topic 的 Count 均大于 0；点云和 PLC 在本虚拟测试中约为 10 Hz。
+8. 用例 1 反复三次报警只生成一个 left bag，证明 3 秒内的抖动被合并。
+9. 用例 2 中 area 3 再报警后没有提前关闭，证明本组任一区报警都会取消解除计时。
+10. 用例 3 左右各自生成 bag，互不覆盖、互不等待。
+11. 终端 2 日志没有 FATAL、ERROR、process has died、写盘失败或磁盘空间不足。
+
+检查本轮最新日志：
+
+grep -nE 'FATAL|ERROR|process has died|写入失败|磁盘空间不足' "$(find /home/dnt/ws_ros2_rtg/virtual_test_output/logs -maxdepth 1 -type f -name 'gantry_clear_hold_*.log' -printf '%T@ %p\n' | sort -n | tail -1 | cut -d' ' -f2-)"
+
+上述 grep 没有输出才符合预期。
+
+
+测试结束
+========
+
+先在终端 2 按 Ctrl+C，确认两个节点均显示 process has finished cleanly；再在终端 1 按 Ctrl+C。终端 1 停止多个后台 ros2 topic pub 时，若出现 failed to initialize wait set: the given context is not valid，属于 ROS2 CLI 同时退出时的噪声，不代表录包节点失败。
+
+本流程验证边界：
+
+- 已验证：编译、纯状态单元测试、3 秒解除等待、等待期再报警合包、同组另一区取消计时、左右独立、四话题写入、event.txt 和 DB3 可读。
+- 未验证：真实雷达点云带宽和丢帧、真实防撞算法输出、相机融合触发、现场磁盘持续吞吐、长时间运行稳定性。

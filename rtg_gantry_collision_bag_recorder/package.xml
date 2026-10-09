@@ -1,0 +1,22 @@
+<?xml version="1.0"?>
+<package format="3">
+  <name>rtg_gantry_collision_bag_recorder</name>
+  <version>0.1.0</version>
+  <description>Record PLC and two point clouds independently for each gantry collision side.</description>
+  <maintainer email="wxh@example.com">wxh</maintainer>
+  <license>Apache-2.0</license>
+  <buildtool_depend>ament_cmake</buildtool_depend>
+  <depend>rclcpp</depend>
+  <depend>rmw</depend>
+  <depend>rosbag2_cpp</depend>
+  <depend>rosbag2_storage</depend>
+  <depend>sensor_msgs</depend>
+  <depend>sensor_device_interfaces</depend>
+  <depend>rtg_algorithm_interfaces</depend>
+  <exec_depend>rosbag2_storage_default_plugins</exec_depend>
+  <exec_depend>ament_index_python</exec_depend>
+  <exec_depend>launch</exec_depend>
+  <exec_depend>launch_ros</exec_depend>
+  <exec_depend>rclpy</exec_depend>
+  <export><build_type>ament_cmake</build_type></export>
+</package>

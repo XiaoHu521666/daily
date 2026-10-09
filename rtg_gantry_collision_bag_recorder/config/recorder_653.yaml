@@ -1,0 +1,40 @@
+# 653：序列号和 IP 来自用户提供的传感器配置表。
+/**:
+  ros__parameters:
+    output_base_directory: "./ros_bag/gantry_collision"
+    bag_name_prefix: "rtg_653_gantry_collision"
+    plc_topic: "/rtg/plc_topic_35"
+    alarm_topic: "/algl/GantryColDetMsg"
+    # 对齐控制侧严格小于判定；仅处理四角防撞区域 1-4。
+    slow_distance_m: 16.0
+    stop_distance_m: 5.5
+    # 报警前预录，0 关闭；容量为每个左右实例的序列化消息上限，不含 DDS/写盘开销。
+    pre_record_seconds: 2.0
+    # 每条有效报警将结束时间刷新为当前时间加5秒。
+    post_record_seconds: 5.0
+    # 从报警触发开始计算的最大录制时长；正常仍在后录窗口结束时关闭。
+    max_record_seconds: 120.0
+    pre_record_max_mb: 256
+    # PLC/点云连续数据监测超时，不用于判断报警解除。
+    data_timeout_seconds: 3.0
+    min_free_space_gb: 2.0
+    # 单个 DB3 分卷大小，不是事件停止条件。
+    max_bagfile_size_mb: 1024
+
+gantry_collision_bag_recorder_left:
+  ros__parameters:
+    collision_side: "left"
+    lidar_topics:
+      - "/livox/lidar_3GGDJA500100521"  # L21 | 区域1 | 10.141.53.101
+      - "/livox/lidar_3GGDJ9U00100411"  # L18 | 区域3 | 10.141.53.98
+      - "/livox/lidar_3GGDJ9U00100181"  # L20 | 区域2 | 10.141.53.100
+      - "/livox/lidar_3GGDJ9S00101101"  # L19 | 区域4 | 10.141.53.99
+
+gantry_collision_bag_recorder_right:
+  ros__parameters:
+    collision_side: "right"
+    lidar_topics:
+      - "/livox/lidar_3GGDJA500100521"  # L21 | 区域1 | 10.141.53.101
+      - "/livox/lidar_3GGDJ9U00100411"  # L18 | 区域3 | 10.141.53.98
+      - "/livox/lidar_3GGDJ9U00100181"  # L20 | 区域2 | 10.141.53.100
+      - "/livox/lidar_3GGDJ9S00101101"  # L19 | 区域4 | 10.141.53.99

@@ -1,0 +1,489 @@
+dnt@rw-4090:~/ws_ros2_rtg$ cd /home/dnt/ws_ros2_rtg
+source /opt/ros/humble/setup.bash
+source /home/dnt/ws_ros2_rtg/install/setup.bash
+
+test -f /home/dnt/ws_ros2_rtg/src/rtg_gantry_collision_bag_recorder/package.xml
+colcon list | grep '^rtg_gantry_collision_bag_recorder'
+
+colcon build --packages-select rtg_gantry_collision_bag_recorder --symlink-install --cmake-args -DBUILD_TESTING=ON
+source /home/dnt/ws_ros2_rtg/install/setup.bash
+
+colcon test --packages-select rtg_gantry_collision_bag_recorder --event-handlers console_direct+
+colcon test-result --verbose
+
+ros2 pkg prefix rtg_gantry_collision_bag_recorder
+grep -n 'clear_hold_seconds' /home/dnt/ws_ros2_rtg/install/rtg_gantry_collision_bag_recorder/share/rtg_gantry_collision_bag_recorder/config/recorder.yaml
+rtg_gantry_collision_bag_recorder       src/rtg_gantry_collision_bag_recorder   (ros.ament_cmake)
+Starting >>> rtg_gantry_collision_bag_recorder
+[0.253s] colcon.colcon_core.shell WARNING The following packages are in the workspace but haven't been built:
+- rtg_algorithm_interfaces
+They are being used from the following locations instead:
+- /home/dnt/ws_ros2_rtg/cpp_install/rtg_algorithm_interfaces
+To suppress this warning ignore these packages in the workspace:
+--packages-ignore rtg_algorithm_interfaces
+Finished <<< rtg_gantry_collision_bag_recorder [7.49s]                     
+
+Summary: 1 package finished [7.68s]
+Starting >>> rtg_gantry_collision_bag_recorder
+[0.250s] colcon.colcon_core.shell WARNING The following packages are in the workspace but haven't been built:
+- rtg_algorithm_interfaces
+They are being used from the following locations instead:
+- /home/dnt/ws_ros2_rtg/cpp_install/rtg_algorithm_interfaces
+To suppress this warning ignore these packages in the workspace:
+--packages-ignore rtg_algorithm_interfaces
+UpdateCTestConfiguration  from :/home/dnt/ws_ros2_rtg/build/rtg_gantry_collision_bag_recorder/CTestConfiguration.ini
+Parse Config file:/home/dnt/ws_ros2_rtg/build/rtg_gantry_collision_bag_recorder/CTestConfiguration.ini
+   Site: rw-4090
+   Build name: (empty)
+ Add coverage exclude regular expressions.
+Create new tag: 20260909-0227 - Experimental
+UpdateCTestConfiguration  from :/home/dnt/ws_ros2_rtg/build/rtg_gantry_collision_bag_recorder/CTestConfiguration.ini
+Parse Config file:/home/dnt/ws_ros2_rtg/build/rtg_gantry_collision_bag_recorder/CTestConfiguration.ini
+Test project /home/dnt/ws_ros2_rtg/build/rtg_gantry_collision_bag_recorder
+Constructing a list of tests
+Done constructing a list of tests
+Updating test list for fixtures
+Added 0 tests to meet fixture requirements
+Checking test dependency graph...
+Checking test dependency graph end
+test 1
+    Start 1: alarm_state
+
+1: Test command: /home/dnt/ws_ros2_rtg/build/rtg_gantry_collision_bag_recorder/test_alarm_state
+1: Working Directory: /home/dnt/ws_ros2_rtg/build/rtg_gantry_collision_bag_recorder
+1: Test timeout computed to be: 10000000
+1: alarm_state tests passed
+1/1 Test #1: alarm_state ......................   Passed    0.00 sec
+
+100% tests passed, 0 tests failed out of 1
+
+Total Test time (real) =   0.00 sec
+Finished <<< rtg_gantry_collision_bag_recorder [0.10s]          
+
+Summary: 1 package finished [0.29s]
+Summary: 1 test, 0 errors, 0 failures, 0 skipped
+/home/dnt/ws_ros2_rtg/install/rtg_gantry_collision_bag_recorder
+13:    clear_hold_seconds: 3.0
+
+dnt@rw-4090:~/ws_ros2_rtg$ cd /home/dnt/ws_ros2_rtg
+source /opt/ros/humble/setup.bash
+source /home/dnt/ws_ros2_rtg/install/setup.bash
+export ROS_DOMAIN_ID=98
+
+trap 'jobs -pr | xargs -r kill' EXIT INT TERM
+
+ros2 topic pub /livox/lidar_3GGDJA600101431 sensor_msgs/msg/PointCloud2 '{}' --rate 10 --print 1000 &
+ros2 topic pub /livox/lidar_3GGDJA500101151 sensor_msgs/msg/PointCloud2 '{}' --rate 10 --print 1000 &
+ros2 topic pub /livox/lidar_3GGDJ9S00100741 sensor_msgs/msg/PointCloud2 '{}' --rate 10 --print 1000 &
+ros2 topic pub /livox/lidar_3GGDJA600101201 sensor_msgs/msg/PointCloud2 '{}' --rate 10 --print 1000 &
+ros2 topic pub /rtg/plc_topic_35 sensor_device_interfaces/msg/PlcMsg '{plc_connect: true}' --rate 10 --print 1000 &
+ros2 topic pub /algl/GantryColDetMsg rtg_algorithm_interfaces/msg/SafetyDetectMsg '{area_code: 7, has_object: false, object_distance: 100.0}' --rate 2 --print 1000 &
+
+wait
+[1] 3462758
+[2] 3462759
+[3] 3462760
+[4] 3462761
+[5] 3462762
+[6] 3462763
+publisher: beginning loop
+publisher: beginning loop
+publisher: beginning loop
+publisher: beginning loop
+publisher: beginning loop
+publisher: beginning loop
+publishing #1000: sensor_device_interfaces.msg.PlcMsg(header=std_msgs.msg.Header(stamp=builtin_interfaces.msg.Time(sec=0, nanosec=0), frame_id=''), plc_id=0, source_timestamp=0, plc_connect=True, no_estop=False, spreader_lock=False, spreader_unlock=False, spreader_20f=False, spreader_40f=False, spreader_45f=False, spreader_landed=False, spreader_pump_on_state=0, spreader_home=0, spreader_weight=0.0, ctrl_on_state=0, ctrl_mode_local=False, ctrl_mode_remote=False, ctrl_mode_manual=False, ctrl_mode_auto=False, ros_connect_state=False, gantry_velocity_1=0.0, gantry_velocity_2=0.0, gantry_velocity_3=0.0, gantry_velocity_4=0.0, gantry_pos=0.0, joystick_gantry_fb=0, joystick_trolley_fb=0, joystick_hoist_fb=0, trolley_pos=0.0, trolley_velocity=0.0, hoist_height=0.0, hoist_velocity=0.0, left_crane_state=0, left_crane_gantry_pos=0.0, left_crane_gantry_velocity=0.0, right_crane_state=0, right_crane_gantry_pos=0.0, right_crane_gantry_velocity=0.0, trolley_anchor_state=0, spreader_skew_right=False, spreader_skew_left=False, spreader20ft_cmd=False, spreader40ft_cmd=False, spreader45ft_cmd=False, spreader_rope_loose=False, flipper_left_down=False, flipper_right_down=False, over_load_fb=False, wheel_at0=False, wheel_at90=False, wheel_at16=False, wheel_at_park=False, wheel_locked=False, wheel_unlocked=False, wheel_pump1_on=False, wheel_pump2_on=False, wheel_pump_off=False, wheel_turn_auto_fb=False, wheel_turn_manual_fb=False, laser1_fault=False, laser2_fault=False, laser3_fault=False, laser4_fault=False, laser5_fault=False, laser6_fault=False, laser7_fault=False, laser8_fault=False, laser1_height=0, laser2_height=0, laser3_height=0, laser4_height=0, laser5_height=0, laser6_height=0, laser7_height=0, laser8_height=0, auto_anti_sway=False, gantry_move_assist=False, agss1=0, agss2=0, aptt_gsd=False, general_bypass_fb=False, human_bypass_fb=False, agss_left_gsd=False, agss_right_gsd=False, speed_limit=False, spreader_not_top_limit=False, bypass_atl_fb=False, bypass_jack_set_fb=False, bypass_landing_fb=False, bypass_ls_fb=False, bypass_over_height_fb=False, bypass_over_load_fb=False, bypass_spreader_fb=False, gantry_run_permit_left=False, gantry_run_permit_right=False, trolley_run_permit_forward=False, trolley_run_permit_backward=False, hoist_run_permit_up=False, hoist_run_permit_down=False, skew_pos=0)
+
+publishing #1000: sensor_msgs.msg.PointCloud2(header=std_msgs.msg.Header(stamp=builtin_interfaces.msg.Time(sec=0, nanosec=0), frame_id=''), height=0, width=0, fields=[], is_bigendian=False, point_step=0, row_step=0, data=[], is_dense=False)
+
+publishing #1000: sensor_msgs.msg.PointCloud2(header=std_msgs.msg.Header(stamp=builtin_interfaces.msg.Time(sec=0, nanosec=0), frame_id=''), height=0, width=0, fields=[], is_bigendian=False, point_step=0, row_step=0, data=[], is_dense=False)
+
+publishing #1000: sensor_msgs.msg.PointCloud2(header=std_msgs.msg.Header(stamp=builtin_interfaces.msg.Time(sec=0, nanosec=0), frame_id=''), height=0, width=0, fields=[], is_bigendian=False, point_step=0, row_step=0, data=[], is_dense=False)
+
+publishing #1000: sensor_msgs.msg.PointCloud2(header=std_msgs.msg.Header(stamp=builtin_interfaces.msg.Time(sec=0, nanosec=0), frame_id=''), height=0, width=0, fields=[], is_bigendian=False, point_step=0, row_step=0, data=[], is_dense=False)
+
+publishing #2000: sensor_device_interfaces.msg.PlcMsg(header=std_msgs.msg.Header(stamp=builtin_interfaces.msg.Time(sec=0, nanosec=0), frame_id=''), plc_id=0, source_timestamp=0, plc_connect=True, no_estop=False, spreader_lock=False, spreader_unlock=False, spreader_20f=False, spreader_40f=False, spreader_45f=False, spreader_landed=False, spreader_pump_on_state=0, spreader_home=0, spreader_weight=0.0, ctrl_on_state=0, ctrl_mode_local=False, ctrl_mode_remote=False, ctrl_mode_manual=False, ctrl_mode_auto=False, ros_connect_state=False, gantry_velocity_1=0.0, gantry_velocity_2=0.0, gantry_velocity_3=0.0, gantry_velocity_4=0.0, gantry_pos=0.0, joystick_gantry_fb=0, joystick_trolley_fb=0, joystick_hoist_fb=0, trolley_pos=0.0, trolley_velocity=0.0, hoist_height=0.0, hoist_velocity=0.0, left_crane_state=0, left_crane_gantry_pos=0.0, left_crane_gantry_velocity=0.0, right_crane_state=0, right_crane_gantry_pos=0.0, right_crane_gantry_velocity=0.0, trolley_anchor_state=0, spreader_skew_right=False, spreader_skew_left=False, spreader20ft_cmd=False, spreader40ft_cmd=False, spreader45ft_cmd=False, spreader_rope_loose=False, flipper_left_down=False, flipper_right_down=False, over_load_fb=False, wheel_at0=False, wheel_at90=False, wheel_at16=False, wheel_at_park=False, wheel_locked=False, wheel_unlocked=False, wheel_pump1_on=False, wheel_pump2_on=False, wheel_pump_off=False, wheel_turn_auto_fb=False, wheel_turn_manual_fb=False, laser1_fault=False, laser2_fault=False, laser3_fault=False, laser4_fault=False, laser5_fault=False, laser6_fault=False, laser7_fault=False, laser8_fault=False, laser1_height=0, laser2_height=0, laser3_height=0, laser4_height=0, laser5_height=0, laser6_height=0, laser7_height=0, laser8_height=0, auto_anti_sway=False, gantry_move_assist=False, agss1=0, agss2=0, aptt_gsd=False, general_bypass_fb=False, human_bypass_fb=False, agss_left_gsd=False, agss_right_gsd=False, speed_limit=False, spreader_not_top_limit=False, bypass_atl_fb=False, bypass_jack_set_fb=False, bypass_landing_fb=False, bypass_ls_fb=False, bypass_over_height_fb=False, bypass_over_load_fb=False, bypass_spreader_fb=False, gantry_run_permit_left=False, gantry_run_permit_right=False, trolley_run_permit_forward=False, trolley_run_permit_backward=False, hoist_run_permit_up=False, hoist_run_permit_down=False, skew_pos=0)
+
+publishing #2000: sensor_msgs.msg.PointCloud2(header=std_msgs.msg.Header(stamp=builtin_interfaces.msg.Time(sec=0, nanosec=0), frame_id=''), height=0, width=0, fields=[], is_bigendian=False, point_step=0, row_step=0, data=[], is_dense=False)
+
+publishing #2000: sensor_msgs.msg.PointCloud2(header=std_msgs.msg.Header(stamp=builtin_interfaces.msg.Time(sec=0, nanosec=0), frame_id=''), height=0, width=0, fields=[], is_bigendian=False, point_step=0, row_step=0, data=[], is_dense=False)
+
+publishing #2000: sensor_msgs.msg.PointCloud2(header=std_msgs.msg.Header(stamp=builtin_interfaces.msg.Time(sec=0, nanosec=0), frame_id=''), height=0, width=0, fields=[], is_bigendian=False, point_step=0, row_step=0, data=[], is_dense=False)
+
+publishing #2000: sensor_msgs.msg.PointCloud2(header=std_msgs.msg.Header(stamp=builtin_interfaces.msg.Time(sec=0, nanosec=0), frame_id=''), height=0, width=0, fields=[], is_bigendian=False, point_step=0, row_step=0, data=[], is_dense=False)
+
+publishing #3000: sensor_device_interfaces.msg.PlcMsg(header=std_msgs.msg.Header(stamp=builtin_interfaces.msg.Time(sec=0, nanosec=0), frame_id=''), plc_id=0, source_timestamp=0, plc_connect=True, no_estop=False, spreader_lock=False, spreader_unlock=False, spreader_20f=False, spreader_40f=False, spreader_45f=False, spreader_landed=False, spreader_pump_on_state=0, spreader_home=0, spreader_weight=0.0, ctrl_on_state=0, ctrl_mode_local=False, ctrl_mode_remote=False, ctrl_mode_manual=False, ctrl_mode_auto=False, ros_connect_state=False, gantry_velocity_1=0.0, gantry_velocity_2=0.0, gantry_velocity_3=0.0, gantry_velocity_4=0.0, gantry_pos=0.0, joystick_gantry_fb=0, joystick_trolley_fb=0, joystick_hoist_fb=0, trolley_pos=0.0, trolley_velocity=0.0, hoist_height=0.0, hoist_velocity=0.0, left_crane_state=0, left_crane_gantry_pos=0.0, left_crane_gantry_velocity=0.0, right_crane_state=0, right_crane_gantry_pos=0.0, right_crane_gantry_velocity=0.0, trolley_anchor_state=0, spreader_skew_right=False, spreader_skew_left=False, spreader20ft_cmd=False, spreader40ft_cmd=False, spreader45ft_cmd=False, spreader_rope_loose=False, flipper_left_down=False, flipper_right_down=False, over_load_fb=False, wheel_at0=False, wheel_at90=False, wheel_at16=False, wheel_at_park=False, wheel_locked=False, wheel_unlocked=False, wheel_pump1_on=False, wheel_pump2_on=False, wheel_pump_off=False, wheel_turn_auto_fb=False, wheel_turn_manual_fb=False, laser1_fault=False, laser2_fault=False, laser3_fault=False, laser4_fault=False, laser5_fault=False, laser6_fault=False, laser7_fault=False, laser8_fault=False, laser1_height=0, laser2_height=0, laser3_height=0, laser4_height=0, laser5_height=0, laser6_height=0, laser7_height=0, laser8_height=0, auto_anti_sway=False, gantry_move_assist=False, agss1=0, agss2=0, aptt_gsd=False, general_bypass_fb=False, human_bypass_fb=False, agss_left_gsd=False, agss_right_gsd=False, speed_limit=False, spreader_not_top_limit=False, bypass_atl_fb=False, bypass_jack_set_fb=False, bypass_landing_fb=False, bypass_ls_fb=False, bypass_over_height_fb=False, bypass_over_load_fb=False, bypass_spreader_fb=False, gantry_run_permit_left=False, gantry_run_permit_right=False, trolley_run_permit_forward=False, trolley_run_permit_backward=False, hoist_run_permit_up=False, hoist_run_permit_down=False, skew_pos=0)
+
+publishing #3000: sensor_msgs.msg.PointCloud2(header=std_msgs.msg.Header(stamp=builtin_interfaces.msg.Time(sec=0, nanosec=0), frame_id=''), height=0, width=0, fields=[], is_bigendian=False, point_step=0, row_step=0, data=[], is_dense=False)
+
+publishing #3000: sensor_msgs.msg.PointCloud2(header=std_msgs.msg.Header(stamp=builtin_interfaces.msg.Time(sec=0, nanosec=0), frame_id=''), height=0, width=0, fields=[], is_bigendian=False, point_step=0, row_step=0, data=[], is_dense=False)
+
+publishing #3000: sensor_msgs.msg.PointCloud2(header=std_msgs.msg.Header(stamp=builtin_interfaces.msg.Time(sec=0, nanosec=0), frame_id=''), height=0, width=0, fields=[], is_bigendian=False, point_step=0, row_step=0, data=[], is_dense=False)
+
+publishing #3000: sensor_msgs.msg.PointCloud2(header=std_msgs.msg.Header(stamp=builtin_interfaces.msg.Time(sec=0, nanosec=0), frame_id=''), height=0, width=0, fields=[], is_bigendian=False, point_step=0, row_step=0, data=[], is_dense=False)
+
+publishing #4000: sensor_device_interfaces.msg.PlcMsg(header=std_msgs.msg.Header(stamp=builtin_interfaces.msg.Time(sec=0, nanosec=0), frame_id=''), plc_id=0, source_timestamp=0, plc_connect=True, no_estop=False, spreader_lock=False, spreader_unlock=False, spreader_20f=False, spreader_40f=False, spreader_45f=False, spreader_landed=False, spreader_pump_on_state=0, spreader_home=0, spreader_weight=0.0, ctrl_on_state=0, ctrl_mode_local=False, ctrl_mode_remote=False, ctrl_mode_manual=False, ctrl_mode_auto=False, ros_connect_state=False, gantry_velocity_1=0.0, gantry_velocity_2=0.0, gantry_velocity_3=0.0, gantry_velocity_4=0.0, gantry_pos=0.0, joystick_gantry_fb=0, joystick_trolley_fb=0, joystick_hoist_fb=0, trolley_pos=0.0, trolley_velocity=0.0, hoist_height=0.0, hoist_velocity=0.0, left_crane_state=0, left_crane_gantry_pos=0.0, left_crane_gantry_velocity=0.0, right_crane_state=0, right_crane_gantry_pos=0.0, right_crane_gantry_velocity=0.0, trolley_anchor_state=0, spreader_skew_right=False, spreader_skew_left=False, spreader20ft_cmd=False, spreader40ft_cmd=False, spreader45ft_cmd=False, spreader_rope_loose=False, flipper_left_down=False, flipper_right_down=False, over_load_fb=False, wheel_at0=False, wheel_at90=False, wheel_at16=False, wheel_at_park=False, wheel_locked=False, wheel_unlocked=False, wheel_pump1_on=False, wheel_pump2_on=False, wheel_pump_off=False, wheel_turn_auto_fb=False, wheel_turn_manual_fb=False, laser1_fault=False, laser2_fault=False, laser3_fault=False, laser4_fault=False, laser5_fault=False, laser6_fault=False, laser7_fault=False, laser8_fault=False, laser1_height=0, laser2_height=0, laser3_height=0, laser4_height=0, laser5_height=0, laser6_height=0, laser7_height=0, laser8_height=0, auto_anti_sway=False, gantry_move_assist=False, agss1=0, agss2=0, aptt_gsd=False, general_bypass_fb=False, human_bypass_fb=False, agss_left_gsd=False, agss_right_gsd=False, speed_limit=False, spreader_not_top_limit=False, bypass_atl_fb=False, bypass_jack_set_fb=False, bypass_landing_fb=False, bypass_ls_fb=False, bypass_over_height_fb=False, bypass_over_load_fb=False, bypass_spreader_fb=False, gantry_run_permit_left=False, gantry_run_permit_right=False, trolley_run_permit_forward=False, trolley_run_permit_backward=False, hoist_run_permit_up=False, hoist_run_permit_down=False, skew_pos=0)
+
+publishing #4000: sensor_msgs.msg.PointCloud2(header=std_msgs.msg.Header(stamp=builtin_interfaces.msg.Time(sec=0, nanosec=0), frame_id=''), height=0, width=0, fields=[], is_bigendian=False, point_step=0, row_step=0, data=[], is_dense=False)
+publishing #4000: sensor_msgs.msg.PointCloud2(header=std_msgs.msg.Header(stamp=builtin_interfaces.msg.Time(sec=0, nanosec=0), frame_id=''), height=0, width=0, fields=[], is_bigendian=False, point_step=0, row_step=0, data=[], is_dense=False)
+
+
+publishing #4000: sensor_msgs.msg.PointCloud2(header=std_msgs.msg.Header(stamp=builtin_interfaces.msg.Time(sec=0, nanosec=0), frame_id=''), height=0, width=0, fields=[], is_bigendian=False, point_step=0, row_step=0, data=[], is_dense=False)
+
+publishing #4000: sensor_msgs.msg.PointCloud2(header=std_msgs.msg.Header(stamp=builtin_interfaces.msg.Time(sec=0, nanosec=0), frame_id=''), height=0, width=0, fields=[], is_bigendian=False, point_step=0, row_step=0, data=[], is_dense=False)
+
+publishing #1000: rtg_algorithm_interfaces.msg.SafetyDetectMsg(header=std_msgs.msg.Header(stamp=builtin_interfaces.msg.Time(sec=0, nanosec=0), frame_id=''), area_code=7, cam_code_list=[], has_object=False, has_person=False, object_distance=100.0, object_distance_camera=0.0, object_distance_lidar=0.0, object_list=[], images=[])
+
+publishing #5000: sensor_device_interfaces.msg.PlcMsg(header=std_msgs.msg.Header(stamp=builtin_interfaces.msg.Time(sec=0, nanosec=0), frame_id=''), plc_id=0, source_timestamp=0, plc_connect=True, no_estop=False, spreader_lock=False, spreader_unlock=False, spreader_20f=False, spreader_40f=False, spreader_45f=False, spreader_landed=False, spreader_pump_on_state=0, spreader_home=0, spreader_weight=0.0, ctrl_on_state=0, ctrl_mode_local=False, ctrl_mode_remote=False, ctrl_mode_manual=False, ctrl_mode_auto=False, ros_connect_state=False, gantry_velocity_1=0.0, gantry_velocity_2=0.0, gantry_velocity_3=0.0, gantry_velocity_4=0.0, gantry_pos=0.0, joystick_gantry_fb=0, joystick_trolley_fb=0, joystick_hoist_fb=0, trolley_pos=0.0, trolley_velocity=0.0, hoist_height=0.0, hoist_velocity=0.0, left_crane_state=0, left_crane_gantry_pos=0.0, left_crane_gantry_velocity=0.0, right_crane_state=0, right_crane_gantry_pos=0.0, right_crane_gantry_velocity=0.0, trolley_anchor_state=0, spreader_skew_right=False, spreader_skew_left=False, spreader20ft_cmd=False, spreader40ft_cmd=False, spreader45ft_cmd=False, spreader_rope_loose=False, flipper_left_down=False, flipper_right_down=False, over_load_fb=False, wheel_at0=False, wheel_at90=False, wheel_at16=False, wheel_at_park=False, wheel_locked=False, wheel_unlocked=False, wheel_pump1_on=False, wheel_pump2_on=False, wheel_pump_off=False, wheel_turn_auto_fb=False, wheel_turn_manual_fb=False, laser1_fault=False, laser2_fault=False, laser3_fault=False, laser4_fault=False, laser5_fault=False, laser6_fault=False, laser7_fault=False, laser8_fault=False, laser1_height=0, laser2_height=0, laser3_height=0, laser4_height=0, laser5_height=0, laser6_height=0, laser7_height=0, laser8_height=0, auto_anti_sway=False, gantry_move_assist=False, agss1=0, agss2=0, aptt_gsd=False, general_bypass_fb=False, human_bypass_fb=False, agss_left_gsd=False, agss_right_gsd=False, speed_limit=False, spreader_not_top_limit=False, bypass_atl_fb=False, bypass_jack_set_fb=False, bypass_landing_fb=False, bypass_ls_fb=False, bypass_over_height_fb=False, bypass_over_load_fb=False, bypass_spreader_fb=False, gantry_run_permit_left=False, gantry_run_permit_right=False, trolley_run_permit_forward=False, trolley_run_permit_backward=False, hoist_run_permit_up=False, hoist_run_permit_down=False, skew_pos=0)
+
+publishing #5000: sensor_msgs.msg.PointCloud2(header=std_msgs.msg.Header(stamp=builtin_interfaces.msg.Time(sec=0, nanosec=0), frame_id=''), height=0, width=0, fields=[], is_bigendian=False, point_step=0, row_step=0, data=[], is_dense=False)
+
+publishing #5000: sensor_msgs.msg.PointCloud2(header=std_msgs.msg.Header(stamp=builtin_interfaces.msg.Time(sec=0, nanosec=0), frame_id=''), height=0, width=0, fields=[], is_bigendian=False, point_step=0, row_step=0, data=[], is_dense=False)
+
+publishing #5000: sensor_msgs.msg.PointCloud2(header=std_msgs.msg.Header(stamp=builtin_interfaces.msg.Time(sec=0, nanosec=0), frame_id=''), height=0, width=0, fields=[], is_bigendian=False, point_step=0, row_step=0, data=[], is_dense=False)
+
+publishing #5000: sensor_msgs.msg.PointCloud2(header=std_msgs.msg.Header(stamp=builtin_interfaces.msg.Time(sec=0, nanosec=0), frame_id=''), height=0, width=0, fields=[], is_bigendian=False, point_step=0, row_step=0, data=[], is_dense=False)
+
+publishing #6000: sensor_device_interfaces.msg.PlcMsg(header=std_msgs.msg.Header(stamp=builtin_interfaces.msg.Time(sec=0, nanosec=0), frame_id=''), plc_id=0, source_timestamp=0, plc_connect=True, no_estop=False, spreader_lock=False, spreader_unlock=False, spreader_20f=False, spreader_40f=False, spreader_45f=False, spreader_landed=False, spreader_pump_on_state=0, spreader_home=0, spreader_weight=0.0, ctrl_on_state=0, ctrl_mode_local=False, ctrl_mode_remote=False, ctrl_mode_manual=False, ctrl_mode_auto=False, ros_connect_state=False, gantry_velocity_1=0.0, gantry_velocity_2=0.0, gantry_velocity_3=0.0, gantry_velocity_4=0.0, gantry_pos=0.0, joystick_gantry_fb=0, joystick_trolley_fb=0, joystick_hoist_fb=0, trolley_pos=0.0, trolley_velocity=0.0, hoist_height=0.0, hoist_velocity=0.0, left_crane_state=0, left_crane_gantry_pos=0.0, left_crane_gantry_velocity=0.0, right_crane_state=0, right_crane_gantry_pos=0.0, right_crane_gantry_velocity=0.0, trolley_anchor_state=0, spreader_skew_right=False, spreader_skew_left=False, spreader20ft_cmd=False, spreader40ft_cmd=False, spreader45ft_cmd=False, spreader_rope_loose=False, flipper_left_down=False, flipper_right_down=False, over_load_fb=False, wheel_at0=False, wheel_at90=False, wheel_at16=False, wheel_at_park=False, wheel_locked=False, wheel_unlocked=False, wheel_pump1_on=False, wheel_pump2_on=False, wheel_pump_off=False, wheel_turn_auto_fb=False, wheel_turn_manual_fb=False, laser1_fault=False, laser2_fault=False, laser3_fault=False, laser4_fault=False, laser5_fault=False, laser6_fault=False, laser7_fault=False, laser8_fault=False, laser1_height=0, laser2_height=0, laser3_height=0, laser4_height=0, laser5_height=0, laser6_height=0, laser7_height=0, laser8_height=0, auto_anti_sway=False, gantry_move_assist=False, agss1=0, agss2=0, aptt_gsd=False, general_bypass_fb=False, human_bypass_fb=False, agss_left_gsd=False, agss_right_gsd=False, speed_limit=False, spreader_not_top_limit=False, bypass_atl_fb=False, bypass_jack_set_fb=False, bypass_landing_fb=False, bypass_ls_fb=False, bypass_over_height_fb=False, bypass_over_load_fb=False, bypass_spreader_fb=False, gantry_run_permit_left=False, gantry_run_permit_right=False, trolley_run_permit_forward=False, trolley_run_permit_backward=False, hoist_run_permit_up=False, hoist_run_permit_down=False, skew_pos=0)
+
+publishing #6000: sensor_msgs.msg.PointCloud2(header=std_msgs.msg.Header(stamp=builtin_interfaces.msg.Time(sec=0, nanosec=0), frame_id=''), height=0, width=0, fields=[], is_bigendian=False, point_step=0, row_step=0, data=[], is_dense=False)
+
+publishing #6000: sensor_msgs.msg.PointCloud2(header=std_msgs.msg.Header(stamp=builtin_interfaces.msg.Time(sec=0, nanosec=0), frame_id=''), height=0, width=0, fields=[], is_bigendian=False, point_step=0, row_step=0, data=[], is_dense=False)
+
+publishing #6000: sensor_msgs.msg.PointCloud2(header=std_msgs.msg.Header(stamp=builtin_interfaces.msg.Time(sec=0, nanosec=0), frame_id=''), height=0, width=0, fields=[], is_bigendian=False, point_step=0, row_step=0, data=[], is_dense=False)
+
+publishing #6000: sensor_msgs.msg.PointCloud2(header=std_msgs.msg.Header(stamp=builtin_interfaces.msg.Time(sec=0, nanosec=0), frame_id=''), height=0, width=0, fields=[], is_bigendian=False, point_step=0, row_step=0, data=[], is_dense=False)
+
+publishing #7000: sensor_device_interfaces.msg.PlcMsg(header=std_msgs.msg.Header(stamp=builtin_interfaces.msg.Time(sec=0, nanosec=0), frame_id=''), plc_id=0, source_timestamp=0, plc_connect=True, no_estop=False, spreader_lock=False, spreader_unlock=False, spreader_20f=False, spreader_40f=False, spreader_45f=False, spreader_landed=False, spreader_pump_on_state=0, spreader_home=0, spreader_weight=0.0, ctrl_on_state=0, ctrl_mode_local=False, ctrl_mode_remote=False, ctrl_mode_manual=False, ctrl_mode_auto=False, ros_connect_state=False, gantry_velocity_1=0.0, gantry_velocity_2=0.0, gantry_velocity_3=0.0, gantry_velocity_4=0.0, gantry_pos=0.0, joystick_gantry_fb=0, joystick_trolley_fb=0, joystick_hoist_fb=0, trolley_pos=0.0, trolley_velocity=0.0, hoist_height=0.0, hoist_velocity=0.0, left_crane_state=0, left_crane_gantry_pos=0.0, left_crane_gantry_velocity=0.0, right_crane_state=0, right_crane_gantry_pos=0.0, right_crane_gantry_velocity=0.0, trolley_anchor_state=0, spreader_skew_right=False, spreader_skew_left=False, spreader20ft_cmd=False, spreader40ft_cmd=False, spreader45ft_cmd=False, spreader_rope_loose=False, flipper_left_down=False, flipper_right_down=False, over_load_fb=False, wheel_at0=False, wheel_at90=False, wheel_at16=False, wheel_at_park=False, wheel_locked=False, wheel_unlocked=False, wheel_pump1_on=False, wheel_pump2_on=False, wheel_pump_off=False, wheel_turn_auto_fb=False, wheel_turn_manual_fb=False, laser1_fault=False, laser2_fault=False, laser3_fault=False, laser4_fault=False, laser5_fault=False, laser6_fault=False, laser7_fault=False, laser8_fault=False, laser1_height=0, laser2_height=0, laser3_height=0, laser4_height=0, laser5_height=0, laser6_height=0, laser7_height=0, laser8_height=0, auto_anti_sway=False, gantry_move_assist=False, agss1=0, agss2=0, aptt_gsd=False, general_bypass_fb=False, human_bypass_fb=False, agss_left_gsd=False, agss_right_gsd=False, speed_limit=False, spreader_not_top_limit=False, bypass_atl_fb=False, bypass_jack_set_fb=False, bypass_landing_fb=False, bypass_ls_fb=False, bypass_over_height_fb=False, bypass_over_load_fb=False, bypass_spreader_fb=False, gantry_run_permit_left=False, gantry_run_permit_right=False, trolley_run_permit_forward=False, trolley_run_permit_backward=False, hoist_run_permit_up=False, hoist_run_permit_down=False, skew_pos=0)
+
+publishing #7000: sensor_msgs.msg.PointCloud2(header=std_msgs.msg.Header(stamp=builtin_interfaces.msg.Time(sec=0, nanosec=0), frame_id=''), height=0, width=0, fields=[], is_bigendian=False, point_step=0, row_step=0, data=[], is_dense=False)
+
+publishing #7000: sensor_msgs.msg.PointCloud2(header=std_msgs.msg.Header(stamp=builtin_interfaces.msg.Time(sec=0, nanosec=0), frame_id=''), height=0, width=0, fields=[], is_bigendian=False, point_step=0, row_step=0, data=[], is_dense=False)
+
+publishing #7000: sensor_msgs.msg.PointCloud2(header=std_msgs.msg.Header(stamp=builtin_interfaces.msg.Time(sec=0, nanosec=0), frame_id=''), height=0, width=0, fields=[], is_bigendian=False, point_step=0, row_step=0, data=[], is_dense=False)
+
+publishing #7000: sensor_msgs.msg.PointCloud2(header=std_msgs.msg.Header(stamp=builtin_interfaces.msg.Time(sec=0, nanosec=0), frame_id=''), height=0, width=0, fields=[], is_bigendian=False, point_step=0, row_step=0, data=[], is_dense=False)
+
+publishing #8000: sensor_device_interfaces.msg.PlcMsg(header=std_msgs.msg.Header(stamp=builtin_interfaces.msg.Time(sec=0, nanosec=0), frame_id=''), plc_id=0, source_timestamp=0, plc_connect=True, no_estop=False, spreader_lock=False, spreader_unlock=False, spreader_20f=False, spreader_40f=False, spreader_45f=False, spreader_landed=False, spreader_pump_on_state=0, spreader_home=0, spreader_weight=0.0, ctrl_on_state=0, ctrl_mode_local=False, ctrl_mode_remote=False, ctrl_mode_manual=False, ctrl_mode_auto=False, ros_connect_state=False, gantry_velocity_1=0.0, gantry_velocity_2=0.0, gantry_velocity_3=0.0, gantry_velocity_4=0.0, gantry_pos=0.0, joystick_gantry_fb=0, joystick_trolley_fb=0, joystick_hoist_fb=0, trolley_pos=0.0, trolley_velocity=0.0, hoist_height=0.0, hoist_velocity=0.0, left_crane_state=0, left_crane_gantry_pos=0.0, left_crane_gantry_velocity=0.0, right_crane_state=0, right_crane_gantry_pos=0.0, right_crane_gantry_velocity=0.0, trolley_anchor_state=0, spreader_skew_right=False, spreader_skew_left=False, spreader20ft_cmd=False, spreader40ft_cmd=False, spreader45ft_cmd=False, spreader_rope_loose=False, flipper_left_down=False, flipper_right_down=False, over_load_fb=False, wheel_at0=False, wheel_at90=False, wheel_at16=False, wheel_at_park=False, wheel_locked=False, wheel_unlocked=False, wheel_pump1_on=False, wheel_pump2_on=False, wheel_pump_off=False, wheel_turn_auto_fb=False, wheel_turn_manual_fb=False, laser1_fault=False, laser2_fault=False, laser3_fault=False, laser4_fault=False, laser5_fault=False, laser6_fault=False, laser7_fault=False, laser8_fault=False, laser1_height=0, laser2_height=0, laser3_height=0, laser4_height=0, laser5_height=0, laser6_height=0, laser7_height=0, laser8_height=0, auto_anti_sway=False, gantry_move_assist=False, agss1=0, agss2=0, aptt_gsd=False, general_bypass_fb=False, human_bypass_fb=False, agss_left_gsd=False, agss_right_gsd=False, speed_limit=False, spreader_not_top_limit=False, bypass_atl_fb=False, bypass_jack_set_fb=False, bypass_landing_fb=False, bypass_ls_fb=False, bypass_over_height_fb=False, bypass_over_load_fb=False, bypass_spreader_fb=False, gantry_run_permit_left=False, gantry_run_permit_right=False, trolley_run_permit_forward=False, trolley_run_permit_backward=False, hoist_run_permit_up=False, hoist_run_permit_down=False, skew_pos=0)
+
+publishing #8000: sensor_msgs.msg.PointCloud2(header=std_msgs.msg.Header(stamp=builtin_interfaces.msg.Time(sec=0, nanosec=0), frame_id=''), height=0, width=0, fields=[], is_bigendian=False, point_step=0, row_step=0, data=[], is_dense=False)
+
+publishing #8000: sensor_msgs.msg.PointCloud2(header=std_msgs.msg.Header(stamp=builtin_interfaces.msg.Time(sec=0, nanosec=0), frame_id=''), height=0, width=0, fields=[], is_bigendian=False, point_step=0, row_step=0, data=[], is_dense=False)
+
+publishing #8000: sensor_msgs.msg.PointCloud2(header=std_msgs.msg.Header(stamp=builtin_interfaces.msg.Time(sec=0, nanosec=0), frame_id=''), height=0, width=0, fields=[], is_bigendian=False, point_step=0, row_step=0, data=[], is_dense=False)
+
+publishing #8000: sensor_msgs.msg.PointCloud2(header=std_msgs.msg.Header(stamp=builtin_interfaces.msg.Time(sec=0, nanosec=0), frame_id=''), height=0, width=0, fields=[], is_bigendian=False, point_step=0, row_step=0, data=[], is_dense=False)
+
+publishing #9000: sensor_device_interfaces.msg.PlcMsg(header=std_msgs.msg.Header(stamp=builtin_interfaces.msg.Time(sec=0, nanosec=0), frame_id=''), plc_id=0, source_timestamp=0, plc_connect=True, no_estop=False, spreader_lock=False, spreader_unlock=False, spreader_20f=False, spreader_40f=False, spreader_45f=False, spreader_landed=False, spreader_pump_on_state=0, spreader_home=0, spreader_weight=0.0, ctrl_on_state=0, ctrl_mode_local=False, ctrl_mode_remote=False, ctrl_mode_manual=False, ctrl_mode_auto=False, ros_connect_state=False, gantry_velocity_1=0.0, gantry_velocity_2=0.0, gantry_velocity_3=0.0, gantry_velocity_4=0.0, gantry_pos=0.0, joystick_gantry_fb=0, joystick_trolley_fb=0, joystick_hoist_fb=0, trolley_pos=0.0, trolley_velocity=0.0, hoist_height=0.0, hoist_velocity=0.0, left_crane_state=0, left_crane_gantry_pos=0.0, left_crane_gantry_velocity=0.0, right_crane_state=0, right_crane_gantry_pos=0.0, right_crane_gantry_velocity=0.0, trolley_anchor_state=0, spreader_skew_right=False, spreader_skew_left=False, spreader20ft_cmd=False, spreader40ft_cmd=False, spreader45ft_cmd=False, spreader_rope_loose=False, flipper_left_down=False, flipper_right_down=False, over_load_fb=False, wheel_at0=False, wheel_at90=False, wheel_at16=False, wheel_at_park=False, wheel_locked=False, wheel_unlocked=False, wheel_pump1_on=False, wheel_pump2_on=False, wheel_pump_off=False, wheel_turn_auto_fb=False, wheel_turn_manual_fb=False, laser1_fault=False, laser2_fault=False, laser3_fault=False, laser4_fault=False, laser5_fault=False, laser6_fault=False, laser7_fault=False, laser8_fault=False, laser1_height=0, laser2_height=0, laser3_height=0, laser4_height=0, laser5_height=0, laser6_height=0, laser7_height=0, laser8_height=0, auto_anti_sway=False, gantry_move_assist=False, agss1=0, agss2=0, aptt_gsd=False, general_bypass_fb=False, human_bypass_fb=False, agss_left_gsd=False, agss_right_gsd=False, speed_limit=False, spreader_not_top_limit=False, bypass_atl_fb=False, bypass_jack_set_fb=False, bypass_landing_fb=False, bypass_ls_fb=False, bypass_over_height_fb=False, bypass_over_load_fb=False, bypass_spreader_fb=False, gantry_run_permit_left=False, gantry_run_permit_right=False, trolley_run_permit_forward=False, trolley_run_permit_backward=False, hoist_run_permit_up=False, hoist_run_permit_down=False, skew_pos=0)
+
+publishing #9000: sensor_msgs.msg.PointCloud2(header=std_msgs.msg.Header(stamp=builtin_interfaces.msg.Time(sec=0, nanosec=0), frame_id=''), height=0, width=0, fields=[], is_bigendian=False, point_step=0, row_step=0, data=[], is_dense=False)
+
+publishing #9000: sensor_msgs.msg.PointCloud2(header=std_msgs.msg.Header(stamp=builtin_interfaces.msg.Time(sec=0, nanosec=0), frame_id=''), height=0, width=0, fields=[], is_bigendian=False, point_step=0, row_step=0, data=[], is_dense=False)
+
+publishing #9000: sensor_msgs.msg.PointCloud2(header=std_msgs.msg.Header(stamp=builtin_interfaces.msg.Time(sec=0, nanosec=0), frame_id=''), height=0, width=0, fields=[], is_bigendian=False, point_step=0, row_step=0, data=[], is_dense=False)
+
+publishing #9000: sensor_msgs.msg.PointCloud2(header=std_msgs.msg.Header(stamp=builtin_interfaces.msg.Time(sec=0, nanosec=0), frame_id=''), height=0, width=0, fields=[], is_bigendian=False, point_step=0, row_step=0, data=[], is_dense=False)
+
+publishing #2000: rtg_algorithm_interfaces.msg.SafetyDetectMsg(header=std_msgs.msg.Header(stamp=builtin_interfaces.msg.Time(sec=0, nanosec=0), frame_id=''), area_code=7, cam_code_list=[], has_object=False, has_person=False, object_distance=100.0, object_distance_camera=0.0, object_distance_lidar=0.0, object_list=[], images=[])
+
+publishing #10000: sensor_device_interfaces.msg.PlcMsg(header=std_msgs.msg.Header(stamp=builtin_interfaces.msg.Time(sec=0, nanosec=0), frame_id=''), plc_id=0, source_timestamp=0, plc_connect=True, no_estop=False, spreader_lock=False, spreader_unlock=False, spreader_20f=False, spreader_40f=False, spreader_45f=False, spreader_landed=False, spreader_pump_on_state=0, spreader_home=0, spreader_weight=0.0, ctrl_on_state=0, ctrl_mode_local=False, ctrl_mode_remote=False, ctrl_mode_manual=False, ctrl_mode_auto=False, ros_connect_state=False, gantry_velocity_1=0.0, gantry_velocity_2=0.0, gantry_velocity_3=0.0, gantry_velocity_4=0.0, gantry_pos=0.0, joystick_gantry_fb=0, joystick_trolley_fb=0, joystick_hoist_fb=0, trolley_pos=0.0, trolley_velocity=0.0, hoist_height=0.0, hoist_velocity=0.0, left_crane_state=0, left_crane_gantry_pos=0.0, left_crane_gantry_velocity=0.0, right_crane_state=0, right_crane_gantry_pos=0.0, right_crane_gantry_velocity=0.0, trolley_anchor_state=0, spreader_skew_right=False, spreader_skew_left=False, spreader20ft_cmd=False, spreader40ft_cmd=False, spreader45ft_cmd=False, spreader_rope_loose=False, flipper_left_down=False, flipper_right_down=False, over_load_fb=False, wheel_at0=False, wheel_at90=False, wheel_at16=False, wheel_at_park=False, wheel_locked=False, wheel_unlocked=False, wheel_pump1_on=False, wheel_pump2_on=False, wheel_pump_off=False, wheel_turn_auto_fb=False, wheel_turn_manual_fb=False, laser1_fault=False, laser2_fault=False, laser3_fault=False, laser4_fault=False, laser5_fault=False, laser6_fault=False, laser7_fault=False, laser8_fault=False, laser1_height=0, laser2_height=0, laser3_height=0, laser4_height=0, laser5_height=0, laser6_height=0, laser7_height=0, laser8_height=0, auto_anti_sway=False, gantry_move_assist=False, agss1=0, agss2=0, aptt_gsd=False, general_bypass_fb=False, human_bypass_fb=False, agss_left_gsd=False, agss_right_gsd=False, speed_limit=False, spreader_not_top_limit=False, bypass_atl_fb=False, bypass_jack_set_fb=False, bypass_landing_fb=False, bypass_ls_fb=False, bypass_over_height_fb=False, bypass_over_load_fb=False, bypass_spreader_fb=False, gantry_run_permit_left=False, gantry_run_permit_right=False, trolley_run_permit_forward=False, trolley_run_permit_backward=False, hoist_run_permit_up=False, hoist_run_permit_down=False, skew_pos=0)
+
+publishing #10000: sensor_msgs.msg.PointCloud2(header=std_msgs.msg.Header(stamp=builtin_interfaces.msg.Time(sec=0, nanosec=0), frame_id=''), height=0, width=0, fields=[], is_bigendian=False, point_step=0, row_step=0, data=[], is_dense=False)
+publishing #10000: sensor_msgs.msg.PointCloud2(header=std_msgs.msg.Header(stamp=builtin_interfaces.msg.Time(sec=0, nanosec=0), frame_id=''), height=0, width=0, fields=[], is_bigendian=False, point_step=0, row_step=0, data=[], is_dense=False)
+publishing #10000: sensor_msgs.msg.PointCloud2(header=std_msgs.msg.Header(stamp=builtin_interfaces.msg.Time(sec=0, nanosec=0), frame_id=''), height=0, width=0, fields=[], is_bigendian=False, point_step=0, row_step=0, data=[], is_dense=False)
+
+
+
+publishing #10000: sensor_msgs.msg.PointCloud2(header=std_msgs.msg.Header(stamp=builtin_interfaces.msg.Time(sec=0, nanosec=0), frame_id=''), height=0, width=0, fields=[], is_bigendian=False, point_step=0, row_step=0, data=[], is_dense=False)
+
+dnt@rw-4090:~/ws_ros2_rtg$ cd /home/dnt/ws_ros2_rtg
+source /opt/ros/humble/setup.bash
+source /home/dnt/ws_ros2_rtg/install/setup.bash
+export ROS_DOMAIN_ID=98
+
+mkdir -p /home/dnt/ws_ros2_rtg/virtual_test_output/gantry_collision
+mkdir -p /home/dnt/ws_ros2_rtg/virtual_test_output/logs
+touch /tmp/gantry_clear_hold_test_start
+
+sed 's#output_base_directory: "./ros_bag/gantry_collision"#output_base_directory: "/home/dnt/ws_ros2_rtg/virtual_test_output/gantry_collision"#' /home/dnt/ws_ros2_rtg/install/rtg_gantry_collision_bag_recorder/share/rtg_gantry_collision_bag_recorder/config/recorder.yaml > /tmp/recorder_654_virtual_test.yaml
+
+grep -nE 'output_base_directory|bag_name_prefix|clear_hold_seconds|lidar_' /tmp/recorder_654_virtual_test.yaml
+
+ros2 launch rtg_gantry_collision_bag_recorder gantry_collision_bag_recorder.launch.py config:=/tmp/recorder_654_virtual_test.yaml 2>&1 | tee /home/dnt/ws_ros2_rtg/virtual_test_output/logs/gantry_clear_hold_$(date +%Y%m%d_%H%M%S).log
+3:    output_base_directory: "/home/dnt/ws_ros2_rtg/virtual_test_output/gantry_collision"
+4:    bag_name_prefix: "rtg_654_gantry_collision"
+13:    clear_hold_seconds: 3.0
+26:    lidar_topics:
+27:      - "/livox/lidar_3GGDJA600101431"  # L21 | 区域1 | 10.141.54.101
+28:      - "/livox/lidar_3GGDJA500101151"  # L18 | 区域3 | 10.141.54.98
+33:    lidar_topics:
+34:      - "/livox/lidar_3GGDJ9S00100741"  # L20 | 区域2 | 10.141.54.100
+35:      - "/livox/lidar_3GGDJA600101201"  # L19 | 区域4 | 10.141.54.99
+[INFO] [launch]: All log files can be found below /home/dnt/.ros/log/2026-09-09-10-29-58-028998-rw-4090-3464107
+[INFO] [launch]: Default logging verbosity is set to INFO
+[INFO] [gantry_collision_bag_recorder_node-1]: process started with pid [3464114]
+[INFO] [gantry_collision_bag_recorder_node-2]: process started with pid [3464116]
+[gantry_collision_bag_recorder_node-1] [INFO] [1788920998.084311944] [gantry_collision_bag_recorder_left]: left 组全天监听：报警立即录制，两区域明确解除并保持 3.00 秒后结束
+[gantry_collision_bag_recorder_node-1] [INFO] [1788920998.084358852] [gantry_collision_bag_recorder_left]: 输出目录：/home/dnt/ws_ros2_rtg/virtual_test_output/gantry_collision
+[gantry_collision_bag_recorder_node-1] [INFO] [1788920998.084362550] [gantry_collision_bag_recorder_left]: 点云：/livox/lidar_3GGDJA600101431
+[gantry_collision_bag_recorder_node-1] [INFO] [1788920998.084364938] [gantry_collision_bag_recorder_left]: 点云：/livox/lidar_3GGDJA500101151
+[gantry_collision_bag_recorder_node-2] [INFO] [1788920998.085586948] [gantry_collision_bag_recorder_right]: right 组全天监听：报警立即录制，两区域明确解除并保持 3.00 秒后结束
+[gantry_collision_bag_recorder_node-2] [INFO] [1788920998.085622407] [gantry_collision_bag_recorder_right]: 输出目录：/home/dnt/ws_ros2_rtg/virtual_test_output/gantry_collision
+[gantry_collision_bag_recorder_node-2] [INFO] [1788920998.085626285] [gantry_collision_bag_recorder_right]: 点云：/livox/lidar_3GGDJ9S00100741
+[gantry_collision_bag_recorder_node-2] [INFO] [1788920998.085628859] [gantry_collision_bag_recorder_right]: 点云：/livox/lidar_3GGDJA600101201
+[gantry_collision_bag_recorder_node-1] [INFO] [1788921075.597041732] [rosbag2_storage]: Opened database '/home/dnt/ws_ros2_rtg/virtual_test_output/gantry_collision/2026_09_09/rtg_654_gantry_collision_left_2026_09_09_10_31_15_579739797/rtg_654_gantry_collision_left_2026_09_09_10_31_15_579739797_0.db3' for READ_WRITE.
+[gantry_collision_bag_recorder_node-1] [INFO] [1788921075.597158758] [gantry_collision_bag_recorder_left]: 区域 1 报警，开始录包：/home/dnt/ws_ros2_rtg/virtual_test_output/gantry_collision/2026_09_09/rtg_654_gantry_collision_left_2026_09_09_10_31_15_579739797
+[gantry_collision_bag_recorder_node-1] [INFO] [1788921087.103484141] [gantry_collision_bag_recorder_left]: 结束录包：/home/dnt/ws_ros2_rtg/virtual_test_output/gantry_collision/2026_09_09/rtg_654_gantry_collision_left_2026_09_09_10_31_15_579739797，原因：alarm_cleared
+[gantry_collision_bag_recorder_node-1] [INFO] [1788921087.103544444] [gantry_collision_bag_recorder_left]:   /rtg/plc_topic_35：115 条
+[gantry_collision_bag_recorder_node-1] [INFO] [1788921087.103549327] [gantry_collision_bag_recorder_left]:   /algl/GantryColDetMsg：6 条
+[gantry_collision_bag_recorder_node-1] [INFO] [1788921087.103552336] [gantry_collision_bag_recorder_left]:   /livox/lidar_3GGDJA600101431：115 条
+[gantry_collision_bag_recorder_node-1] [INFO] [1788921087.103555342] [gantry_collision_bag_recorder_left]:   /livox/lidar_3GGDJA500101151：115 条
+[gantry_collision_bag_recorder_node-1] [INFO] [1788921143.658028980] [rosbag2_storage]: Opened database '/home/dnt/ws_ros2_rtg/virtual_test_output/gantry_collision/2026_09_09/rtg_654_gantry_collision_left_2026_09_09_10_32_23_640826260/rtg_654_gantry_collision_left_2026_09_09_10_32_23_640826260_0.db3' for READ_WRITE.
+[gantry_collision_bag_recorder_node-1] [INFO] [1788921143.658201980] [gantry_collision_bag_recorder_left]: 区域 1 报警，开始录包：/home/dnt/ws_ros2_rtg/virtual_test_output/gantry_collision/2026_09_09/rtg_654_gantry_collision_left_2026_09_09_10_32_23_640826260
+[gantry_collision_bag_recorder_node-1] [INFO] [1788921152.108384065] [gantry_collision_bag_recorder_left]: 结束录包：/home/dnt/ws_ros2_rtg/virtual_test_output/gantry_collision/2026_09_09/rtg_654_gantry_collision_left_2026_09_09_10_32_23_640826260，原因：alarm_cleared
+[gantry_collision_bag_recorder_node-1] [INFO] [1788921152.108429522] [gantry_collision_bag_recorder_left]:   /rtg/plc_topic_35：84 条
+[gantry_collision_bag_recorder_node-1] [INFO] [1788921152.108437431] [gantry_collision_bag_recorder_left]:   /algl/GantryColDetMsg：4 条
+[gantry_collision_bag_recorder_node-1] [INFO] [1788921152.108443195] [gantry_collision_bag_recorder_left]:   /livox/lidar_3GGDJA600101431：84 条
+[gantry_collision_bag_recorder_node-1] [INFO] [1788921152.108448506] [gantry_collision_bag_recorder_left]:   /livox/lidar_3GGDJA500101151：84 条
+[gantry_collision_bag_recorder_node-1] [INFO] [1788921190.474177217] [rosbag2_storage]: Opened database '/home/dnt/ws_ros2_rtg/virtual_test_output/gantry_collision/2026_09_09/rtg_654_gantry_collision_left_2026_09_09_10_33_10_455107862/rtg_654_gantry_collision_left_2026_09_09_10_33_10_455107862_0.db3' for READ_WRITE.
+[gantry_collision_bag_recorder_node-1] [INFO] [1788921190.474454845] [gantry_collision_bag_recorder_left]: 区域 1 报警，开始录包：/home/dnt/ws_ros2_rtg/virtual_test_output/gantry_collision/2026_09_09/rtg_654_gantry_collision_left_2026_09_09_10_33_10_455107862
+[gantry_collision_bag_recorder_node-2] [INFO] [1788921191.464194924] [rosbag2_storage]: Opened database '/home/dnt/ws_ros2_rtg/virtual_test_output/gantry_collision/2026_09_09/rtg_654_gantry_collision_right_2026_09_09_10_33_11_452180884/rtg_654_gantry_collision_right_2026_09_09_10_33_11_452180884_0.db3' for READ_WRITE.
+[gantry_collision_bag_recorder_node-2] [INFO] [1788921191.464416746] [gantry_collision_bag_recorder_right]: 区域 2 报警，开始录包：/home/dnt/ws_ros2_rtg/virtual_test_output/gantry_collision/2026_09_09/rtg_654_gantry_collision_right_2026_09_09_10_33_11_452180884
+[gantry_collision_bag_recorder_node-1] [INFO] [1788921196.110958632] [gantry_collision_bag_recorder_left]: 结束录包：/home/dnt/ws_ros2_rtg/virtual_test_output/gantry_collision/2026_09_09/rtg_654_gantry_collision_left_2026_09_09_10_33_10_455107862，原因：alarm_cleared
+[gantry_collision_bag_recorder_node-1] [INFO] [1788921196.110998525] [gantry_collision_bag_recorder_left]:   /rtg/plc_topic_35：56 条
+[gantry_collision_bag_recorder_node-1] [INFO] [1788921196.111001832] [gantry_collision_bag_recorder_left]:   /algl/GantryColDetMsg：2 条
+[gantry_collision_bag_recorder_node-1] [INFO] [1788921196.111004096] [gantry_collision_bag_recorder_left]:   /livox/lidar_3GGDJA600101431：56 条
+[gantry_collision_bag_recorder_node-1] [INFO] [1788921196.111006064] [gantry_collision_bag_recorder_left]:   /livox/lidar_3GGDJA500101151：56 条
+[gantry_collision_bag_recorder_node-2] [INFO] [1788921197.112780776] [gantry_collision_bag_recorder_right]: 结束录包：/home/dnt/ws_ros2_rtg/virtual_test_output/gantry_collision/2026_09_09/rtg_654_gantry_collision_right_2026_09_09_10_33_11_452180884，原因：alarm_cleared
+[gantry_collision_bag_recorder_node-2] [INFO] [1788921197.112824281] [gantry_collision_bag_recorder_right]:   /rtg/plc_topic_35：57 条
+[gantry_collision_bag_recorder_node-2] [INFO] [1788921197.112832315] [gantry_collision_bag_recorder_right]:   /algl/GantryColDetMsg：2 条
+[gantry_collision_bag_recorder_node-2] [INFO] [1788921197.112838051] [gantry_collision_bag_recorder_right]:   /livox/lidar_3GGDJ9S00100741：56 条
+[gantry_collision_bag_recorder_node-2] [INFO] [1788921197.112843866] [gantry_collision_bag_recorder_right]:   /livox/lidar_3GGDJA600101201：56 条
+
+dnt@rw-4090:~/ws_ros2_rtg$ cd /home/dnt/ws_ros2_rtg
+source /opt/ros/humble/setup.bash
+source /home/dnt/ws_ros2_rtg/install/setup.bash
+export ROS_DOMAIN_ID=98
+
+alarm()
+{
+  ros2 topic pub /algl/GantryColDetMsg rtg_algorithm_interfaces/msg/SafetyDetectMsg "{area_code: $1, has_object: false, object_distance: $2}" --once
+}
+
+bag_count()
+{
+  find /home/dnt/ws_ros2_rtg/virtual_test_output/gantry_collision -mindepth 2 -maxdepth 2 -type d -newer /tmp/gantry_clear_hold_test_start | wc -l
+}
+dnt@rw-4090:~/ws_ros2_rtg$ alarm 1 20.0
+alarm 2 20.0
+alarm 3 20.0
+alarm 4 20.0
+sleep 2
+publisher: beginning loop
+publishing #1: rtg_algorithm_interfaces.msg.SafetyDetectMsg(header=std_msgs.msg.Header(stamp=builtin_interfaces.msg.Time(sec=0, nanosec=0), frame_id=''), area_code=1, cam_code_list=[], has_object=False, has_person=False, object_distance=20.0, object_distance_camera=0.0, object_distance_lidar=0.0, object_list=[], images=[])
+
+publisher: beginning loop
+publishing #1: rtg_algorithm_interfaces.msg.SafetyDetectMsg(header=std_msgs.msg.Header(stamp=builtin_interfaces.msg.Time(sec=0, nanosec=0), frame_id=''), area_code=2, cam_code_list=[], has_object=False, has_person=False, object_distance=20.0, object_distance_camera=0.0, object_distance_lidar=0.0, object_list=[], images=[])
+
+publisher: beginning loop
+publishing #1: rtg_algorithm_interfaces.msg.SafetyDetectMsg(header=std_msgs.msg.Header(stamp=builtin_interfaces.msg.Time(sec=0, nanosec=0), frame_id=''), area_code=3, cam_code_list=[], has_object=False, has_person=False, object_distance=20.0, object_distance_camera=0.0, object_distance_lidar=0.0, object_list=[], images=[])
+
+publisher: beginning loop
+publishing #1: rtg_algorithm_interfaces.msg.SafetyDetectMsg(header=std_msgs.msg.Header(stamp=builtin_interfaces.msg.Time(sec=0, nanosec=0), frame_id=''), area_code=4, cam_code_list=[], has_object=False, has_person=False, object_distance=20.0, object_distance_camera=0.0, object_distance_lidar=0.0, object_list=[], images=[])
+
+dnt@rw-4090:~/ws_ros2_rtg$ bag_count
+0
+dnt@rw-4090:~/ws_ros2_rtg$ alarm 1 10.0
+sleep 0.3
+alarm 1 20.0
+sleep 1
+alarm 1 10.0
+sleep 0.3
+alarm 1 20.0
+sleep 1
+alarm 1 10.0
+sleep 0.3
+alarm 1 20.0
+sleep 1
+publisher: beginning loop
+publishing #1: rtg_algorithm_interfaces.msg.SafetyDetectMsg(header=std_msgs.msg.Header(stamp=builtin_interfaces.msg.Time(sec=0, nanosec=0), frame_id=''), area_code=1, cam_code_list=[], has_object=False, has_person=False, object_distance=10.0, object_distance_camera=0.0, object_distance_lidar=0.0, object_list=[], images=[])
+
+publisher: beginning loop
+publishing #1: rtg_algorithm_interfaces.msg.SafetyDetectMsg(header=std_msgs.msg.Header(stamp=builtin_interfaces.msg.Time(sec=0, nanosec=0), frame_id=''), area_code=1, cam_code_list=[], has_object=False, has_person=False, object_distance=20.0, object_distance_camera=0.0, object_distance_lidar=0.0, object_list=[], images=[])
+
+publisher: beginning loop
+publishing #1: rtg_algorithm_interfaces.msg.SafetyDetectMsg(header=std_msgs.msg.Header(stamp=builtin_interfaces.msg.Time(sec=0, nanosec=0), frame_id=''), area_code=1, cam_code_list=[], has_object=False, has_person=False, object_distance=10.0, object_distance_camera=0.0, object_distance_lidar=0.0, object_list=[], images=[])
+
+publisher: beginning loop
+publishing #1: rtg_algorithm_interfaces.msg.SafetyDetectMsg(header=std_msgs.msg.Header(stamp=builtin_interfaces.msg.Time(sec=0, nanosec=0), frame_id=''), area_code=1, cam_code_list=[], has_object=False, has_person=False, object_distance=20.0, object_distance_camera=0.0, object_distance_lidar=0.0, object_list=[], images=[])
+
+publisher: beginning loop
+publishing #1: rtg_algorithm_interfaces.msg.SafetyDetectMsg(header=std_msgs.msg.Header(stamp=builtin_interfaces.msg.Time(sec=0, nanosec=0), frame_id=''), area_code=1, cam_code_list=[], has_object=False, has_person=False, object_distance=10.0, object_distance_camera=0.0, object_distance_lidar=0.0, object_list=[], images=[])
+
+publisher: beginning loop
+publishing #1: rtg_algorithm_interfaces.msg.SafetyDetectMsg(header=std_msgs.msg.Header(stamp=builtin_interfaces.msg.Time(sec=0, nanosec=0), frame_id=''), area_code=1, cam_code_list=[], has_object=False, has_person=False, object_distance=20.0, object_distance_camera=0.0, object_distance_lidar=0.0, object_list=[], images=[])
+
+dnt@rw-4090:~/ws_ros2_rtg$ bag_count
+1
+dnt@rw-4090:~/ws_ros2_rtg$ find /home/dnt/ws_ros2_rtg/virtual_test_output/gantry_collision -mindepth 2 -maxdepth 2 -type f -name event.txt -newer /tmp/gantry_clear_hold_test_start -exec grep -H '^status=' {} \;
+sleep 4
+dnt@rw-4090:~/ws_ros2_rtg$ bag_count
+1
+dnt@rw-4090:~/ws_ros2_rtg$ alarm 1 10.0
+sleep 0.3
+alarm 1 20.0
+sleep 1
+alarm 3 4.0
+sleep 0.3
+alarm 3 20.0
+sleep 1
+publisher: beginning loop
+publishing #1: rtg_algorithm_interfaces.msg.SafetyDetectMsg(header=std_msgs.msg.Header(stamp=builtin_interfaces.msg.Time(sec=0, nanosec=0), frame_id=''), area_code=1, cam_code_list=[], has_object=False, has_person=False, object_distance=10.0, object_distance_camera=0.0, object_distance_lidar=0.0, object_list=[], images=[])
+
+publisher: beginning loop
+publishing #1: rtg_algorithm_interfaces.msg.SafetyDetectMsg(header=std_msgs.msg.Header(stamp=builtin_interfaces.msg.Time(sec=0, nanosec=0), frame_id=''), area_code=1, cam_code_list=[], has_object=False, has_person=False, object_distance=20.0, object_distance_camera=0.0, object_distance_lidar=0.0, object_list=[], images=[])
+
+publisher: beginning loop
+publishing #1: rtg_algorithm_interfaces.msg.SafetyDetectMsg(header=std_msgs.msg.Header(stamp=builtin_interfaces.msg.Time(sec=0, nanosec=0), frame_id=''), area_code=3, cam_code_list=[], has_object=False, has_person=False, object_distance=4.0, object_distance_camera=0.0, object_distance_lidar=0.0, object_list=[], images=[])
+
+publisher: beginning loop
+publishing #1: rtg_algorithm_interfaces.msg.SafetyDetectMsg(header=std_msgs.msg.Header(stamp=builtin_interfaces.msg.Time(sec=0, nanosec=0), frame_id=''), area_code=3, cam_code_list=[], has_object=False, has_person=False, object_distance=20.0, object_distance_camera=0.0, object_distance_lidar=0.0, object_list=[], images=[])
+
+dnt@rw-4090:~/ws_ros2_rtg$ find /home/dnt/ws_ros2_rtg/virtual_test_output/gantry_collision -mindepth 2 -maxdepth 2 -type f -name event.txt -newer /tmp/gantry_clear_hold_test_start -exec grep -H '^status=' {} \;
+sleep 4
+dnt@rw-4090:~/ws_ros2_rtg$ bag_count
+2
+dnt@rw-4090:~/ws_ros2_rtg$ alarm 1 10.0
+alarm 2 10.0
+sleep 0.5
+alarm 1 20.0
+alarm 2 20.0
+sleep 1
+publisher: beginning loop
+publishing #1: rtg_algorithm_interfaces.msg.SafetyDetectMsg(header=std_msgs.msg.Header(stamp=builtin_interfaces.msg.Time(sec=0, nanosec=0), frame_id=''), area_code=1, cam_code_list=[], has_object=False, has_person=False, object_distance=10.0, object_distance_camera=0.0, object_distance_lidar=0.0, object_list=[], images=[])
+
+publisher: beginning loop
+publishing #1: rtg_algorithm_interfaces.msg.SafetyDetectMsg(header=std_msgs.msg.Header(stamp=builtin_interfaces.msg.Time(sec=0, nanosec=0), frame_id=''), area_code=2, cam_code_list=[], has_object=False, has_person=False, object_distance=10.0, object_distance_camera=0.0, object_distance_lidar=0.0, object_list=[], images=[])
+
+publisher: beginning loop
+publishing #1: rtg_algorithm_interfaces.msg.SafetyDetectMsg(header=std_msgs.msg.Header(stamp=builtin_interfaces.msg.Time(sec=0, nanosec=0), frame_id=''), area_code=1, cam_code_list=[], has_object=False, has_person=False, object_distance=20.0, object_distance_camera=0.0, object_distance_lidar=0.0, object_list=[], images=[])
+
+publisher: beginning loop
+publishing #1: rtg_algorithm_interfaces.msg.SafetyDetectMsg(header=std_msgs.msg.Header(stamp=builtin_interfaces.msg.Time(sec=0, nanosec=0), frame_id=''), area_code=2, cam_code_list=[], has_object=False, has_person=False, object_distance=20.0, object_distance_camera=0.0, object_distance_lidar=0.0, object_list=[], images=[])
+
+dnt@rw-4090:~/ws_ros2_rtg$ find /home/dnt/ws_ros2_rtg/virtual_test_output/gantry_collision -mindepth 2 -maxdepth 2 -type f -name event.txt -newer /tmp/gantry_clear_hold_test_start -exec grep -H '^status=' {} \;
+sleep 4
+dnt@rw-4090:~/ws_ros2_rtg$ bag_count
+4
+
+dnt@rw-4090:~/ws_ros2_rtg$ cd /home/dnt/ws_ros2_rtg
+source /opt/ros/humble/setup.bash
+source /home/dnt/ws_ros2_rtg/install/setup.bash
+export ROS_DOMAIN_ID=98
+
+ros2 param get /gantry_collision_bag_recorder_left clear_hold_seconds
+ros2 param get /gantry_collision_bag_recorder_right clear_hold_seconds
+ros2 param get /gantry_collision_bag_recorder_left lidar_topics
+ros2 param get /gantry_collision_bag_recorder_right lidar_topics
+Double value is: 3.0
+Double value is: 3.0
+String values are: ['/livox/lidar_3GGDJA600101431', '/livox/lidar_3GGDJA500101151']
+String values are: ['/livox/lidar_3GGDJ9S00100741', '/livox/lidar_3GGDJA600101201']
+dnt@rw-4090:~/ws_ros2_rtg$ find /home/dnt/ws_ros2_rtg/virtual_test_output/gantry_collision -mindepth 2 -maxdepth 2 -type d -newer /tmp/gantry_clear_hold_test_start | wc -l
+4
+dnt@rw-4090:~/ws_ros2_rtg$ find /home/dnt/ws_ros2_rtg/virtual_test_output/gantry_collision -mindepth 2 -maxdepth 2 -type d -newer /tmp/gantry_clear_hold_test_start -name '*_left_*' | wc -l
+3
+dnt@rw-4090:~/ws_ros2_rtg$ find /home/dnt/ws_ros2_rtg/virtual_test_output/gantry_collision -mindepth 2 -maxdepth 2 -type d -newer /tmp/gantry_clear_hold_test_start -name '*_right_*' | wc -l
+
+find /home/dnt/ws_ros2_rtg/virtual_test_output/gantry_collision -mindepth 2 -maxdepth 2 -type d -newer /tmp/gantry_clear_hold_test_start -print0 | sort -z | while IFS= read -r -d '' bag
+do
+  echo "===== $bag ====="
+  cat "$bag/event.txt"
+  ros2 bag info "$bag"
+done
+1
+===== /home/dnt/ws_ros2_rtg/virtual_test_output/gantry_collision/2026_09_09/rtg_654_gantry_collision_left_2026_09_09_10_31_15_579739797 =====
+status=alarm_cleared
+start_receive_time_ns=1788921075579739797
+updated_time_ns=1788921087103446126
+/rtg/plc_topic_35=115
+/algl/GantryColDetMsg=6
+/livox/lidar_3GGDJA600101431=115
+/livox/lidar_3GGDJA500101151=115
+
+Files:             rtg_654_gantry_collision_left_2026_09_09_10_31_15_579739797_0.db3
+Bag size:          89.6 KiB
+Storage id:        sqlite3
+Duration:          11.433277693s
+Start:             Sep  9 2026 10:31:15.579739797 (1788921075.579739797)
+End:               Sep  9 2026 10:31:27.013017490 (1788921087.013017490)
+Messages:          351
+Topic information: Topic: /livox/lidar_3GGDJA500101151 | Type: sensor_msgs/msg/PointCloud2 | Count: 115 | Serialization Format: cdr
+                   Topic: /livox/lidar_3GGDJA600101431 | Type: sensor_msgs/msg/PointCloud2 | Count: 115 | Serialization Format: cdr
+                   Topic: /algl/GantryColDetMsg | Type: rtg_algorithm_interfaces/msg/SafetyDetectMsg | Count: 6 | Serialization Format: cdr
+                   Topic: /rtg/plc_topic_35 | Type: sensor_device_interfaces/msg/PlcMsg | Count: 115 | Serialization Format: cdr
+
+===== /home/dnt/ws_ros2_rtg/virtual_test_output/gantry_collision/2026_09_09/rtg_654_gantry_collision_left_2026_09_09_10_32_23_640826260 =====
+status=alarm_cleared
+start_receive_time_ns=1788921143640826260
+updated_time_ns=1788921152108354050
+/rtg/plc_topic_35=84
+/algl/GantryColDetMsg=4
+/livox/lidar_3GGDJA600101431=84
+/livox/lidar_3GGDJA500101151=84
+
+Files:             rtg_654_gantry_collision_left_2026_09_09_10_32_23_640826260_0.db3
+Bag size:          65.6 KiB
+Storage id:        sqlite3
+Duration:          8.372271403s
+Start:             Sep  9 2026 10:32:23.640826260 (1788921143.640826260)
+End:               Sep  9 2026 10:32:32.013097663 (1788921152.013097663)
+Messages:          256
+Topic information: Topic: /livox/lidar_3GGDJA500101151 | Type: sensor_msgs/msg/PointCloud2 | Count: 84 | Serialization Format: cdr
+                   Topic: /livox/lidar_3GGDJA600101431 | Type: sensor_msgs/msg/PointCloud2 | Count: 84 | Serialization Format: cdr
+                   Topic: /algl/GantryColDetMsg | Type: rtg_algorithm_interfaces/msg/SafetyDetectMsg | Count: 4 | Serialization Format: cdr
+                   Topic: /rtg/plc_topic_35 | Type: sensor_device_interfaces/msg/PlcMsg | Count: 84 | Serialization Format: cdr
+
+===== /home/dnt/ws_ros2_rtg/virtual_test_output/gantry_collision/2026_09_09/rtg_654_gantry_collision_left_2026_09_09_10_33_10_455107862 =====
+status=alarm_cleared
+start_receive_time_ns=1788921190455107862
+updated_time_ns=1788921196110940519
+/rtg/plc_topic_35=56
+/algl/GantryColDetMsg=2
+/livox/lidar_3GGDJA600101431=56
+/livox/lidar_3GGDJA500101151=56
+
+Files:             rtg_654_gantry_collision_left_2026_09_09_10_33_10_455107862_0.db3
+Bag size:          53.6 KiB
+Storage id:        sqlite3
+Duration:          5.558007935s
+Start:             Sep  9 2026 10:33:10.455107862 (1788921190.455107862)
+End:               Sep  9 2026 10:33:16.013115797 (1788921196.013115797)
+Messages:          170
+Topic information: Topic: /livox/lidar_3GGDJA500101151 | Type: sensor_msgs/msg/PointCloud2 | Count: 56 | Serialization Format: cdr
+                   Topic: /livox/lidar_3GGDJA600101431 | Type: sensor_msgs/msg/PointCloud2 | Count: 56 | Serialization Format: cdr
+                   Topic: /algl/GantryColDetMsg | Type: rtg_algorithm_interfaces/msg/SafetyDetectMsg | Count: 2 | Serialization Format: cdr
+                   Topic: /rtg/plc_topic_35 | Type: sensor_device_interfaces/msg/PlcMsg | Count: 56 | Serialization Format: cdr
+
+===== /home/dnt/ws_ros2_rtg/virtual_test_output/gantry_collision/2026_09_09/rtg_654_gantry_collision_right_2026_09_09_10_33_11_452180884 =====
+status=alarm_cleared
+start_receive_time_ns=1788921191452180884
+updated_time_ns=1788921197112754934
+/rtg/plc_topic_35=57
+/algl/GantryColDetMsg=2
+/livox/lidar_3GGDJ9S00100741=56
+/livox/lidar_3GGDJA600101201=56
+
+Files:             rtg_654_gantry_collision_right_2026_09_09_10_33_11_452180884_0.db3
+Bag size:          53.6 KiB
+Storage id:        sqlite3
+Duration:          5.647110396s
+Start:             Sep  9 2026 10:33:11.452180884 (1788921191.452180884)
+End:               Sep  9 2026 10:33:17.099291280 (1788921197.099291280)
+Messages:          171
+Topic information: Topic: /livox/lidar_3GGDJ9S00100741 | Type: sensor_msgs/msg/PointCloud2 | Count: 56 | Serialization Format: cdr
+                   Topic: /algl/GantryColDetMsg | Type: rtg_algorithm_interfaces/msg/SafetyDetectMsg | Count: 2 | Serialization Format: cdr
+                   Topic: /livox/lidar_3GGDJA600101201 | Type: sensor_msgs/msg/PointCloud2 | Count: 56 | Serialization Format: cdr
+                   Topic: /rtg/plc_topic_35 | Type: sensor_device_interfaces/msg/PlcMsg | Count: 57 | Serialization Format: cdr
+
+dnt@rw-4090:~/ws_ros2_rtg$ grep -nE 'FATAL|ERROR|process has died|写入失败|磁盘空间不足' "$(find /home/dnt/ws_ros2_rtg/virtual_test_output/logs -maxdepth 1 -type f -name 'gantry_clear_hold_*.log' -printf '%T@ %p\n' | sort -n | tail -1 | cut -d' ' -f2-)"

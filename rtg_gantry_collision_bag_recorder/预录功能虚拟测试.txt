@@ -1,0 +1,322 @@
+大车防撞录包程序：报警前 2 秒预录功能虚拟测试
+
+一、复制规则
+============
+
+【整块复制】表示：把该标题下面的整个命令块一次性复制到对应终端执行。
+【不要复制】表示：这是预期结果或说明，只用于核对。
+
+本次所有命令块都已标明复制方式。不要把“通过标准”和“预期结果”复制进终端。
+
+
+二、本次测试目标
+================
+
+1. 新版本能完成编译，并执行 alarm_state、pre_record_buffer 两个单元测试。
+2. 左右节点参数均为 pre_record_seconds=2.0、pre_record_max_mb=128。
+3. 报警前持续到达的本组两路点云和 PLC 能写入事件 bag。
+4. bag 的最早消息时间早于报警触发时间，并接近提前 2 秒。
+5. 触发消息不会因“缓存补写+实时写入”而重复。本流程每包的报警 Topic 应为两条：一条触发、一条解除。
+6. 第一包关闭以后缓存继续工作，第二次报警仍能写入报警前数据。
+7. 左右两个实例都能预录各自的两路点云。
+
+本流程使用 ROS_DOMAIN_ID=98，与现场 ROS 域隔离。虚拟 PointCloud2 是空消息，只验证预录时序、状态机和 DB3 写入；不验证真实点云吞吐、真实点云单帧大小、现场内存占用或长期稳定性。
+
+源码放入服务器后必须存在：
+
+/home/dnt/ws_ros2_rtg/src/rtg_gantry_collision_bag_recorder/package.xml
+
+
+三、终端 0：重新编译并执行两个单元测试
+==========================================
+
+【整块复制：从 cd 开始，到最后一条 grep 结束】
+
+cd /home/dnt/ws_ros2_rtg
+source /opt/ros/humble/setup.bash
+source /home/dnt/ws_ros2_rtg/install/setup.bash
+
+test -f /home/dnt/ws_ros2_rtg/src/rtg_gantry_collision_bag_recorder/package.xml
+colcon list | grep '^rtg_gantry_collision_bag_recorder'
+
+colcon build --packages-select rtg_gantry_collision_bag_recorder --symlink-install --cmake-args -DBUILD_TESTING=ON
+source /home/dnt/ws_ros2_rtg/install/setup.bash
+
+colcon test --packages-select rtg_gantry_collision_bag_recorder --event-handlers console_direct+
+colcon test-result --verbose
+
+ros2 pkg prefix rtg_gantry_collision_bag_recorder
+grep -nE 'clear_hold_seconds|pre_record_seconds|pre_record_max_mb' /home/dnt/ws_ros2_rtg/install/rtg_gantry_collision_bag_recorder/share/rtg_gantry_collision_bag_recorder/config/recorder.yaml
+
+【不要复制：终端 0 通过标准】
+
+- 编译显示 Summary: 1 package finished，不能出现 Failed。
+- 测试显示 Summary: 2 tests, 0 errors, 0 failures, 0 skipped。
+- 两个测试分别输出 alarm_state tests passed 和 pre_record_buffer tests passed。
+- 安装配置显示 clear_hold_seconds: 3.0、pre_record_seconds: 2.0、pre_record_max_mb: 128。
+
+
+四、终端 1：持续发布四路虚拟点云、PLC 和报警心跳
+====================================================
+
+【整块复制：复制整个命令块；执行后保持该终端运行】
+
+cd /home/dnt/ws_ros2_rtg
+source /opt/ros/humble/setup.bash
+source /home/dnt/ws_ros2_rtg/install/setup.bash
+export ROS_DOMAIN_ID=98
+
+trap 'jobs -pr | xargs -r kill' EXIT INT TERM
+
+ros2 topic pub /livox/lidar_3GGDJA600101431 sensor_msgs/msg/PointCloud2 '{}' --rate 10 --print 1000 &
+ros2 topic pub /livox/lidar_3GGDJA500101151 sensor_msgs/msg/PointCloud2 '{}' --rate 10 --print 1000 &
+ros2 topic pub /livox/lidar_3GGDJ9S00100741 sensor_msgs/msg/PointCloud2 '{}' --rate 10 --print 1000 &
+ros2 topic pub /livox/lidar_3GGDJA600101201 sensor_msgs/msg/PointCloud2 '{}' --rate 10 --print 1000 &
+ros2 topic pub /rtg/plc_topic_35 sensor_device_interfaces/msg/PlcMsg '{plc_connect: true}' --rate 10 --print 1000 &
+ros2 topic pub /algl/GantryColDetMsg rtg_algorithm_interfaces/msg/SafetyDetectMsg '{area_code: 7, has_object: false, object_distance: 100.0}' --rate 2 --print 1000 &
+
+wait
+
+【不要复制：说明】
+
+area 7 只用于保持报警 Topic 有发布者，不属于左右四角，因此不会触发 bag，也不会写入左右实例的缓存。
+
+
+五、终端 2：生成独立测试配置并启动节点
+======================================
+
+先确认终端 1 已开始发布，再执行本终端。
+
+【整块复制：从 cd 开始，到 ros2 launch 结束】
+
+cd /home/dnt/ws_ros2_rtg
+source /opt/ros/humble/setup.bash
+source /home/dnt/ws_ros2_rtg/install/setup.bash
+export ROS_DOMAIN_ID=98
+
+mkdir -p /home/dnt/ws_ros2_rtg/virtual_test_output/gantry_pre_record
+mkdir -p /home/dnt/ws_ros2_rtg/virtual_test_output/logs
+touch /tmp/gantry_pre_record_test_start
+
+sed 's#output_base_directory: "./ros_bag/gantry_collision"#output_base_directory: "/home/dnt/ws_ros2_rtg/virtual_test_output/gantry_pre_record"#' /home/dnt/ws_ros2_rtg/install/rtg_gantry_collision_bag_recorder/share/rtg_gantry_collision_bag_recorder/config/recorder.yaml > /tmp/recorder_654_pre_record_test.yaml
+
+grep -nE 'output_base_directory|clear_hold_seconds|pre_record_seconds|pre_record_max_mb|lidar_topics' /tmp/recorder_654_pre_record_test.yaml
+
+ros2 launch rtg_gantry_collision_bag_recorder gantry_collision_bag_recorder.launch.py config:=/tmp/recorder_654_pre_record_test.yaml 2>&1 | tee /home/dnt/ws_ros2_rtg/virtual_test_output/logs/gantry_pre_record_$(date +%Y%m%d_%H%M%S).log
+
+【不要复制：终端 2 启动通过标准】
+
+左右两个节点都必须看到：
+
+- 报警立即录制，两区域明确解除并保持 3.00 秒后结束。
+- 报警前缓存：2.00 秒，每实例序列化容量上限 128 MiB。
+- 输出目录为 /home/dnt/ws_ros2_rtg/virtual_test_output/gantry_pre_record。
+- 左侧是 654 的 L21、L18；右侧是 654 的 L20、L19。
+
+
+六、终端 3：执行三次预录事件
+==============================
+
+终端 1 和终端 2 均正常运行后再执行。三次事件之间特意等待 4 秒，使上一次报警消息离开 2 秒缓存；这样每包报警 Topic 应准确为两条。
+
+【整块复制：从 cd 开始，到最后一次 bag_count 结束】
+
+cd /home/dnt/ws_ros2_rtg
+source /opt/ros/humble/setup.bash
+source /home/dnt/ws_ros2_rtg/install/setup.bash
+export ROS_DOMAIN_ID=98
+
+alarm()
+{
+  ros2 topic pub /algl/GantryColDetMsg rtg_algorithm_interfaces/msg/SafetyDetectMsg "{area_code: $1, has_object: false, object_distance: $2}" --once
+}
+
+bag_count()
+{
+  find /home/dnt/ws_ros2_rtg/virtual_test_output/gantry_pre_record -mindepth 2 -maxdepth 2 -type d -newer /tmp/gantry_pre_record_test_start | wc -l
+}
+
+# 先建立四个区域的明确正常状态，再等待超过 2 秒，让这些初始化消息退出缓存。
+alarm 1 20.0
+alarm 2 20.0
+alarm 3 20.0
+alarm 4 20.0
+sleep 4
+echo '初始化后 bag 数，预期 0：'
+bag_count
+
+# 用例 1：第一次左侧事件。触发前点云和 PLC 已持续发布 4 秒。
+alarm 1 10.0
+sleep 1
+alarm 1 20.0
+sleep 5
+echo '用例 1 后累计 bag 数，预期 1：'
+bag_count
+
+# 让上一事件的报警消息退出缓存，但点云和 PLC 缓存继续滚动更新。
+sleep 4
+
+# 用例 2：第二次左侧事件，验证关包后下一事件仍有预录数据。
+alarm 3 4.0
+sleep 1
+alarm 3 20.0
+sleep 5
+echo '用例 2 后累计 bag 数，预期 2：'
+bag_count
+
+sleep 4
+
+# 用例 3：右侧事件，验证右实例也能预录自己的 L20、L19 和 PLC。
+alarm 2 10.0
+sleep 1
+alarm 2 20.0
+sleep 5
+echo '全部用例后累计 bag 数，预期 3：'
+bag_count
+
+【不要复制：终端 3 通过标准】
+
+- 初始化后为 0。
+- 用例 1 后为 1。
+- 用例 2 后为 2。
+- 全部完成后为 3。
+- 终端 2 每个事件只打印一次“开始录包”和一次“结束录包”。
+
+
+七、终端 4：核验参数、event.txt、DB3 和预录时间
+=================================================
+
+终端 2 保持运行时执行。
+
+【整块复制 A：核验运行参数和三个事件目录】
+
+cd /home/dnt/ws_ros2_rtg
+source /opt/ros/humble/setup.bash
+source /home/dnt/ws_ros2_rtg/install/setup.bash
+export ROS_DOMAIN_ID=98
+
+ros2 param get /gantry_collision_bag_recorder_left pre_record_seconds
+ros2 param get /gantry_collision_bag_recorder_left pre_record_max_mb
+ros2 param get /gantry_collision_bag_recorder_right pre_record_seconds
+ros2 param get /gantry_collision_bag_recorder_right pre_record_max_mb
+
+echo '本轮总数、left 数、right 数，预期依次为 3、2、1：'
+find /home/dnt/ws_ros2_rtg/virtual_test_output/gantry_pre_record -mindepth 2 -maxdepth 2 -type d -newer /tmp/gantry_pre_record_test_start | wc -l
+find /home/dnt/ws_ros2_rtg/virtual_test_output/gantry_pre_record -mindepth 2 -maxdepth 2 -type d -newer /tmp/gantry_pre_record_test_start -name '*_left_*' | wc -l
+find /home/dnt/ws_ros2_rtg/virtual_test_output/gantry_pre_record -mindepth 2 -maxdepth 2 -type d -newer /tmp/gantry_pre_record_test_start -name '*_right_*' | wc -l
+
+find /home/dnt/ws_ros2_rtg/virtual_test_output/gantry_pre_record -mindepth 2 -maxdepth 2 -type d -newer /tmp/gantry_pre_record_test_start -print0 | sort -z | while IFS= read -r -d '' bag
+do
+  echo "===== $bag ====="
+  cat "$bag/event.txt"
+  ros2 bag info "$bag"
+done
+
+【不要复制：复制 A 的通过标准】
+
+- 左右参数均为 pre_record_seconds=2.0、pre_record_max_mb=128。
+- 总数为 3，其中 left=2、right=1。
+- 三个 event.txt 都是 status=alarm_cleared、pre_record_seconds=2。
+- 三个 bag 均能被 ros2 bag info 读取，每包恰好四个 Topic。
+- 每包 /algl/GantryColDetMsg 的 Count 为 2。
+- 点云和 PLC 的 Count 都应明显多于报警后的约 4～5 秒数据量；最终以复制 B 的时间戳检查为准。
+
+
+【整块复制 B：用 SQLite 时间戳精确判断是否写入报警前数据】
+
+python3 - <<'PY'
+from pathlib import Path
+import sqlite3
+
+root = Path('/home/dnt/ws_ros2_rtg/virtual_test_output/gantry_pre_record')
+marker = Path('/tmp/gantry_pre_record_test_start').stat().st_mtime_ns
+bags = sorted(
+    path for path in root.glob('*/*')
+    if path.is_dir() and path.stat().st_mtime_ns > marker
+)
+
+passed = True
+print(f'本轮事件数={len(bags)}，预期=3')
+if len(bags) != 3:
+    passed = False
+
+for bag in bags:
+    event = {}
+    for line in (bag / 'event.txt').read_text().splitlines():
+        if '=' in line:
+            key, value = line.split('=', 1)
+            event[key] = value
+
+    topic_counts = {}
+    first_timestamp = None
+    for database in sorted(bag.glob('*.db3')):
+        connection = sqlite3.connect(database)
+        for name, count in connection.execute(
+            'SELECT topics.name, COUNT(messages.id) '
+            'FROM topics LEFT JOIN messages ON topics.id=messages.topic_id '
+            'GROUP BY topics.id'
+        ):
+            topic_counts[name] = topic_counts.get(name, 0) + count
+        current_first = connection.execute('SELECT MIN(timestamp) FROM messages').fetchone()[0]
+        connection.close()
+        if current_first is not None:
+            first_timestamp = current_first if first_timestamp is None else min(first_timestamp, current_first)
+
+    trigger = int(event['start_receive_time_ns'])
+    requested = int(event['requested_record_from_ns'])
+    lead_ms = (trigger - first_timestamp) / 1_000_000
+    requested_ms = (trigger - requested) / 1_000_000
+    alarm_count = topic_counts.get('/algl/GantryColDetMsg', 0)
+    status = event.get('status')
+    bag_ok = (
+        status == 'alarm_cleared'
+        and 1500 <= lead_ms <= 2300
+        and 1999 <= requested_ms <= 2001
+        and alarm_count == 2
+        and len(topic_counts) == 4
+        and all(count > 0 for count in topic_counts.values())
+    )
+    passed = passed and bag_ok
+    print(f'{bag.name}: status={status}, 实际预录={lead_ms:.1f}ms, 请求预录={requested_ms:.1f}ms, 报警消息={alarm_count}, Topic数={len(topic_counts)}, 结果={"通过" if bag_ok else "失败"}')
+    for name, count in sorted(topic_counts.items()):
+        print(f'  {name}: {count}')
+
+print('预录功能总结果：' + ('通过' if passed else '失败'))
+raise SystemExit(0 if passed else 1)
+PY
+
+【不要复制：复制 B 的通过标准】
+
+- 三个事件的“实际预录”均在 1500～2300 ms。
+- “请求预录”均约为 2000 ms。
+- 报警消息均为 2，Topic 数均为 4，所有 Topic 计数大于 0。
+- 最后一行必须是“预录功能总结果：通过”，并且命令退出码为 0。
+
+
+【整块复制 C：检查节点日志是否出现错误或缓存容量不足】
+
+grep -nE 'FATAL|ERROR|process has died|写入失败|磁盘空间不足|报警前缓存达到容量上限' "$(find /home/dnt/ws_ros2_rtg/virtual_test_output/logs -maxdepth 1 -type f -name 'gantry_pre_record_*.log' -printf '%T@ %p\n' | sort -n | tail -1 | cut -d' ' -f2-)"
+
+【不要复制：复制 C 的通过标准】
+
+上面的 grep 没有任何输出才通过。虚拟空点云很小，正常情况下不会触发 128 MiB 缓存上限。
+
+
+八、测试结束
+============
+
+【人工操作，不是命令块】
+
+1. 先在终端 2 按 Ctrl+C。
+2. 确认左右节点均显示 process has finished cleanly。
+3. 再在终端 1 按 Ctrl+C，停止全部虚拟发布者。
+
+终端 1 同时停止多个 ros2 topic pub 时，如果出现 failed to initialize wait set: the given context is not valid，属于 ROS2 CLI 退出噪声，不代表录包节点失败。
+
+
+九、验收边界
+============
+
+通过本流程后，可以确认：编译、两个纯状态测试、2 秒虚拟预录、连续两次事件缓存保留、左右独立、触发消息不重复、event.txt 与 DB3 可读。
+
+仍未确认：真实雷达点云吞吐、真实单帧容量、128 MiB 是否适合现场数据率、开盘补写时 DDS 是否丢帧、真实防撞算法联动和长期稳定性。这些必须使用现场真实 Topic 另做压力测试。

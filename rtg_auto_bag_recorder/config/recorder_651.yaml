@@ -1,0 +1,39 @@
+auto_bag_recorder:
+  ros__parameters:
+    output_base_directory: "./ros_bag"
+    bag_name_prefix: "rtg_651_lidar_14_17"
+
+    plc_topic: "/rtg/plc_topic_35"
+    exec_status_topic: "/rtg/task_exec_status"
+    truck_detect_topic: "/algl/TruckDetectMsg"
+    recorded_topics:
+      - "/livox/lidar_3GGDJ9T00101081"  # L14
+      - "/livox/lidar_3GGDJ9U00100161"  # L15
+      - "/livox/lidar_3GGDJ9T00101271"  # L16
+      - "/livox/lidar_3GGDJ9S00100321"  # L17
+      - "/rtg/plc_topic_35"
+
+    # 启动时检查上述四路雷达是否至少存在一个发布者，超时仍缺失则报错退出。
+    topic_check_timeout_seconds: 10.0
+
+    # 只有当前任务是抓箱(action_type=2)时，闭锁上升沿才允许开始录制。
+    require_pick_task: true
+    pick_action_type: 2
+
+    # 检测区域内有指定类型的集卡即可，不要求识别出行驶方向。
+    require_truck_detect: true
+    required_truck_type: "OTK"
+
+    # 吊具闭锁后，只有小车位置小于等于该值时才开始录包。
+    max_start_trolley_position: 1.5
+
+    # 两种停止条件可独立开关；都开启时，任一条件先满足就停止。
+    stop_on_spreader_unlock: true
+    stop_on_hoist_height: true
+    stop_hoist_height: 10.0
+
+    # 防止异常工况无限录制，设为 0.0 可关闭超时保护。
+    max_record_seconds: 1800.0
+
+    # 节点启动时若吊具已经闭锁，默认不从半个作业周期中途开始录制。
+    start_on_initial_locked: false

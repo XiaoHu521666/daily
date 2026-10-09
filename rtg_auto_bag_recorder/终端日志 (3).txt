@@ -1,0 +1,347 @@
+dnt@rw-4090:~/ws_ros2_rtg$ cd ~/ws_ros2_rtg
+  source /opt/ros/humble/setup.bash
+  colcon build --packages-select rtg_auto_bag_recorder
+  source install/setup.bash
+  ros2 launch rtg_auto_bag_recorder auto_bag_recorder.launch.py
+Starting >>> rtg_auto_bag_recorder
+Finished <<< rtg_auto_bag_recorder [7.14s]                     
+
+Summary: 1 package finished [7.31s]
+[INFO] [launch]: All log files can be found below /home/dnt/.ros/log/2026-08-05-11-36-22-107892-rw-4090-1503131
+[INFO] [launch]: Default logging verbosity is set to INFO
+[INFO] [auto_bag_recorder_node-1]: process started with pid [1503184]
+[auto_bag_recorder_node-1] [INFO] [1785900982.148081207] [auto_bag_recorder]: 本次录制 Topic 配置（共 5 个）:
+[auto_bag_recorder_node-1] [INFO] [1785900982.148127831] [auto_bag_recorder]:   /livox/lidar_3GGDJ9U00101051 [雷达]
+[auto_bag_recorder_node-1] [INFO] [1785900982.148132199] [auto_bag_recorder]:   /livox/lidar_3GGDJ9T00100371 [雷达]
+[auto_bag_recorder_node-1] [INFO] [1785900982.148134455] [auto_bag_recorder]:   /livox/lidar_3GGDJ9T00100931 [雷达]
+[auto_bag_recorder_node-1] [INFO] [1785900982.148137637] [auto_bag_recorder]:   /livox/lidar_3GGDJ9S00100631 [雷达]
+[auto_bag_recorder_node-1] [INFO] [1785900982.148139809] [auto_bag_recorder]:   /rtg/plc_topic_35 [PLC]
+[auto_bag_recorder_node-1] [INFO] [1785900982.148143769] [auto_bag_recorder]: 正在检查 4 个雷达 Topic，最长等待 10.0 s
+[auto_bag_recorder_node-1] [INFO] [1785900988.152709398] [auto_bag_recorder]: 雷达 Topic 检查通过，所有雷达均存在发布者
+[auto_bag_recorder_node-1] [INFO] [1785900988.152780598] [auto_bag_recorder]: 无人值守录包节点已启动，等待抓箱闭锁信号
+[auto_bag_recorder_node-1] [INFO] [1785900988.152809273] [auto_bag_recorder]: 输出根目录: /home/dnt/ws_ros2_rtg/./ros_bag
+[auto_bag_recorder_node-1] [INFO] [1785900988.152812867] [auto_bag_recorder]: 停止条件: 开锁=启用, 起升高度=启用 (阈值 20.00 m), 最长录制 1800.0 s
+[auto_bag_recorder_node-1] [WARN] [1785901128.265683525] [auto_bag_recorder]: 暂存闭锁信号：当前动作类型=0，要求抓箱动作类型=2（尚未收到任务状态）
+[auto_bag_recorder_node-1] stdin is not a terminal device. Keyboard handling disabled.[WARN] [1785901167.279422042] [rcl.logging_rosout]: Publisher already registered for provided node name. If this is due to multiple nodes with the same name then all logs for that logger name will go out over the existing publisher. As soon as any node with that name is destructed it will unregister the publisher, preventing any further logs for that name from being published on the rosout topic.
+[auto_bag_recorder_node-1] [INFO] [1785901167.280581588] [auto_bag_recorder]: Press SPACE for pausing/resuming
+[auto_bag_recorder_node-1] [INFO] [1785901167.281543900] [rosbag2_storage]: Opened database './ros_bag/rtg_lidar_14_17_2026_08_05_11_39_27/rtg_lidar_14_17_2026_08_05_11_39_27_0.db3' for READ_WRITE.
+[auto_bag_recorder_node-1] [INFO] [1785901167.281955512] [auto_bag_recorder]: Listening for topics...
+[auto_bag_recorder_node-1] [INFO] [1785901167.281965579] [auto_bag_recorder]: Event publisher thread: Starting
+[auto_bag_recorder_node-1] [INFO] [1785901167.282914396] [auto_bag_recorder]: Subscribed to topic '/livox/lidar_3GGDJ9U00101051'
+[auto_bag_recorder_node-1] [INFO] [1785901167.283229183] [auto_bag_recorder]: Subscribed to topic '/livox/lidar_3GGDJ9T00100931'
+[auto_bag_recorder_node-1] [INFO] [1785901167.283514699] [auto_bag_recorder]: Subscribed to topic '/livox/lidar_3GGDJ9T00100371'
+[auto_bag_recorder_node-1] [INFO] [1785901167.283790933] [auto_bag_recorder]: Subscribed to topic '/livox/lidar_3GGDJ9S00100631'
+[auto_bag_recorder_node-1] [INFO] [1785901167.283821475] [auto_bag_recorder]: Waiting for recording: Press SPACE to start.
+[auto_bag_recorder_node-1] [INFO] [1785901167.283826085] [auto_bag_recorder]: 下一次录包已预热，输出目录=./ros_bag/rtg_lidar_14_17_2026_08_05_11_39_27
+[auto_bag_recorder_node-1] [INFO] [1785901167.283833588] [auto_bag_recorder]: Resuming recording.
+[auto_bag_recorder_node-1] [INFO] [1785901167.283906844] [auto_bag_recorder]: 已写入触发录包的闭锁 PLC 消息
+[auto_bag_recorder_node-1] [INFO] [1785901167.283913896] [auto_bag_recorder]: 开始录包: 此前已检测到吊具闭锁，任务和集卡条件现已满足
+[auto_bag_recorder_node-1] [INFO] [1785901167.283916516] [auto_bag_recorder]: 输出目录=./ros_bag/rtg_lidar_14_17_2026_08_05_11_39_27
+[auto_bag_recorder_node-1] [INFO] [1785901167.284589281] [auto_bag_recorder]: All requested topics are subscribed. Stopping discovery...
+[auto_bag_recorder_node-1] [INFO] [1785901210.887980848] [auto_bag_recorder]: Pausing recording.
+[auto_bag_recorder_node-1] [INFO] [1785901210.889082496] [rosbag2_cpp]: Writing remaining messages from cache to the bag. It may take a while
+[auto_bag_recorder_node-1] [INFO] [1785901210.889570981] [auto_bag_recorder]: Event publisher thread: Exiting
+[auto_bag_recorder_node-1] [INFO] [1785901210.889600833] [auto_bag_recorder]: Recording stopped
+[auto_bag_recorder_node-1] [INFO] [1785901210.891517052] [auto_bag_recorder]: 录包已结束，原因=检测到吊具开锁上升沿，箱子已放下，时长=43.6 s，目录=./ros_bag/rtg_lidar_14_17_2026_08_05_11_39_27
+[auto_bag_recorder_node-1] stdin is not a terminal device. Keyboard handling disabled.[INFO] [1785901210.895132329] [auto_bag_recorder]: Press SPACE for pausing/resuming
+[auto_bag_recorder_node-1] [INFO] [1785901210.896088318] [rosbag2_storage]: Opened database './ros_bag/rtg_lidar_14_17_2026_08_05_11_40_10/rtg_lidar_14_17_2026_08_05_11_40_10_0.db3' for READ_WRITE.
+[auto_bag_recorder_node-1] [INFO] [1785901210.896251476] [auto_bag_recorder]: Listening for topics...
+[auto_bag_recorder_node-1] [INFO] [1785901210.896255546] [auto_bag_recorder]: Event publisher thread: Starting
+[auto_bag_recorder_node-1] [INFO] [1785901210.897180156] [auto_bag_recorder]: Subscribed to topic '/livox/lidar_3GGDJ9U00101051'
+[auto_bag_recorder_node-1] [INFO] [1785901210.897511660] [auto_bag_recorder]: Subscribed to topic '/livox/lidar_3GGDJ9T00100931'
+[auto_bag_recorder_node-1] [INFO] [1785901210.897812731] [auto_bag_recorder]: Subscribed to topic '/livox/lidar_3GGDJ9T00100371'
+[auto_bag_recorder_node-1] [INFO] [1785901210.898105377] [auto_bag_recorder]: Subscribed to topic '/livox/lidar_3GGDJ9S00100631'
+[auto_bag_recorder_node-1] [INFO] [1785901210.898125638] [auto_bag_recorder]: Waiting for recording: Press SPACE to start.
+[auto_bag_recorder_node-1] [INFO] [1785901210.898129425] [auto_bag_recorder]: 下一次录包已预热，输出目录=./ros_bag/rtg_lidar_14_17_2026_08_05_11_40_10
+[auto_bag_recorder_node-1] [INFO] [1785901210.898849454] [auto_bag_recorder]: All requested topics are subscribed. Stopping discovery...
+[auto_bag_recorder_node-1] [INFO] [1785901210.917238691] [auto_bag_recorder]: Resuming recording.
+[auto_bag_recorder_node-1] [INFO] [1785901210.917481963] [auto_bag_recorder]: 已写入触发录包的闭锁 PLC 消息
+[auto_bag_recorder_node-1] [INFO] [1785901210.917512639] [auto_bag_recorder]: 开始录包: 检测到吊具闭锁上升沿，已抓到箱子
+[auto_bag_recorder_node-1] [INFO] [1785901210.917531262] [auto_bag_recorder]: 输出目录=./ros_bag/rtg_lidar_14_17_2026_08_05_11_40_10
+[auto_bag_recorder_node-1] [INFO] [1785901224.442103254] [auto_bag_recorder]: Pausing recording.
+[auto_bag_recorder_node-1] [INFO] [1785901224.442736791] [rosbag2_cpp]: Writing remaining messages from cache to the bag. It may take a while
+[auto_bag_recorder_node-1] [INFO] [1785901224.443293181] [auto_bag_recorder]: Event publisher thread: Exiting
+[auto_bag_recorder_node-1] [INFO] [1785901224.443323799] [auto_bag_recorder]: Recording stopped
+[auto_bag_recorder_node-1] [INFO] [1785901224.444828019] [auto_bag_recorder]: 录包已结束，原因=检测到吊具开锁上升沿，箱子已放下，时长=13.5 s，目录=./ros_bag/rtg_lidar_14_17_2026_08_05_11_40_10
+[auto_bag_recorder_node-1] stdin is not a terminal device. Keyboard handling disabled.[INFO] [1785901224.447205473] [auto_bag_recorder]: Press SPACE for pausing/resuming
+[auto_bag_recorder_node-1] [INFO] [1785901224.448111793] [rosbag2_storage]: Opened database './ros_bag/rtg_lidar_14_17_2026_08_05_11_40_24/rtg_lidar_14_17_2026_08_05_11_40_24_0.db3' for READ_WRITE.
+[auto_bag_recorder_node-1] [INFO] [1785901224.448291990] [auto_bag_recorder]: Listening for topics...
+[auto_bag_recorder_node-1] [INFO] [1785901224.448295486] [auto_bag_recorder]: Event publisher thread: Starting
+[auto_bag_recorder_node-1] [INFO] [1785901224.449035129] [auto_bag_recorder]: Subscribed to topic '/livox/lidar_3GGDJ9U00101051'
+[auto_bag_recorder_node-1] [INFO] [1785901224.449345354] [auto_bag_recorder]: Subscribed to topic '/livox/lidar_3GGDJ9T00100931'
+[auto_bag_recorder_node-1] [INFO] [1785901224.449609290] [auto_bag_recorder]: Subscribed to topic '/livox/lidar_3GGDJ9T00100371'
+[auto_bag_recorder_node-1] [INFO] [1785901224.449863027] [auto_bag_recorder]: Subscribed to topic '/livox/lidar_3GGDJ9S00100631'
+[auto_bag_recorder_node-1] [INFO] [1785901224.449885223] [auto_bag_recorder]: Waiting for recording: Press SPACE to start.
+[auto_bag_recorder_node-1] [INFO] [1785901224.449889323] [auto_bag_recorder]: 下一次录包已预热，输出目录=./ros_bag/rtg_lidar_14_17_2026_08_05_11_40_24
+[auto_bag_recorder_node-1] [INFO] [1785901224.450618328] [auto_bag_recorder]: All requested topics are subscribed. Stopping discovery...
+[auto_bag_recorder_node-1] [INFO] [1785901224.476957650] [auto_bag_recorder]: Resuming recording.
+[auto_bag_recorder_node-1] [INFO] [1785901224.477292993] [auto_bag_recorder]: 已写入触发录包的闭锁 PLC 消息
+[auto_bag_recorder_node-1] [INFO] [1785901224.477343934] [auto_bag_recorder]: 开始录包: 检测到吊具闭锁上升沿，已抓到箱子
+[auto_bag_recorder_node-1] [INFO] [1785901224.477373485] [auto_bag_recorder]: 输出目录=./ros_bag/rtg_lidar_14_17_2026_08_05_11_40_24
+[auto_bag_recorder_node-1] [INFO] [1785901243.312790259] [auto_bag_recorder]: Pausing recording.
+[auto_bag_recorder_node-1] [INFO] [1785901243.313477196] [rosbag2_cpp]: Writing remaining messages from cache to the bag. It may take a while
+[auto_bag_recorder_node-1] [INFO] [1785901243.313973118] [auto_bag_recorder]: Event publisher thread: Exiting
+[auto_bag_recorder_node-1] [INFO] [1785901243.314006594] [auto_bag_recorder]: Recording stopped
+[auto_bag_recorder_node-1] [INFO] [1785901243.315365472] [auto_bag_recorder]: 录包已结束，原因=检测到吊具开锁上升沿，箱子已放下，时长=18.8 s，目录=./ros_bag/rtg_lidar_14_17_2026_08_05_11_40_24
+[auto_bag_recorder_node-1] stdin is not a terminal device. Keyboard handling disabled.[INFO] [1785901243.317729813] [auto_bag_recorder]: Press SPACE for pausing/resuming
+[auto_bag_recorder_node-1] [INFO] [1785901243.318629340] [rosbag2_storage]: Opened database './ros_bag/rtg_lidar_14_17_2026_08_05_11_40_43/rtg_lidar_14_17_2026_08_05_11_40_43_0.db3' for READ_WRITE.
+[auto_bag_recorder_node-1] [INFO] [1785901243.318818594] [auto_bag_recorder]: Listening for topics...
+[auto_bag_recorder_node-1] [INFO] [1785901243.318855790] [auto_bag_recorder]: Event publisher thread: Starting
+[auto_bag_recorder_node-1] [INFO] [1785901243.319606822] [auto_bag_recorder]: Subscribed to topic '/livox/lidar_3GGDJ9U00101051'
+[auto_bag_recorder_node-1] [INFO] [1785901243.319906518] [auto_bag_recorder]: Subscribed to topic '/livox/lidar_3GGDJ9T00100931'
+[auto_bag_recorder_node-1] [INFO] [1785901243.320178073] [auto_bag_recorder]: Subscribed to topic '/livox/lidar_3GGDJ9T00100371'
+[auto_bag_recorder_node-1] [INFO] [1785901243.320444018] [auto_bag_recorder]: Subscribed to topic '/livox/lidar_3GGDJ9S00100631'
+[auto_bag_recorder_node-1] [INFO] [1785901243.320467946] [auto_bag_recorder]: Waiting for recording: Press SPACE to start.
+[auto_bag_recorder_node-1] [INFO] [1785901243.320472525] [auto_bag_recorder]: 下一次录包已预热，输出目录=./ros_bag/rtg_lidar_14_17_2026_08_05_11_40_43
+[auto_bag_recorder_node-1] [INFO] [1785901243.320522745] [auto_bag_recorder]: Resuming recording.
+[auto_bag_recorder_node-1] [INFO] [1785901243.320579260] [auto_bag_recorder]: 已写入触发录包的闭锁 PLC 消息
+[auto_bag_recorder_node-1] [INFO] [1785901243.320584702] [auto_bag_recorder]: 开始录包: 检测到吊具闭锁上升沿，已抓到箱子
+[auto_bag_recorder_node-1] [INFO] [1785901243.320587858] [auto_bag_recorder]: 输出目录=./ros_bag/rtg_lidar_14_17_2026_08_05_11_40_43
+[auto_bag_recorder_node-1] [INFO] [1785901243.321210035] [auto_bag_recorder]: All requested topics are subscribed. Stopping discovery...
+
+dnt@rw-4090:~/ws_ros2_rtg$ source /opt/ros/humble/setup.bash 
+dnt@rw-4090:~/ws_ros2_rtg$ source install/se
+sensor_device_interfaces/ setup.bash                setup.ps1                 setup.sh                  setup.zsh                 
+dnt@rw-4090:~/ws_ros2_rtg$ source install/setup.bash 
+dnt@rw-4090:~/ws_ros2_rtg$ ros2 bag play "/mnt/win_share/Data_Storage/研发/HIT/防吊起/654_rtg_lidar_14_17_2026_07_29_14_43_13_task_11452" --loop
+[INFO] [1785901024.091880500] [rosbag2_storage]: Opened database '/mnt/win_share/Data_Storage/研发/HIT/防吊起/654_rtg_lidar_14_17_2026_07_29_14_43_13_task_11452/rtg_lidar_14_17_2026_07_29_14_43_13_task_11452_0.db3' for READ_ONLY.
+[INFO] [1785901024.091913012] [rosbag2_player]: Set rate to 1
+[INFO] [1785901024.098212479] [rosbag2_player]: Adding keyboard callbacks.
+[INFO] [1785901024.098230524] [rosbag2_player]: Press SPACE for Pause/Resume
+[INFO] [1785901024.098235020] [rosbag2_player]: Press CURSOR_RIGHT for Play Next Message
+[INFO] [1785901024.098238523] [rosbag2_player]: Press CURSOR_UP for Increase Rate 10%
+[INFO] [1785901024.098242977] [rosbag2_player]: Press CURSOR_DOWN for Decrease Rate 10%
+[INFO] [1785901024.098424270] [rosbag2_storage]: Opened database '/mnt/win_share/Data_Storage/研发/HIT/防吊起/654_rtg_lidar_14_17_2026_07_29_14_43_13_task_11452/rtg_lidar_14_17_2026_07_29_14_43_13_task_11452_0.db3' for READ_ONLY.
+[INFO] [1785901082.622708444] [rosbag2_storage]: Opened database '/mnt/win_share/Data_Storage/研发/HIT/防吊起/654_rtg_lidar_14_17_2026_07_29_14_43_13_task_11452/rtg_lidar_14_17_2026_07_29_14_43_13_task_11452_0.db3' for READ_ONLY.
+[INFO] [1785901141.147943504] [rosbag2_storage]: Opened database '/mnt/win_share/Data_Storage/研发/HIT/防吊起/654_rtg_lidar_14_17_2026_07_29_14_43_13_task_11452/rtg_lidar_14_17_2026_07_29_14_43_13_task_11452_0.db3' for READ_ONLY.
+[INFO] [1785901199.673312487] [rosbag2_storage]: Opened database '/mnt/win_share/Data_Storage/研发/HIT/防吊起/654_rtg_lidar_14_17_2026_07_29_14_43_13_task_11452/rtg_lidar_14_17_2026_07_29_14_43_13_task_11452_0.db3' for READ_ONLY.
+[INFO] [1785901258.198022803] [rosbag2_storage]: Opened database '/mnt/win_share/Data_Storage/研发/HIT/防吊起/654_rtg_lidar_14_17_2026_07_29_14_43_13_task_11452/rtg_lidar_14_17_2026_07_29_14_43_13_task_11452_0.db3' for READ_ONLY.
+[INFO] [1785901316.722548598] [rosbag2_storage]: Opened database '/mnt/win_share/Data_Storage/研发/HIT/防吊起/654_rtg_lidar_14_17_2026_07_29_14_43_13_task_11452/rtg_lidar_14_17_2026_07_29_14_43_13_task_11452_0.db3' for READ_ONLY.
+[INFO] [1785901375.247095786] [rosbag2_storage]: Opened database '/mnt/win_share/Data_Storage/研发/HIT/防吊起/654_rtg_lidar_14_17_2026_07_29_14_43_13_task_11452/rtg_lidar_14_17_2026_07_29_14_43_13_task_11452_0.db3' for READ_ONLY.
+[INFO] [1785901433.771832629] [rosbag2_storage]: Opened database '/mnt/win_share/Data_Storage/研发/HIT/防吊起/654_rtg_lidar_14_17_2026_07_29_14_43_13_task_11452/rtg_lidar_14_17_2026_07_29_14_43_13_task_11452_0.db3' for READ_ONLY.
+[INFO] [1785901492.297328761] [rosbag2_storage]: Opened database '/mnt/win_share/Data_Storage/研发/HIT/防吊起/654_rtg_lidar_14_17_2026_07_29_14_43_13_task_11452/rtg_lidar_14_17_2026_07_29_14_43_13_task_11452_0.db3' for READ_ONLY.
+
+dnt@rw-4090:~/ws_ros2_rtg$  cd /home/dnt/ws_ros2_rtg
+  source /opt/ros/humble/setup.bash
+  source install/setup.bash
+
+  ros2 topic pub /rtg/plc_topic_35 \
+    sensor_device_interfaces/msg/PlcMsg \
+    "{spreader_lock: false, spreader_unlock: false, hoist_height: 2.0}" \
+    --once
+publisher: beginning loop
+publishing #1: sensor_device_interfaces.msg.PlcMsg(header=std_msgs.msg.Header(stamp=builtin_interfaces.msg.Time(sec=0, nanosec=0), frame_id=''), plc_id=0, source_timestamp=0, plc_connect=False, no_estop=False, spreader_lock=False, spreader_unlock=False, spreader_20f=False, spreader_40f=False, spreader_45f=False, spreader_landed=False, spreader_pump_on_state=0, spreader_home=0, spreader_weight=0.0, ctrl_on_state=0, ctrl_mode_local=False, ctrl_mode_remote=False, ctrl_mode_manual=False, ctrl_mode_auto=False, ros_connect_state=False, gantry_velocity_1=0.0, gantry_velocity_2=0.0, gantry_velocity_3=0.0, gantry_velocity_4=0.0, gantry_pos=0.0, joystick_gantry_fb=0, joystick_trolley_fb=0, joystick_hoist_fb=0, trolley_pos=0.0, trolley_velocity=0.0, hoist_height=2.0, hoist_velocity=0.0, left_crane_state=0, left_crane_gantry_pos=0.0, left_crane_gantry_velocity=0.0, right_crane_state=0, right_crane_gantry_pos=0.0, right_crane_gantry_velocity=0.0, trolley_anchor_state=0, spreader_skew_right=False, spreader_skew_left=False, spreader20ft_cmd=False, spreader40ft_cmd=False, spreader45ft_cmd=False, spreader_rope_loose=False, flipper_left_down=False, flipper_right_down=False, over_load_fb=False, wheel_at0=False, wheel_at90=False, wheel_at16=False, wheel_at_park=False, wheel_locked=False, wheel_unlocked=False, wheel_pump1_on=False, wheel_pump2_on=False, wheel_pump_off=False, wheel_turn_auto_fb=False, wheel_turn_manual_fb=False, laser1_fault=False, laser2_fault=False, laser3_fault=False, laser4_fault=False, laser5_fault=False, laser6_fault=False, laser7_fault=False, laser8_fault=False, laser1_height=0, laser2_height=0, laser3_height=0, laser4_height=0, laser5_height=0, laser6_height=0, laser7_height=0, laser8_height=0, auto_anti_sway=False, gantry_move_assist=False, agss1=0, agss2=0, aptt_gsd=False, general_bypass_fb=False, human_bypass_fb=False, agss_left_gsd=False, agss_right_gsd=False, speed_limit=False, spreader_not_top_limit=False, bypass_atl_fb=False, bypass_jack_set_fb=False, bypass_landing_fb=False, bypass_ls_fb=False, bypass_over_height_fb=False, bypass_over_load_fb=False, bypass_spreader_fb=False, gantry_run_permit_left=False, gantry_run_permit_right=False, trolley_run_permit_forward=False, trolley_run_permit_backward=False, hoist_run_permit_up=False, hoist_run_permit_down=False, skew_pos=0)
+
+dnt@rw-4090:~/ws_ros2_rtg$  ros2 topic pub /rtg/plc_topic_35 \
+    sensor_device_interfaces/msg/PlcMsg \
+    "{spreader_lock: true, spreader_unlock: false, hoist_height: 2.0}" \
+    --once
+publisher: beginning loop
+publishing #1: sensor_device_interfaces.msg.PlcMsg(header=std_msgs.msg.Header(stamp=builtin_interfaces.msg.Time(sec=0, nanosec=0), frame_id=''), plc_id=0, source_timestamp=0, plc_connect=False, no_estop=False, spreader_lock=True, spreader_unlock=False, spreader_20f=False, spreader_40f=False, spreader_45f=False, spreader_landed=False, spreader_pump_on_state=0, spreader_home=0, spreader_weight=0.0, ctrl_on_state=0, ctrl_mode_local=False, ctrl_mode_remote=False, ctrl_mode_manual=False, ctrl_mode_auto=False, ros_connect_state=False, gantry_velocity_1=0.0, gantry_velocity_2=0.0, gantry_velocity_3=0.0, gantry_velocity_4=0.0, gantry_pos=0.0, joystick_gantry_fb=0, joystick_trolley_fb=0, joystick_hoist_fb=0, trolley_pos=0.0, trolley_velocity=0.0, hoist_height=2.0, hoist_velocity=0.0, left_crane_state=0, left_crane_gantry_pos=0.0, left_crane_gantry_velocity=0.0, right_crane_state=0, right_crane_gantry_pos=0.0, right_crane_gantry_velocity=0.0, trolley_anchor_state=0, spreader_skew_right=False, spreader_skew_left=False, spreader20ft_cmd=False, spreader40ft_cmd=False, spreader45ft_cmd=False, spreader_rope_loose=False, flipper_left_down=False, flipper_right_down=False, over_load_fb=False, wheel_at0=False, wheel_at90=False, wheel_at16=False, wheel_at_park=False, wheel_locked=False, wheel_unlocked=False, wheel_pump1_on=False, wheel_pump2_on=False, wheel_pump_off=False, wheel_turn_auto_fb=False, wheel_turn_manual_fb=False, laser1_fault=False, laser2_fault=False, laser3_fault=False, laser4_fault=False, laser5_fault=False, laser6_fault=False, laser7_fault=False, laser8_fault=False, laser1_height=0, laser2_height=0, laser3_height=0, laser4_height=0, laser5_height=0, laser6_height=0, laser7_height=0, laser8_height=0, auto_anti_sway=False, gantry_move_assist=False, agss1=0, agss2=0, aptt_gsd=False, general_bypass_fb=False, human_bypass_fb=False, agss_left_gsd=False, agss_right_gsd=False, speed_limit=False, spreader_not_top_limit=False, bypass_atl_fb=False, bypass_jack_set_fb=False, bypass_landing_fb=False, bypass_ls_fb=False, bypass_over_height_fb=False, bypass_over_load_fb=False, bypass_spreader_fb=False, gantry_run_permit_left=False, gantry_run_permit_right=False, trolley_run_permit_forward=False, trolley_run_permit_backward=False, hoist_run_permit_up=False, hoist_run_permit_down=False, skew_pos=0)
+
+dnt@rw-4090:~/ws_ros2_rtg$ ros2 topic pub /rtg/task_exec_status \
+    rtg_algorithm_interfaces/msg/ExecStatusMsg \
+    "{truck_type: 'OTK', action_type: 2}" \
+    --once
+publisher: beginning loop
+publishing #1: rtg_algorithm_interfaces.msg.ExecStatusMsg(header=std_msgs.msg.Header(stamp=builtin_interfaces.msg.Time(sec=0, nanosec=0), frame_id=''), task_id='', action_index=0, state='', move_step='', action_type=2, action_mode='', position_type=0, row_no='', block='', tier_no='', bay_no='', bay_size=0, truck_pos='', truck_type='OTK', hoist_height=0.0, trolley_pos=0.0, gantry_pos=0.0, object_height=0.0)
+
+dnt@rw-4090:~/ws_ros2_rtg$ ros2 topic pub /algl/TruckDetectMsg \
+    rtg_algorithm_interfaces/msg/TruckDetectMsg \
+    "{region_has_truck: true, truck_direction: {result: 'right'}, truck_type: {result: 'OTK'}}" \
+    --once
+publisher: beginning loop
+publishing #1: rtg_algorithm_interfaces.msg.TruckDetectMsg(header=std_msgs.msg.Header(stamp=builtin_interfaces.msg.Time(sec=0, nanosec=0), frame_id=''), has_truck=False, region_has_truck=True, tracking_id='', lane_id='', truck_direction=rtg_algorithm_interfaces.msg.RecognizeResult(header=std_msgs.msg.Header(stamp=builtin_interfaces.msg.Time(sec=0, nanosec=0), frame_id=''), item='', state=0, confident=0.0, result='right', images=[]), truck_load_state=rtg_algorithm_interfaces.msg.RecognizeResult(header=std_msgs.msg.Header(stamp=builtin_interfaces.msg.Time(sec=0, nanosec=0), frame_id=''), item='', state=0, confident=0.0, result='', images=[]), truck_type=rtg_algorithm_interfaces.msg.RecognizeResult(header=std_msgs.msg.Header(stamp=builtin_interfaces.msg.Time(sec=0, nanosec=0), frame_id=''), item='', state=0, confident=0.0, result='OTK', images=[]), truck_id=rtg_algorithm_interfaces.msg.RecognizeResult(header=std_msgs.msg.Header(stamp=builtin_interfaces.msg.Time(sec=0, nanosec=0), frame_id=''), item='', state=0, confident=0.0, result='', images=[]), truck_x=0.0, truck_y=0.0, truck_z=0.0, truck_t=0.0, container_count=0, container_gap=0.0, container_height_not_equal=False, container_pos=[], anti_truck_cabin_smash=0, state=0, is_on_position=False)
+
+dnt@rw-4090:~/ws_ros2_rtg$ ros2 topic pub /rtg/plc_topic_35 \
+    sensor_device_interfaces/msg/PlcMsg \
+    "{spreader_lock: true, spreader_unlock: false, hoist_height: 5.0}" \
+    --once
+publisher: beginning loop
+publishing #1: sensor_device_interfaces.msg.PlcMsg(header=std_msgs.msg.Header(stamp=builtin_interfaces.msg.Time(sec=0, nanosec=0), frame_id=''), plc_id=0, source_timestamp=0, plc_connect=False, no_estop=False, spreader_lock=True, spreader_unlock=False, spreader_20f=False, spreader_40f=False, spreader_45f=False, spreader_landed=False, spreader_pump_on_state=0, spreader_home=0, spreader_weight=0.0, ctrl_on_state=0, ctrl_mode_local=False, ctrl_mode_remote=False, ctrl_mode_manual=False, ctrl_mode_auto=False, ros_connect_state=False, gantry_velocity_1=0.0, gantry_velocity_2=0.0, gantry_velocity_3=0.0, gantry_velocity_4=0.0, gantry_pos=0.0, joystick_gantry_fb=0, joystick_trolley_fb=0, joystick_hoist_fb=0, trolley_pos=0.0, trolley_velocity=0.0, hoist_height=5.0, hoist_velocity=0.0, left_crane_state=0, left_crane_gantry_pos=0.0, left_crane_gantry_velocity=0.0, right_crane_state=0, right_crane_gantry_pos=0.0, right_crane_gantry_velocity=0.0, trolley_anchor_state=0, spreader_skew_right=False, spreader_skew_left=False, spreader20ft_cmd=False, spreader40ft_cmd=False, spreader45ft_cmd=False, spreader_rope_loose=False, flipper_left_down=False, flipper_right_down=False, over_load_fb=False, wheel_at0=False, wheel_at90=False, wheel_at16=False, wheel_at_park=False, wheel_locked=False, wheel_unlocked=False, wheel_pump1_on=False, wheel_pump2_on=False, wheel_pump_off=False, wheel_turn_auto_fb=False, wheel_turn_manual_fb=False, laser1_fault=False, laser2_fault=False, laser3_fault=False, laser4_fault=False, laser5_fault=False, laser6_fault=False, laser7_fault=False, laser8_fault=False, laser1_height=0, laser2_height=0, laser3_height=0, laser4_height=0, laser5_height=0, laser6_height=0, laser7_height=0, laser8_height=0, auto_anti_sway=False, gantry_move_assist=False, agss1=0, agss2=0, aptt_gsd=False, general_bypass_fb=False, human_bypass_fb=False, agss_left_gsd=False, agss_right_gsd=False, speed_limit=False, spreader_not_top_limit=False, bypass_atl_fb=False, bypass_jack_set_fb=False, bypass_landing_fb=False, bypass_ls_fb=False, bypass_over_height_fb=False, bypass_over_load_fb=False, bypass_spreader_fb=False, gantry_run_permit_left=False, gantry_run_permit_right=False, trolley_run_permit_forward=False, trolley_run_permit_backward=False, hoist_run_permit_up=False, hoist_run_permit_down=False, skew_pos=0)
+
+dnt@rw-4090:~/ws_ros2_rtg$ ros2 topic pub /rtg/plc_topic_35 \
+    sensor_device_interfaces/msg/PlcMsg \
+    "{spreader_lock: false, spreader_unlock: true, hoist_height: 5.0}" \
+    --once
+publisher: beginning loop
+publishing #1: sensor_device_interfaces.msg.PlcMsg(header=std_msgs.msg.Header(stamp=builtin_interfaces.msg.Time(sec=0, nanosec=0), frame_id=''), plc_id=0, source_timestamp=0, plc_connect=False, no_estop=False, spreader_lock=False, spreader_unlock=True, spreader_20f=False, spreader_40f=False, spreader_45f=False, spreader_landed=False, spreader_pump_on_state=0, spreader_home=0, spreader_weight=0.0, ctrl_on_state=0, ctrl_mode_local=False, ctrl_mode_remote=False, ctrl_mode_manual=False, ctrl_mode_auto=False, ros_connect_state=False, gantry_velocity_1=0.0, gantry_velocity_2=0.0, gantry_velocity_3=0.0, gantry_velocity_4=0.0, gantry_pos=0.0, joystick_gantry_fb=0, joystick_trolley_fb=0, joystick_hoist_fb=0, trolley_pos=0.0, trolley_velocity=0.0, hoist_height=5.0, hoist_velocity=0.0, left_crane_state=0, left_crane_gantry_pos=0.0, left_crane_gantry_velocity=0.0, right_crane_state=0, right_crane_gantry_pos=0.0, right_crane_gantry_velocity=0.0, trolley_anchor_state=0, spreader_skew_right=False, spreader_skew_left=False, spreader20ft_cmd=False, spreader40ft_cmd=False, spreader45ft_cmd=False, spreader_rope_loose=False, flipper_left_down=False, flipper_right_down=False, over_load_fb=False, wheel_at0=False, wheel_at90=False, wheel_at16=False, wheel_at_park=False, wheel_locked=False, wheel_unlocked=False, wheel_pump1_on=False, wheel_pump2_on=False, wheel_pump_off=False, wheel_turn_auto_fb=False, wheel_turn_manual_fb=False, laser1_fault=False, laser2_fault=False, laser3_fault=False, laser4_fault=False, laser5_fault=False, laser6_fault=False, laser7_fault=False, laser8_fault=False, laser1_height=0, laser2_height=0, laser3_height=0, laser4_height=0, laser5_height=0, laser6_height=0, laser7_height=0, laser8_height=0, auto_anti_sway=False, gantry_move_assist=False, agss1=0, agss2=0, aptt_gsd=False, general_bypass_fb=False, human_bypass_fb=False, agss_left_gsd=False, agss_right_gsd=False, speed_limit=False, spreader_not_top_limit=False, bypass_atl_fb=False, bypass_jack_set_fb=False, bypass_landing_fb=False, bypass_ls_fb=False, bypass_over_height_fb=False, bypass_over_load_fb=False, bypass_spreader_fb=False, gantry_run_permit_left=False, gantry_run_permit_right=False, trolley_run_permit_forward=False, trolley_run_permit_backward=False, hoist_run_permit_up=False, hoist_run_permit_down=False, skew_pos=0)
+
+dnt@rw-4090:~/ws_ros2_rtg$ ros2 topic pub /rtg/plc_topic_35 \
+    sensor_device_interfaces/msg/PlcMsg \
+    "{spreader_lock: false, spreader_unlock: true, hoist_height: 5.0}" \
+    --once
+publisher: beginning loop
+publishing #1: sensor_device_interfaces.msg.PlcMsg(header=std_msgs.msg.Header(stamp=builtin_interfaces.msg.Time(sec=0, nanosec=0), frame_id=''), plc_id=0, source_timestamp=0, plc_connect=False, no_estop=False, spreader_lock=False, spreader_unlock=True, spreader_20f=False, spreader_40f=False, spreader_45f=False, spreader_landed=False, spreader_pump_on_state=0, spreader_home=0, spreader_weight=0.0, ctrl_on_state=0, ctrl_mode_local=False, ctrl_mode_remote=False, ctrl_mode_manual=False, ctrl_mode_auto=False, ros_connect_state=False, gantry_velocity_1=0.0, gantry_velocity_2=0.0, gantry_velocity_3=0.0, gantry_velocity_4=0.0, gantry_pos=0.0, joystick_gantry_fb=0, joystick_trolley_fb=0, joystick_hoist_fb=0, trolley_pos=0.0, trolley_velocity=0.0, hoist_height=5.0, hoist_velocity=0.0, left_crane_state=0, left_crane_gantry_pos=0.0, left_crane_gantry_velocity=0.0, right_crane_state=0, right_crane_gantry_pos=0.0, right_crane_gantry_velocity=0.0, trolley_anchor_state=0, spreader_skew_right=False, spreader_skew_left=False, spreader20ft_cmd=False, spreader40ft_cmd=False, spreader45ft_cmd=False, spreader_rope_loose=False, flipper_left_down=False, flipper_right_down=False, over_load_fb=False, wheel_at0=False, wheel_at90=False, wheel_at16=False, wheel_at_park=False, wheel_locked=False, wheel_unlocked=False, wheel_pump1_on=False, wheel_pump2_on=False, wheel_pump_off=False, wheel_turn_auto_fb=False, wheel_turn_manual_fb=False, laser1_fault=False, laser2_fault=False, laser3_fault=False, laser4_fault=False, laser5_fault=False, laser6_fault=False, laser7_fault=False, laser8_fault=False, laser1_height=0, laser2_height=0, laser3_height=0, laser4_height=0, laser5_height=0, laser6_height=0, laser7_height=0, laser8_height=0, auto_anti_sway=False, gantry_move_assist=False, agss1=0, agss2=0, aptt_gsd=False, general_bypass_fb=False, human_bypass_fb=False, agss_left_gsd=False, agss_right_gsd=False, speed_limit=False, spreader_not_top_limit=False, bypass_atl_fb=False, bypass_jack_set_fb=False, bypass_landing_fb=False, bypass_ls_fb=False, bypass_over_height_fb=False, bypass_over_load_fb=False, bypass_spreader_fb=False, gantry_run_permit_left=False, gantry_run_permit_right=False, trolley_run_permit_forward=False, trolley_run_permit_backward=False, hoist_run_permit_up=False, hoist_run_permit_down=False, skew_pos=0)
+
+dnt@rw-4090:~/ws_ros2_rtg$ ros2 topic pub /rtg/plc_topic_35 \
+    sensor_device_interfaces/msg/PlcMsg \
+    "{spreader_lock: false, spreader_unlock: true, hoist_height: 5.0}" \
+    --once
+publisher: beginning loop
+publishing #1: sensor_device_interfaces.msg.PlcMsg(header=std_msgs.msg.Header(stamp=builtin_interfaces.msg.Time(sec=0, nanosec=0), frame_id=''), plc_id=0, source_timestamp=0, plc_connect=False, no_estop=False, spreader_lock=False, spreader_unlock=True, spreader_20f=False, spreader_40f=False, spreader_45f=False, spreader_landed=False, spreader_pump_on_state=0, spreader_home=0, spreader_weight=0.0, ctrl_on_state=0, ctrl_mode_local=False, ctrl_mode_remote=False, ctrl_mode_manual=False, ctrl_mode_auto=False, ros_connect_state=False, gantry_velocity_1=0.0, gantry_velocity_2=0.0, gantry_velocity_3=0.0, gantry_velocity_4=0.0, gantry_pos=0.0, joystick_gantry_fb=0, joystick_trolley_fb=0, joystick_hoist_fb=0, trolley_pos=0.0, trolley_velocity=0.0, hoist_height=5.0, hoist_velocity=0.0, left_crane_state=0, left_crane_gantry_pos=0.0, left_crane_gantry_velocity=0.0, right_crane_state=0, right_crane_gantry_pos=0.0, right_crane_gantry_velocity=0.0, trolley_anchor_state=0, spreader_skew_right=False, spreader_skew_left=False, spreader20ft_cmd=False, spreader40ft_cmd=False, spreader45ft_cmd=False, spreader_rope_loose=False, flipper_left_down=False, flipper_right_down=False, over_load_fb=False, wheel_at0=False, wheel_at90=False, wheel_at16=False, wheel_at_park=False, wheel_locked=False, wheel_unlocked=False, wheel_pump1_on=False, wheel_pump2_on=False, wheel_pump_off=False, wheel_turn_auto_fb=False, wheel_turn_manual_fb=False, laser1_fault=False, laser2_fault=False, laser3_fault=False, laser4_fault=False, laser5_fault=False, laser6_fault=False, laser7_fault=False, laser8_fault=False, laser1_height=0, laser2_height=0, laser3_height=0, laser4_height=0, laser5_height=0, laser6_height=0, laser7_height=0, laser8_height=0, auto_anti_sway=False, gantry_move_assist=False, agss1=0, agss2=0, aptt_gsd=False, general_bypass_fb=False, human_bypass_fb=False, agss_left_gsd=False, agss_right_gsd=False, speed_limit=False, spreader_not_top_limit=False, bypass_atl_fb=False, bypass_jack_set_fb=False, bypass_landing_fb=False, bypass_ls_fb=False, bypass_over_height_fb=False, bypass_over_load_fb=False, bypass_spreader_fb=False, gantry_run_permit_left=False, gantry_run_permit_right=False, trolley_run_permit_forward=False, trolley_run_permit_backward=False, hoist_run_permit_up=False, hoist_run_permit_down=False, skew_pos=0)
+
+dnt@rw-4090:~/ws_ros2_rtg$ 
+
+dnt@rw-4090:~/ws_ros2_rtg$ cd /home/dnt/ws_ros2_rtg
+  source /opt/ros/humble/setup.bash
+  source install/setup.bash
+
+  ros2 bag info \
+    "/home/dnt/ws_ros2_rtg/ros_bag/rtg_lidar_14_17_2026_08_05_11_40_24"
+
+Files:             rtg_lidar_14_17_2026_08_05_11_40_24_0.db3
+Bag size:          128.6 MiB
+Storage id:        sqlite3
+Duration:          18.835824327s
+Start:             Aug  5 2026 11:40:24.476939039 (1785901224.476939039)
+End:               Aug  5 2026 11:40:43.312763366 (1785901243.312763366)
+Messages:          1214
+Topic information: Topic: /rtg/plc_topic_35 | Type: sensor_device_interfaces/msg/PlcMsg | Count: 472 | Serialization Format: cdr
+                   Topic: /livox/lidar_3GGDJ9S00100631 | Type: sensor_msgs/msg/PointCloud2 | Count: 188 | Serialization Format: cdr
+                   Topic: /livox/lidar_3GGDJ9T00100371 | Type: sensor_msgs/msg/PointCloud2 | Count: 189 | Serialization Format: cdr
+                   Topic: /livox/lidar_3GGDJ9T00100931 | Type: sensor_msgs/msg/PointCloud2 | Count: 183 | Serialization Format: cdr
+                   Topic: /livox/lidar_3GGDJ9U00101051 | Type: sensor_msgs/msg/PointCloud2 | Count: 182 | Serialization Format: cdr
+
+dnt@rw-4090:~/ws_ros2_rtg$ ros2 topic echo \
+    /verify/plc_topic_35 \
+    sensor_device_interfaces/msg/PlcMsg \
+    --once
+header:
+  stamp:
+    sec: 1785307420
+    nanosec: 5323749
+  frame_id: plc_frame_35
+plc_id: 35
+source_timestamp: 1785307420002
+plc_connect: true
+no_estop: false
+spreader_lock: true
+spreader_unlock: false
+spreader_20f: false
+spreader_40f: true
+spreader_45f: false
+spreader_landed: false
+spreader_pump_on_state: 1
+spreader_home: 0
+spreader_weight: 9.02
+ctrl_on_state: 1
+ctrl_mode_local: false
+ctrl_mode_remote: true
+ctrl_mode_manual: true
+ctrl_mode_auto: false
+ros_connect_state: true
+gantry_velocity_1: 0.0
+gantry_velocity_2: 0.0
+gantry_velocity_3: 0.0
+gantry_velocity_4: 0.0
+gantry_pos: -0.049
+joystick_gantry_fb: 0
+joystick_trolley_fb: 0
+joystick_hoist_fb: 0
+trolley_pos: 0.409
+trolley_velocity: 0.0
+hoist_height: 4.67
+hoist_velocity: 0.0
+left_crane_state: 1
+left_crane_gantry_pos: 312.27
+left_crane_gantry_velocity: 0.0
+right_crane_state: 0
+right_crane_gantry_pos: 0.0
+right_crane_gantry_velocity: 0.0
+trolley_anchor_state: 0
+spreader_skew_right: false
+spreader_skew_left: false
+spreader20ft_cmd: false
+spreader40ft_cmd: false
+spreader45ft_cmd: false
+spreader_rope_loose: false
+flipper_left_down: true
+flipper_right_down: true
+over_load_fb: false
+wheel_at0: true
+wheel_at90: false
+wheel_at16: false
+wheel_at_park: false
+wheel_locked: true
+wheel_unlocked: false
+wheel_pump1_on: false
+wheel_pump2_on: false
+wheel_pump_off: true
+wheel_turn_auto_fb: false
+wheel_turn_manual_fb: false
+laser1_fault: true
+laser2_fault: true
+laser3_fault: true
+laser4_fault: true
+laser5_fault: true
+laser6_fault: true
+laser7_fault: true
+laser8_fault: true
+laser1_height: 9726
+laser2_height: 15616
+laser3_height: -512
+laser4_height: -5387
+laser5_height: 25988
+laser6_height: 32070
+laser7_height: -4918
+laser8_height: 31493
+auto_anti_sway: false
+gantry_move_assist: false
+agss1: 878
+agss2: 884
+aptt_gsd: false
+general_bypass_fb: false
+human_bypass_fb: false
+agss_left_gsd: false
+agss_right_gsd: false
+speed_limit: false
+spreader_not_top_limit: true
+bypass_atl_fb: false
+bypass_jack_set_fb: false
+bypass_landing_fb: false
+bypass_ls_fb: false
+bypass_over_height_fb: false
+bypass_over_load_fb: false
+bypass_spreader_fb: false
+gantry_run_permit_left: true
+gantry_run_permit_right: true
+trolley_run_permit_forward: true
+trolley_run_permit_backward: true
+hoist_run_permit_up: false
+hoist_run_permit_down: true
+skew_pos: 460
+---
+dnt@rw-4090:~/ws_ros2_rtg$ 
+
+dnt@rw-4090:~/ws_ros2_rtg$ cd /home/dnt/ws_ros2_rtg
+  source /opt/ros/humble/setup.bash
+  source install/setup.bash
+
+  ros2 bag play \
+    "/home/dnt/ws_ros2_rtg/ros_bag/rtg_lidar_14_17_实际时间" \
+    --topics /rtg/plc_topic_35 \
+    --remap /rtg/plc_topic_35:=/verify/plc_topic_35
+usage: ros2 bag play [-h] [-s {my_test_plugin,my_read_only_test_plugin,sqlite3}] [--read-ahead-queue-size READ_AHEAD_QUEUE_SIZE] [-r RATE]
+                     [--topics TOPICS [TOPICS ...]] [--qos-profile-overrides-path QOS_PROFILE_OVERRIDES_PATH] [-l] [--remap REMAP [REMAP ...]]
+                     [--storage-config-file STORAGE_CONFIG_FILE] [--clock [Hz]] [-d DELAY] [--disable-keyboard-controls] [-p]
+                     [--start-offset START_OFFSET] [--wait-for-all-acked TIMEOUT] [--disable-loan-message] [--log-level {debug,info,warn,error,fatal}]
+                     bag_path
+ros2 bag play: error: argument bag_path: Bag path '/home/dnt/ws_ros2_rtg/ros_bag/rtg_lidar_14_17_实际时间' does not exist!
+dnt@rw-4090:~/ws_ros2_rtg$ cd /home/dnt/ws_ros2_rtg
+  source /opt/ros/humble/setup.bash
+  source install/setup.bash
+
+  ros2 bag play \
+    "/home/dnt/ws_ros2_rtg/ros_bag/rtg_lidar_14_17_2026_08_05_11_40_24" \
+    --topics /rtg/plc_topic_35 \
+    --remap /rtg/plc_topic_35:=/verify/plc_topic_35
+[INFO] [1785901421.283725095] [rosbag2_storage]: Opened database '/home/dnt/ws_ros2_rtg/ros_bag/rtg_lidar_14_17_2026_08_05_11_40_24/rtg_lidar_14_17_2026_08_05_11_40_24_0.db3' for READ_ONLY.
+[INFO] [1785901421.283766879] [rosbag2_player]: Set rate to 1
+[INFO] [1785901421.287973599] [rosbag2_player]: Adding keyboard callbacks.
+[INFO] [1785901421.287994698] [rosbag2_player]: Press SPACE for Pause/Resume
+[INFO] [1785901421.288000655] [rosbag2_player]: Press CURSOR_RIGHT for Play Next Message
+[INFO] [1785901421.288005807] [rosbag2_player]: Press CURSOR_UP for Increase Rate 10%
+[INFO] [1785901421.288010242] [rosbag2_player]: Press CURSOR_DOWN for Decrease Rate 10%
+[INFO] [1785901421.288259764] [rosbag2_storage]: Opened database '/home/dnt/ws_ros2_rtg/ros_bag/rtg_lidar_14_17_2026_08_05_11_40_24/rtg_lidar_14_17_2026_08_05_11_40_24_0.db3' for READ_ONLY.
+dnt@rw-4090:~/ws_ros2_rtg$ 

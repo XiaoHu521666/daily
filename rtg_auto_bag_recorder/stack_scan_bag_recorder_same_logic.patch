@@ -1,0 +1,75 @@
+diff --git a/src/stack_scan_bag_recorder_node.cpp b/src/stack_scan_bag_recorder_node.cpp
+--- a/src/stack_scan_bag_recorder_node.cpp
++++ b/src/stack_scan_bag_recorder_node.cpp
+@@ -115,14 +115,20 @@ public:
+     storage_options.max_cache_size = 100 * 1024 * 1024;
+ 
+     rosbag2_transport::RecordOptions record_options;
+-    record_options.topics = recorded_topics_;
++    for (const auto & topic : recorded_topics_) {
++      if (topic != plc_topic_) {
++        record_options.topics.push_back(topic);
++      }
++    }
+     record_options.rmw_serialization_format = rmw_get_serialization_format();
+     record_options.topic_polling_interval = 100ms;
+     record_options.start_paused = true;
+ 
+     auto writer = std::make_shared<rosbag2_cpp::Writer>();
++    rclcpp::NodeOptions recorder_node_options;
++    recorder_node_options.use_global_arguments(false);
+     auto recorder = std::make_shared<rosbag2_transport::Recorder>(
+-      writer, storage_options, record_options, next_recorder_node_name());
++      writer, storage_options, record_options, next_recorder_node_name(), recorder_node_options);
+ 
+     executor->add_node(recorder);
+     try {
+@@ -226,8 +232,17 @@ private:
+ 
+   void on_plc(const sensor_device_interfaces::msg::PlcMsg::SharedPtr msg)
+   {
++    const auto received_time = get_clock()->now();
++    const bool was_recording = state_ == RecorderState::RECORDING;
+     have_plc_state_ = true;
+     hoist_height_ = msg->hoist_height;
++    latest_plc_message_ = std::make_shared<sensor_device_interfaces::msg::PlcMsg>(*msg);
++    latest_plc_received_time_ = received_time;
++
++    if (was_recording) {
++      writer_->write(*msg, plc_topic_, received_time);
++    }
++
+     update_recording_condition();
+   }
+ 
+@@ -267,10 +282,21 @@ private:
+     recorder_->resume();
+     state_ = RecorderState::RECORDING;
+     recording_started_at_ = std::chrono::steady_clock::now();
++    write_latest_plc_message();
+     RCLCPP_INFO(get_logger(), "开始录包: %s", reason.c_str());
+     RCLCPP_INFO(get_logger(), "输出目录=%s", active_bag_path_.c_str());
+   }
+ 
++  void write_latest_plc_message()
++  {
++    if (!latest_plc_message_) {
++      return;
++    }
++
++    writer_->write(*latest_plc_message_, plc_topic_, latest_plc_received_time_);
++    RCLCPP_INFO(get_logger(), "已写入触发堆扫录包的完整 PLC 消息");
++  }
++
+   void stop_recording(const std::string & reason)
+   {
+     if (state_ != RecorderState::RECORDING || !recorder_) {
+@@ -359,6 +385,8 @@ private:
+   bool scan_condition_active_{false};
+   double hoist_height_{0.0};
+   double offset_from_bay_center_{0.0};
++  sensor_device_interfaces::msg::PlcMsg::SharedPtr latest_plc_message_;
++  rclcpp::Time latest_plc_received_time_{0, 0, RCL_SYSTEM_TIME};
+   std::string active_bag_path_;
+   std::chrono::steady_clock::time_point recording_started_at_;
+ };

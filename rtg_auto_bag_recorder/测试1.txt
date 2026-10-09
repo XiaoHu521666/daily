@@ -1,0 +1,113 @@
+dnt@rw-4090:~/ws_ros2_rtg$ cd /home/dnt/ws_ros2_rtg
+
+  source /opt/ros/humble/setup.bash
+  source install/setup.bash
+
+  INPUT_BAG="/mnt/win_share/Data_Storage/研发/HIT/防吊起/654_rtg_lidar_14_17_2026_07_29_14_43_13_task_11452"
+
+  ros2 bag info "$INPUT_BAG"
+
+Files:             rtg_lidar_14_17_2026_07_29_14_43_13_task_11452_0.db3
+Bag size:          400.7 MiB
+Storage id:        sqlite3
+Duration:          58.521953224s
+Start:             Jul 29 2026 14:43:15.203328312 (1785307395.203328312)
+End:               Jul 29 2026 14:44:13.725281536 (1785307453.725281536)
+Messages:          3754
+Topic information: Topic: /rtg/plc_topic_35 | Type: sensor_device_interfaces/msg/PlcMsg | Count: 1440 | Serialization Format: cdr
+                   Topic: /livox/lidar_3GGDJ9U00101051 | Type: sensor_msgs/msg/PointCloud2 | Count: 568 | Serialization Format: cdr
+                   Topic: /livox/lidar_3GGDJ9T00100931 | Type: sensor_msgs/msg/PointCloud2 | Count: 575 | Serialization Format: cdr
+                   Topic: /livox/lidar_3GGDJ9T00100371 | Type: sensor_msgs/msg/PointCloud2 | Count: 586 | Serialization Format: cdr
+                   Topic: /livox/lidar_3GGDJ9S00100631 | Type: sensor_msgs/msg/PointCloud2 | Count: 585 | Serialization Format: cdr
+
+dnt@rw-4090:~/ws_ros2_rtg$ cd /home/dnt/ws_ros2_rtg
+
+  source /opt/ros/humble/setup.bash
+
+  colcon build --packages-select rtg_auto_bag_recorder
+
+  source install/setup.bash
+Starting >>> rtg_auto_bag_recorder
+Finished <<< rtg_auto_bag_recorder [0.18s]                  
+
+Summary: 1 package finished [0.35s]
+dnt@rw-4090:~/ws_ros2_rtg$ ros2 node list | grep auto_bag_recorder
+dnt@rw-4090:~/ws_ros2_rtg$ 
+
+dnt@rw-4090:~/ws_ros2_rtg$  cd /home/dnt/ws_ros2_rtg
+
+  source /opt/ros/humble/setup.bash
+  source install/setup.bash
+
+  ros2 bag play \
+    "/mnt/win_share/Data_Storage/研发/HIT/防吊起/654_rtg_lidar_14_17_2026_07_29_14_43_13_task_11452" \
+    -p \
+    --topics \
+    /livox/lidar_3GGDJ9U00101051 \
+    /livox/lidar_3GGDJ9T00100371 \
+    /livox/lidar_3GGDJ9T00100931 \
+    /livox/lidar_3GGDJ9S00100631 \
+    /rtg/plc_topic_35
+[INFO] [1785909354.723552962] [rosbag2_storage]: Opened database '/mnt/win_share/Data_Storage/研发/HIT/防吊起/654_rtg_lidar_14_17_2026_07_29_14_43_13_task_11452/rtg_lidar_14_17_2026_07_29_14_43_13_task_11452_0.db3' for READ_ONLY.
+[INFO] [1785909354.723604993] [rosbag2_player]: Set rate to 1
+[INFO] [1785909354.729218913] [rosbag2_player]: Adding keyboard callbacks.
+[INFO] [1785909354.729237532] [rosbag2_player]: Press SPACE for Pause/Resume
+[INFO] [1785909354.729241657] [rosbag2_player]: Press CURSOR_RIGHT for Play Next Message
+[INFO] [1785909354.729245294] [rosbag2_player]: Press CURSOR_UP for Increase Rate 10%
+[INFO] [1785909354.729248188] [rosbag2_player]: Press CURSOR_DOWN for Decrease Rate 10%
+[INFO] [1785909354.729430634] [rosbag2_storage]: Opened database '/mnt/win_share/Data_Storage/研发/HIT/防吊起/654_rtg_lidar_14_17_2026_07_29_14_43_13_task_11452/rtg_lidar_14_17_2026_07_29_14_43_13_task_11452_0.db3' for READ_ONLY.
+[INFO] [1785909440.351978475] [rosbag2_player]: Resuming play.
+[INFO] [1785909485.098985029] [rosbag2_player]: Pausing play.
+[INFO] [1785909490.728990293] [rosbag2_player]: Resuming play.
+
+dnt@rw-4090:~/ws_ros2_rtg$ cd /home/dnt/ws_ros2_rtg
+
+  source /opt/ros/humble/setup.bash
+  source install/setup.bash
+
+  ros2 launch rtg_auto_bag_recorder auto_bag_recorder.launch.py
+[INFO] [launch]: All log files can be found below /home/dnt/.ros/log/2026-08-05-13-56-32-601411-rw-4090-2170345
+[INFO] [launch]: Default logging verbosity is set to INFO
+[INFO] [auto_bag_recorder_node-1]: process started with pid [2170366]
+[auto_bag_recorder_node-1] [INFO] [1785909392.644917803] [auto_bag_recorder]: 本次录制 Topic 配置（共 5 个）:
+[auto_bag_recorder_node-1] [INFO] [1785909392.644986530] [auto_bag_recorder]:   /livox/lidar_3GGDJ9U00101051 [雷达]
+[auto_bag_recorder_node-1] [INFO] [1785909392.644995147] [auto_bag_recorder]:   /livox/lidar_3GGDJ9T00100371 [雷达]
+[auto_bag_recorder_node-1] [INFO] [1785909392.645001364] [auto_bag_recorder]:   /livox/lidar_3GGDJ9T00100931 [雷达]
+[auto_bag_recorder_node-1] [INFO] [1785909392.645007183] [auto_bag_recorder]:   /livox/lidar_3GGDJ9S00100631 [雷达]
+[auto_bag_recorder_node-1] [INFO] [1785909392.645012687] [auto_bag_recorder]:   /rtg/plc_topic_35 [PLC]
+[auto_bag_recorder_node-1] [INFO] [1785909392.645021876] [auto_bag_recorder]: 正在检查 4 个雷达 Topic，最长等待 10.0 s
+[auto_bag_recorder_node-1] [INFO] [1785909392.645061396] [auto_bag_recorder]: 雷达 Topic 检查通过，所有雷达均存在发布者
+[auto_bag_recorder_node-1] [INFO] [1785909392.645085466] [auto_bag_recorder]: 无人值守录包节点已启动，等待抓箱闭锁信号
+[auto_bag_recorder_node-1] [INFO] [1785909392.645105985] [auto_bag_recorder]: 输出根目录: /home/dnt/ws_ros2_rtg/./ros_bag
+[auto_bag_recorder_node-1] [INFO] [1785909392.645113204] [auto_bag_recorder]: 停止条件: 开锁=启用, 起升高度=启用 (阈值 20.00 m), 最长录制 1800.0 s
+[auto_bag_recorder_node-1] stdin is not a terminal device. Keyboard handling disabled.[WARN] [1785909417.944672065] [rcl.logging_rosout]: Publisher already registered for provided node name. If this is due to multiple nodes with the same name then all logs for that logger name will go out over the existing publisher. As soon as any node with that name is destructed it will unregister the publisher, preventing any further logs for that name from being published on the rosout topic.
+[auto_bag_recorder_node-1] [INFO] [1785909417.947338695] [auto_bag_recorder]: Press SPACE for pausing/resuming
+[auto_bag_recorder_node-1] [INFO] [1785909417.948292109] [rosbag2_storage]: Opened database './ros_bag/rtg_lidar_14_17_2026_08_05_13_56_57/rtg_lidar_14_17_2026_08_05_13_56_57_0.db3' for READ_WRITE.
+[auto_bag_recorder_node-1] [INFO] [1785909417.948656390] [auto_bag_recorder]: Listening for topics...
+[auto_bag_recorder_node-1] [INFO] [1785909417.948666175] [auto_bag_recorder]: Event publisher thread: Starting
+[auto_bag_recorder_node-1] [INFO] [1785909417.949806965] [auto_bag_recorder]: Subscribed to topic '/livox/lidar_3GGDJ9U00101051'
+[auto_bag_recorder_node-1] [INFO] [1785909417.950387253] [auto_bag_recorder]: Subscribed to topic '/livox/lidar_3GGDJ9T00100931'
+[auto_bag_recorder_node-1] [INFO] [1785909417.950947099] [auto_bag_recorder]: Subscribed to topic '/livox/lidar_3GGDJ9T00100371'
+[auto_bag_recorder_node-1] [INFO] [1785909417.951510739] [auto_bag_recorder]: Subscribed to topic '/livox/lidar_3GGDJ9S00100631'
+[auto_bag_recorder_node-1] [INFO] [1785909417.951541849] [auto_bag_recorder]: Waiting for recording: Press SPACE to start.
+[auto_bag_recorder_node-1] [INFO] [1785909417.951546411] [auto_bag_recorder]: 下一次录包已预热，输出目录=./ros_bag/rtg_lidar_14_17_2026_08_05_13_56_57
+[auto_bag_recorder_node-1] [INFO] [1785909417.952367341] [auto_bag_recorder]: All requested topics are subscribed. Stopping discovery...
+
+dnt@rw-4090:~/ws_ros2_rtg$ cd /home/dnt/ws_ros2_rtg
+
+  source /opt/ros/humble/setup.bash
+  source install/setup.bash
+
+  ros2 topic pub /rtg/task_exec_status \
+    rtg_algorithm_interfaces/msg/ExecStatusMsg \
+    "{truck_type: 'OTK', action_type: 2}" \
+    --once
+publisher: beginning loop
+publishing #1: rtg_algorithm_interfaces.msg.ExecStatusMsg(header=std_msgs.msg.Header(stamp=builtin_interfaces.msg.Time(sec=0, nanosec=0), frame_id=''), task_id='', action_index=0, state='', move_step='', action_type=2, action_mode='', position_type=0, row_no='', block='', tier_no='', bay_no='', bay_size=0, truck_pos='', truck_type='OTK', hoist_height=0.0, trolley_pos=0.0, gantry_pos=0.0, object_height=0.0)
+
+dnt@rw-4090:~/ws_ros2_rtg$ ros2 topic pub /algl/TruckDetectMsg \
+    rtg_algorithm_interfaces/msg/TruckDetectMsg \
+    "{region_has_truck: true, truck_direction: {result: 'right'}, truck_type: {result: 'OTK'}}" \
+    --once
+publisher: beginning loop
+publishing #1: rtg_algorithm_interfaces.msg.TruckDetectMsg(header=std_msgs.msg.Header(stamp=builtin_interfaces.msg.Time(sec=0, nanosec=0), frame_id=''), has_truck=False, region_has_truck=True, tracking_id='', lane_id='', truck_direction=rtg_algorithm_interfaces.msg.RecognizeResult(header=std_msgs.msg.Header(stamp=builtin_interfaces.msg.Time(sec=0, nanosec=0), frame_id=''), item='', state=0, confident=0.0, result='right', images=[]), truck_load_state=rtg_algorithm_interfaces.msg.RecognizeResult(header=std_msgs.msg.Header(stamp=builtin_interfaces.msg.Time(sec=0, nanosec=0), frame_id=''), item='', state=0, confident=0.0, result='', images=[]), truck_type=rtg_algorithm_interfaces.msg.RecognizeResult(header=std_msgs.msg.Header(stamp=builtin_interfaces.msg.Time(sec=0, nanosec=0), frame_id=''), item='', state=0, confident=0.0, result='OTK', images=[]), truck_id=rtg_algorithm_interfaces.msg.RecognizeResult(header=std_msgs.msg.Header(stamp=builtin_interfaces.msg.Time(sec=0, nanosec=0), frame_id=''), item='', state=0, confident=0.0, result='', images=[]), truck_x=0.0, truck_y=0.0, truck_z=0.0, truck_t=0.0, container_count=0, container_gap=0.0, container_height_not_equal=False, container_pos=[], anti_truck_cabin_smash=0, state=0, is_on_position=False)

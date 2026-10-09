@@ -1,0 +1,20 @@
+dnt@rw-4090:~/cpp_ws_ros2_rtg$ ros2 run rtg_split_db3 rtg_split_db3 \
+    "/mnt/win_share/Data_Storage/研发/HIT/新版堆扫/652_2026_07_30_652大小车交替动贝位.尺寸10.40.08.20.07.20" \
+    --dry-run
+[INFO] [1786934055.039037178] [rosbag2_storage]: Opened database '/mnt/win_share/Data_Storage/研发/HIT/新版堆扫/652_2026_07_30_652大小车交替动贝位.尺寸10.40.08.20.07.20/2026_07_30_652_0.db3' for READ_ONLY.
+找到 3 个静止区间:
+  652_10_2026_07_30  堆场=Y1  贝位=10  时长=51.20秒  小车位置=0.05~14.38m
+  652_8_2026_07_30  堆场=Y1  贝位=8  时长=48.12秒  小车位置=0.05~15.29m
+  652_7_2026_07_30  堆场=Y1  贝位=7  时长=40.64秒  小车位置=0.70~14.54m
+dry-run 完成，未写入文件。
+dnt@rw-4090:~/cpp_ws_ros2_rtg$ ros2 run rtg_split_db3 rtg_split_db3 \
+    "/mnt/win_share/Data_Storage/研发/HIT/新版堆扫/652_2026_07_30_652大小车交替动贝位.尺寸10.40.08.20.07.20"
+[INFO] [1786934170.462977253] [rosbag2_storage]: Opened database '/mnt/win_share/Data_Storage/研发/HIT/新版堆扫/652_2026_07_30_652大小车交替动贝位.尺寸10.40.08.20.07.20/2026_07_30_652_0.db3' for READ_ONLY.
+找到 3 个静止区间:
+  652_10_2026_07_30  堆场=Y1  贝位=10  时长=51.20秒  小车位置=0.05~14.38m
+  652_8_2026_07_30  堆场=Y1  贝位=8  时长=48.12秒  小车位置=0.05~15.29m
+  652_7_2026_07_30  堆场=Y1  贝位=7  时长=40.64秒  小车位置=0.70~14.54m
+[ERROR] [1786934191.542363404] [rosbag2_storage]: Could not open '/mnt/win_share/Data_Storage/研发/HIT/新版堆扫/652_2026_07_30_652大小车交替动贝位.尺寸10.40.08.20.07.20/split_by_gantry_stationary/652_10_2026_07_30/652_10_2026_07_30_0' with 'sqlite3'. Error: Error when processing SQL statement. SQLite error (5): database is locked
+[ERROR] [1786934191.542627746] [rosbag2_storage]: Could not load/open plugin with storage id 'sqlite3'
+错误: No storage could be initialized. Abort
+[ros2run]: Process exited with failure 1

@@ -1,0 +1,11 @@
+lidar_to_topic:
+  L17: "/livox/lidar_3GGDJ9S00100321"
+  L16: "/livox/lidar_3GGDJ9T00101271"
+  L15: "/livox/lidar_3GGDJ9U00100161"
+  L14: "/livox/lidar_3GGDJ9T00101081"
+  L5: "/livox/lidar_3JEDM5D00103871"
+  L1: "/livox/lidar_10_141_51_81"
+  L2: "/livox/lidar_10_141_51_82"
+  L3: "/livox/lidar_10_141_51_83"
+  L4: "/livox/lidar_10_141_51_84"
+  plc: "/rtg/plc_topic_35"

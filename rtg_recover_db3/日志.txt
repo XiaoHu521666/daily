@@ -1,0 +1,6 @@
+dnt@rw-4090:~/cpp_ws_ros2_rtg$ ros2 run rtg_recover_db3 rtg_recover_db3   "/mnt/win_share/Data_Storage/研发/HIT/新版堆扫/652_2026_07_30_652大小车交替动贝位.尺寸10.40.08.20.07.20/split_by_gantry_stationary/652_10_2026_07_30_652_extracted"   "/mnt/win_share/Data_Storage/研发/
+HIT/新版堆扫/652_2026_07_30_652大小车交替动贝位.尺寸10.40.08.20.07.20/split_by_gantry_stationary/652_10_2026_07_30_652_recovered_bag"
+[ERROR] [1786944036.456728435] [rosbag2_storage]: Could not open '/mnt/win_share/Data_Storage/研发/HIT/新版堆扫/652_2026_07_30_652大小车交替动贝位.尺寸10.40.08.20.07.20/split_by_gantry_stationary/652_10_2026_07_30_652_recovered_bag/652_10_2026_07_30_652_recovered_bag_0' with 'sqlite3'. Error: Error when processing SQL statement. SQLite error (5): database is locked
+[ERROR] [1786944036.459458328] [rosbag2_storage]: Could not load/open plugin with storage id 'sqlite3'
+错误: No storage could be initialized. Abort
+[ros2run]: Process exited with failure 1

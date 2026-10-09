@@ -1,0 +1,28 @@
+<?xml version="1.0"?>
+<?xml-model href="http://download.ros.org/schema/package_format3.xsd" schematypens="http://www.w3.org/2001/XMLSchema"?>
+<package format="3">
+  <name>rtg_recover_db3</name>
+  <version>0.1.0</version>
+  <description>Rebuild a playable rosbag2 SQLite3 bag from rtg_rosbag2_pointcloud output.</description>
+  <maintainer email="wxh@example.com">wxh</maintainer>
+  <license>Proprietary</license>
+
+  <buildtool_depend>ament_cmake</buildtool_depend>
+
+  <depend>ament_index_cpp</depend>
+  <depend>nlohmann_json</depend>
+  <depend>rclcpp</depend>
+  <depend>rosbag2_cpp</depend>
+  <depend>rosbag2_storage</depend>
+  <depend>rtg_algorithm_interfaces</depend>
+  <depend>sensor_device_interfaces</depend>
+  <depend>sensor_msgs</depend>
+  <depend>std_msgs</depend>
+  <depend>yaml_cpp_vendor</depend>
+
+  <exec_depend>rosbag2_storage_default_plugins</exec_depend>
+
+  <export>
+    <build_type>ament_cmake</build_type>
+  </export>
+</package>

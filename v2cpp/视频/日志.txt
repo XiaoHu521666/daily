@@ -1,0 +1,54 @@
+(.venv) wxh@LAPTOP-5AC6E52H:~/code/v2cpp/视频$ /home/wxh/code/dc531/.venv/bin/python /home/wxh/code/v2cpp/视频/classify_videos.py
+开始递归扫描目标目录: /mnt/data_storage/研发/HIT/防吊起
+  已扫描 12 个目录，当前: /mnt/data_storage/研发/HIT/防吊起/651fdq/260520-stop
+  已扫描 17 个目录，当前: /mnt/data_storage/研发/HIT/防吊起/651fdq/260520-stop/device_7/20260520_1343
+  已扫描 30 个目录，当前: /mnt/data_storage/研发/HIT/防吊起/651防吊起工况数据/l5_data-20尺前箱-吊起/device_6
+  已扫描 40 个目录，当前: /mnt/data_storage/研发/HIT/防吊起/651防吊起工况数据/l5_data-20尺前箱-吊起/device_9/20260514_1615
+  已扫描 56 个目录，当前: /mnt/data_storage/研发/HIT/防吊起/651防吊起工况数据/l5_data-20尺双箱-前箱-吊起/device_6
+  已扫描 72 个目录，当前: /mnt/data_storage/研发/HIT/防吊起/651防吊起工况数据/l5_data-20尺双箱-前箱-静止
+  已扫描 86 个目录，当前: /mnt/data_storage/研发/HIT/防吊起/651防吊起工况数据/l5_data-20尺双箱-后箱-吊起/device_7/20260515_1007
+  已扫描 101 个目录，当前: /mnt/data_storage/研发/HIT/防吊起/651防吊起工况数据/l5_data-20尺双箱-后箱-静止/device_8
+  已扫描 115 个目录，当前: /mnt/data_storage/研发/HIT/防吊起/651防吊起工况数据/l5_data-20尺后箱-吊起/device_8/20260514_1608
+  已扫描 127 个目录，当前: /mnt/data_storage/研发/HIT/防吊起/651防吊起工况数据/l5_data-20尺后箱-静止/device_9
+  已扫描 132 个目录，当前: /mnt/data_storage/研发/HIT/防吊起/651防吊起工况数据/l5_data-40尺-吊起/device_6/20260515_1030
+  已扫描 143 个目录，当前: /mnt/data_storage/研发/HIT/防吊起/651防吊起工况数据/l5_data-40尺-静止/device_6
+  已扫描 165 个目录，当前: /mnt/data_storage/研发/HIT/防吊起/655_2026_6_22_anti_truck_lift_with_L5_2/2026_06_22_0
+  已扫描 172 个目录，当前: /mnt/data_storage/研发/HIT/防吊起/rosbag/651-2026-0816-17-防吊起/rtg_lidar_14_17_2026_08_16_04_02_13_task_17871
+  已扫描 188 个目录，当前: /mnt/data_storage/研发/HIT/防吊起/rosbag/651-2026-0816-17-防吊起/rtg_lidar_14_17_2026_08_16_16_54_41_task_18021
+  已扫描 204 个目录，当前: /mnt/data_storage/研发/HIT/防吊起/rosbag/651-2026-8.11-防吊起
+  已扫描 212 个目录，当前: /mnt/data_storage/研发/HIT/防吊起/rosbag/651_8.12/rtg_lidar_14_17_2026_08_12_06_49_30_task_16270
+  已扫描 229 个目录，当前: /mnt/data_storage/研发/HIT/防吊起/rosbag/651_8.14-15/rtg_lidar_14_17_2026_08_14_00_45_57_task_17043
+  已扫描 251 个目录，当前: /mnt/data_storage/研发/HIT/防吊起/rosbag/654-2026-8.11-防吊起/rtg_lidar_14_17_2026_08_11_12_24_57_task_15930
+  已扫描 279 个目录，当前: /mnt/data_storage/研发/HIT/防吊起/rosbag/654-2026-8.11-防吊起/rtg_lidar_14_17_2026_08_11_17_08_31_task_16035
+  已扫描 294 个目录，当前: /mnt/data_storage/研发/HIT/防吊起/rosbag/654_8.12/rtg_lidar_14_17_2026_08_12_12_34_06_task_16398
+  已扫描 300 个目录，当前: /mnt/data_storage/研发/HIT/防吊起/rosbag/654_8.14-15/rtg_lidar_14_17_2026_08_14_08_28_17_task_17172
+  已扫描 322 个目录，当前: /mnt/data_storage/研发/HIT/防吊起/rosbag/654_8.3/rtg_lidar_14_17_2026_07_29_14_43_13_task_11452
+  已扫描 348 个目录，当前: /mnt/data_storage/研发/HIT/防吊起/rosbag/654_8.3/rtg_lidar_14_17_2026_08_02_15_05_33_task_12862
+  已扫描 374 个目录，当前: /mnt/data_storage/研发/HIT/防吊起/rosbag/654_8.3/rtg_lidar_14_17_2026_08_03_14_23_07_task_13170
+目标目录扫描完成: /mnt/data_storage/研发/HIT/防吊起，共访问 382 个目录，跳过 227 个 extracted 目录树
+
+开始处理源文件夹: /mnt/data_storage/研发/HIT/视频/2026_08_video_download/2026_06_20_test1
+匹配到目标文件夹: /mnt/data_storage/研发/HIT/防吊起/655_2026_6_20_side_safety_v2_test/2026_06_20_test1
+正在统计源文件夹内容: /mnt/data_storage/研发/HIT/视频/2026_08_video_download/2026_06_20_test1
+源文件夹共 4 个文件
+正在复制 7.9 MiB: /mnt/data_storage/研发/HIT/视频/2026_08_video_download/2026_06_20_test1/C14/C14_20260620_160445_20260620_160621.mp4 -> /mnt/data_storage/研发/HIT/防吊起/655_2026_6_20_side_safety_v2_test/2026_06_20_test1/C14/C14_20260620_160445_20260620_160621.mp4
+copy: /mnt/data_storage/研发/HIT/视频/2026_08_video_download/2026_06_20_test1/C14/C14_20260620_160445_20260620_160621.mp4 -> /mnt/data_storage/研发/HIT/防吊起/655_2026_6_20_side_safety_v2_test/2026_06_20_test1/C14/C14_20260620_160445_20260620_160621.mp4
+正在复制 7.5 MiB: /mnt/data_storage/研发/HIT/视频/2026_08_video_download/2026_06_20_test1/C15/C15_20260620_160445_20260620_160621.mp4 -> /mnt/data_storage/研发/HIT/防吊起/655_2026_6_20_side_safety_v2_test/2026_06_20_test1/C15/C15_20260620_160445_20260620_160621.mp4
+copy: /mnt/data_storage/研发/HIT/视频/2026_08_video_download/2026_06_20_test1/C15/C15_20260620_160445_20260620_160621.mp4 -> /mnt/data_storage/研发/HIT/防吊起/655_2026_6_20_side_safety_v2_test/2026_06_20_test1/C15/C15_20260620_160445_20260620_160621.mp4
+正在复制 8.6 MiB: /mnt/data_storage/研发/HIT/视频/2026_08_video_download/2026_06_20_test1/C16/C16_20260620_160445_20260620_160621.mp4 -> /mnt/data_storage/研发/HIT/防吊起/655_2026_6_20_side_safety_v2_test/2026_06_20_test1/C16/C16_20260620_160445_20260620_160621.mp4
+copy: /mnt/data_storage/研发/HIT/视频/2026_08_video_download/2026_06_20_test1/C16/C16_20260620_160445_20260620_160621.mp4 -> /mnt/data_storage/研发/HIT/防吊起/655_2026_6_20_side_safety_v2_test/2026_06_20_test1/C16/C16_20260620_160445_20260620_160621.mp4
+正在复制 35.4 MiB: /mnt/data_storage/研发/HIT/视频/2026_08_video_download/2026_06_20_test1/C17/C17_20260620_160445_20260620_160621.mp4 -> /mnt/data_storage/研发/HIT/防吊起/655_2026_6_20_side_safety_v2_test/2026_06_20_test1/C17/C17_20260620_160445_20260620_160621.mp4
+copy: /mnt/data_storage/研发/HIT/视频/2026_08_video_download/2026_06_20_test1/C17/C17_20260620_160445_20260620_160621.mp4 -> /mnt/data_storage/研发/HIT/防吊起/655_2026_6_20_side_safety_v2_test/2026_06_20_test1/C17/C17_20260620_160445_20260620_160621.mp4
+Traceback (most recent call last):
+  File "/home/wxh/code/v2cpp/视频/classify_videos.py", line 242, in <module>
+    main()
+  File "/home/wxh/code/v2cpp/视频/classify_videos.py", line 238, in main
+    classify(args.mode)
+  File "/home/wxh/code/v2cpp/视频/classify_videos.py", line 173, in classify
+    shutil.copytree(
+  File "/home/wxh/.local/share/uv/python/cpython-3.12.13-linux-x86_64-gnu/lib/python3.12/shutil.py", line 600, in copytree
+    return _copytree(entries=entries, src=src, dst=dst, symlinks=symlinks,
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/wxh/.local/share/uv/python/cpython-3.12.13-linux-x86_64-gnu/lib/python3.12/shutil.py", line 554, in _copytree
+    raise Error(errors)
+shutil.Error: [('/mnt/data_storage/研发/HIT/视频/2026_08_video_download/2026_06_20_test1/C14', '/mnt/data_storage/研发/HIT/防吊起/655_2026_6_20_side_safety_v2_test/2026_06_20_test1/C14', '[Errno 1] Operation not permitted'), ('/mnt/data_storage/研发/HIT/视频/2026_08_video_download/2026_06_20_test1/C15', '/mnt/data_storage/研发/HIT/防吊起/655_2026_6_20_side_safety_v2_test/2026_06_20_test1/C15', '[Errno 1] Operation not permitted'), ('/mnt/data_storage/研发/HIT/视频/2026_08_video_download/2026_06_20_test1/C16', '/mnt/data_storage/研发/HIT/防吊起/655_2026_6_20_side_safety_v2_test/2026_06_20_test1/C16', '[Errno 1] Operation not permitted'), ('/mnt/data_storage/研发/HIT/视频/2026_08_video_download/2026_06_20_test1/C17', '/mnt/data_storage/研发/HIT/防吊起/655_2026_6_20_side_safety_v2_test/2026_06_20_test1/C17', '[Errno 1] Operation not permitted'), (PosixPath('/mnt/data_storage/研发/HIT/视频/2026_08_video_download/2026_06_20_test1'), PosixPath('/mnt/data_storage/研发/HIT/防吊起/655_2026_6_20_side_safety_v2_test/2026_06_20_test1'), '[Errno 1] Operation not permitted')]
